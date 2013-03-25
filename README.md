@@ -4,7 +4,7 @@ This repository is a sandbox for trying out ideas in C++ or new features (like C
 
 Each experiment must be one file with extension .cpp. In the main directory it compiles using gcc with argument -std=c++0x if you need the Microsoft compiler put the file in the UnsupportedByCompiler directory
 
-Here is a short summery of what I wasy trying to do with each file
+Here is a short summery of what I was trying to do with each file
 
 ## Arrays ##
 In this file I was playing around with C style arrays, slightly old and a bit dated to be honest.
