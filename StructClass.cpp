@@ -69,7 +69,8 @@ double triangle::area()
   return 0.5 * m_width * m_height;
 }
 
-// bloody stupid and not a template!!!
+// bloody stupid and not a template!!! Only here to show that you can use
+// structs when you have declares that it is a class in a template.
 template <class T>
 void area(T shape)
 {

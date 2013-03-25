@@ -29,6 +29,8 @@ int main()
 {
   // dosn't work
   // const ConstClass* const_ptr = new ConstClass();
+  // works
+  // ConstClass* const const_ptr = new ConstClass();
   ConstClass* const_ptr = new ConstClass();
   const_ptr->non_const_method();
   return 0;
