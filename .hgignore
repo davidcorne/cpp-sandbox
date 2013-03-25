@@ -1,0 +1,8 @@
+syntax: glob
+
+*~
+*.exe
+
+# for the MS compiler rubbish
+*.obj
+*.asm
