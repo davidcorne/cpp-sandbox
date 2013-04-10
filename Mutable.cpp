@@ -45,7 +45,7 @@ public:
 private:
 
   bool m_valid;
-  T* m_data;
+  T m_data;
 
 };
 
@@ -100,7 +100,7 @@ void Validated<T>::set_data(const T& data)
 //D set the data.
 //
 {
-  m_data = const_cast<T*>(&data);
+  m_data = data;
   m_valid = true;
 }
 
@@ -113,7 +113,7 @@ Validated<T>::operator T()
 {
   // a nice way of returning a message with a standard assert.
   assert(valid() && "Cannot return invalid data.");
-  return *m_data;
+  return m_data;
 }
 
 //=============================================================================
