@@ -5,7 +5,7 @@
 CC = g++
 EXT = cpp
 CC_OPTS = -std=c++0x -g -o $@
-OBJECTS = *.o *.obj *.ilk *.pdb
+OBJECTS = *.o *.obj *.ilk *.pdb *.suo
 
 #==============================================================================
 #D Makes all of the $(EXT) files into exe files using $(CC)
@@ -54,7 +54,7 @@ all: $(SOURCE)
 clean: FRC
 	$(REMOVE_OBJECTS)
 	$(REMOVE_TEMP_FILES)
-	@rem -f *.exe
+	@rm -f *.exe
 	@echo "Removed all: objects, executables, and temp files."
 
 #==============================================================================
