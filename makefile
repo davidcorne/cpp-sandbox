@@ -5,6 +5,7 @@
 CC = g++
 EXT = cpp
 CC_OPTS = -std=c++0x -o $@
+OBJECTS = *.o *.obj *.ilk *.pdb *.exe
 
 #==============================================================================
 #D Makes all of the $(EXT) files into exe files using $(CC)
@@ -24,7 +25,7 @@ endif
 
 # common commands
 REMOVE_OBJECTS = @rm -f $(OBJECTS)
-REMOVE_TEMP_FILES = @rm -f *.stackdump *~ \#*\#
+REMOVE_TEMP_FILES = @rm -f *~ \#*\#
 
 #==============================================================================
 #D Target depending on all .exe files made from a .hs file so that all of them 
@@ -53,7 +54,6 @@ all: $(SOURCE)
 clean: FRC
 	$(REMOVE_OBJECTS)
 	$(REMOVE_TEMP_FILES)
-	@rm *.exe
 	@echo "Removed all: objects, executables, and temp files."
 
 #==============================================================================
