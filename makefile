@@ -5,7 +5,7 @@
 CC = g++
 EXT = cpp
 CC_OPTS = -std=c++0x -g -o $@
-OBJECTS = *.o *.obj *.ilk *.pdb *.suo
+OBJECTS = *.o *.obj *.ilk *.pdb *.suo *.stackdump
 
 #==============================================================================
 #D Makes all of the $(EXT) files into exe files using $(CC)
