@@ -1,5 +1,7 @@
 // Using a #include to get some data into the program.
-// 
+//
+// Inspired by
+// http://mhesham.wordpress.com/2013/04/25/unusual-c-use-of-include/
 
 #include <iostream>
 
