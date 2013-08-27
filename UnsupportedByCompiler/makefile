@@ -54,7 +54,7 @@ all: $(SOURCE)
 clean: FRC
 	$(REMOVE_OBJECTS)
 	$(REMOVE_TEMP_FILES)
-	@rm *.exe
+	@rm -f *.exe *.ilk *.suo *.pdb
 	@echo "Removed all: objects, executables, and temp files."
 
 #==============================================================================
