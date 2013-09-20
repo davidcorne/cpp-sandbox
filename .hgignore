@@ -9,3 +9,4 @@ syntax: glob
 *.asm
 *.ilk
 *.pdb
+*.suo
