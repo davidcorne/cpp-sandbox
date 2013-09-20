@@ -7,3 +7,5 @@ syntax: glob
 # for the MS compiler rubbish
 *.obj
 *.asm
+*.ilk
+*.pdb
