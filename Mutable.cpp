@@ -212,17 +212,6 @@ int main()
 //D Runs the program, makes a triangle and finds the area.
 //
 {
-  // make the following triangle:
-  //
-  // (0,1)
-  //   |\
-  //   |  \
-  //   |    \
-  //   |______\
-  // (0,0)   (1,0)
-  //
-  // it should have an area of 0.5
-
   Point pt_1(1, 0);
   Point pt_2(0, 1);
   Point pt_3(0, 0);
@@ -235,19 +224,6 @@ int main()
   cout << "Area is: " << tri.area() << endl << endl;
 
   // setting the first point so it re-calculates the area
-  //
-  // The new triangle:
-  //
-  // (0,2)
-  //   |\
-  //   | \
-  //   |  \
-  //   |   \
-  //   |    \
-  //   |     \
-  //   |      \
-  //   |_______\
-  // (0,0)   (1,0)
   //
   // it should have an area of 1
 

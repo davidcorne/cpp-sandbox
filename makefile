@@ -4,7 +4,7 @@
 
 CC = g++
 EXT = cpp
-CC_OPTS = -std=c++0x -g -o $@
+CC_OPTS = -std=c++0x -g -o $@ -Wall -Werror
 OBJECTS = *.o *.obj *.ilk *.pdb *.suo *.stackdump
 
 #==============================================================================

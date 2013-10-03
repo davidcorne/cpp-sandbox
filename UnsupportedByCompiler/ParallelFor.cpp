@@ -4,32 +4,30 @@
 #include <array>
 #include <sstream>
 #include <iostream>
+#include <vector>
 
 using namespace Concurrency;
 using namespace std;
 
 //=============================================================================
-void print(int val) {
-  cout << val << endl;
+void print(vector<int>& v) {
+  for (auto i = begin(v); i != end(v); ++i) {
+    cout << *i << " ";
+  }
+  cout << endl;
 }
 
 //=============================================================================
 int main()
 {
    // Print each value from 1 to 5 in parallel.
-  parallel_for(1, 6, print);
+  vector<int> points(5, 0);
+  print(points);
+  parallel_for(0, 5, [&points](int i) {
+      points[i] = i;
+      cout << i << " ";
+    });
+  cout << endl;
+  print(points);
+  
 }
-
-// <nnn> //
-// <nnn> // 
-
-// <nnn> #include <iostream>
-// <nnn> #include <ppl.h>
-// <nnn> using namespace std;
-
-// <nnn> int main() {
-// <nnn>   concurrency::parallel_for(1, 6, [](int value) {
-// <nnn>       cout 
-// <nnn>     }
-// <nnn>   return 0;
-// <nnn> }

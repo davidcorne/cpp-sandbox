@@ -12,7 +12,7 @@ using namespace std;
 void convert(char (*character_function)(char))
 {
   string str("hello ThIs IS 78998");
-  for (int i = 0; i < str.length(); ++i) {
+  for (unsigned int i = 0; i < str.length(); ++i) {
     str[i] = character_function(str[i]);
   }
   cout << str << endl;

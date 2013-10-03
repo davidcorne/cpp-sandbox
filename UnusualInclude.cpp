@@ -20,12 +20,12 @@ struct Person
 };
 
 Person PersonsTable[] = {
-    #include "UnusualInclude.txt"
+  #include "UnusualInclude.txt"
 };
 
 int main()
 {
-  for (int i = 0; i < (sizeof(PersonsTable) / sizeof(Person)); ++i) {
+  for (unsigned int i = 0; i < (sizeof(PersonsTable) / sizeof(Person)); ++i) {
     Person &person = PersonsTable[i];
     person.print();
   }

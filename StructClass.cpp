@@ -3,7 +3,7 @@
 //=============================================================================
 struct polygon {
 public:
-  virtual double print_area();
+  virtual void print_area();
   // returns the area
 
   virtual ~polygon() = 0;
@@ -26,7 +26,7 @@ polygon::~polygon()
 }
 
 //=============================================================================
-double polygon::print_area()
+void polygon::print_area()
 // prints area
 {
   std::cout << area() << std::endl;
@@ -44,8 +44,8 @@ protected:
   virtual double area();
 
 private:
-  double m_height;
   double m_width;
+  double m_height;
 };
 
 //=============================================================================

@@ -1,6 +1,7 @@
 #include <iostream>
 
 #define UT_JOIN(a, args...) a ## args
+#pragma GCC diagnostic ignored "-Wunused-variable"
 
 int main() {
   int ab = 2;

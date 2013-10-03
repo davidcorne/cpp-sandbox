@@ -10,6 +10,7 @@ void allocate()
 {
   while (true) {
     int* i = new int[100];
+    i[0] = 0;
   }
 }
 

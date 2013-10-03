@@ -36,9 +36,9 @@ public:
     {}
 private:
 
-  double m_c;
   int m_a;
   string m_b;
+  double m_c;
   Bank m_bank;
 };
 
