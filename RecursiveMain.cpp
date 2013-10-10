@@ -10,6 +10,5 @@ static int COUNT = 0;
 int main() {
   ++COUNT;
   cout << COUNT << endl;
-  main();
-  return 0;
+  return main();
 }
