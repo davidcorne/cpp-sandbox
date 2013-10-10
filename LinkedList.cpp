@@ -42,7 +42,6 @@ private:
   friend class utest_LinkedList;
   
   Node* m_head;
-  Node* m_tail;
   int m_size;
 };
 
@@ -50,7 +49,6 @@ private:
 template <typename T>
 LinkedList<T>::LinkedList()
   : m_head(0),
-    m_tail(0),
     m_size(0)
 {
 }
@@ -90,7 +88,13 @@ LinkedList<T>::~LinkedList()
 template <typename T>
 typename LinkedList<T>::Node* LinkedList<T>::last_node() const
 {
-  return m_tail;
+  Node* current = m_head;
+  Node* last = 0;
+  while (current != 0) {
+    last = current;
+    current = current->next;
+  }
+  return last;
 }
 
 //=============================================================================
@@ -112,13 +116,13 @@ void LinkedList<T>::append(T i)
   Node* n = new Node;
   n->data = i;
   n->next = 0;
-  n->prev = m_tail;
-  if (!m_head) {
-    n->prev = 0;
-    m_head = n;
-    m_tail = n;
+  Node* last = last_node();
+  n->prev = last;
+  if (last) {
+    assert(last->next == 0);
+    last->next = n;
   } else {
-    m_tail = n;
+    m_head = n;
   }
   ++m_size;
 }
