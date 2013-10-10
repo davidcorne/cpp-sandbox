@@ -7,6 +7,8 @@ EXT = cpp
 CC_OPTS = -std=c++0x -g -o $@ -Wall -Werror
 OBJECTS = *.o *.obj *.ilk *.pdb *.suo *.stackdump
 
+TO_TEST = LinkedList.exe
+
 #==============================================================================
 #D Makes all of the $(EXT) files into exe files using $(CC)
 #D Requires: $(EXT), $(CC) and $(CC_OPTS) to be defined.
@@ -47,6 +49,11 @@ all: $(SOURCE)
 %.exe: %.$(EXT)
 	$(CC) $(CC_OPTS) $<
 	@echo ""
+
+#==============================================================================
+test: all
+	@chmod +x $(TO_TEST)
+	$(foreach test, $(TO_TEST), ./$(test);)
 
 #==============================================================================
 #D For deleting all temporary and made files
