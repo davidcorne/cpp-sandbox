@@ -6,6 +6,7 @@ CC = cl
 EXT = cpp
 CC_OPTS = /EHsc /Z7
 OBJECTS = *.obj
+TO_TEST = MemoryLeakDetector.exe
 
 #==============================================================================
 #D Makes all of the $(EXT) files into exe files using $(CC)
@@ -47,6 +48,11 @@ all: $(SOURCE)
 %.exe: %.$(EXT) makefile
 	$(CC) $(CC_OPTS) $<
 	@echo ""
+
+#==============================================================================
+test: all
+	@chmod +x $(TO_TEST)
+	$(foreach test, $(TO_TEST), ./$(test);)
 
 #==============================================================================
 #D For deleting all temporary and made files
