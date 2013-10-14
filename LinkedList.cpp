@@ -72,7 +72,11 @@ const T& LinkedList<T>::operator[](int index) const
 template <typename T>
 bool LinkedList<T>::operator==(const LinkedList& other) const
 {
-  return true;
+  bool equal = size() == other.size();
+  if (equal) {
+    
+  }
+  return equal;
 }
 
 //=============================================================================
