@@ -299,6 +299,14 @@ void utest_LinkedList::test_equal()
     second.append(i);
   }
   test(first == second, "operator== returns incorrectly.");
+  LinkedList<int> third;
+  for (int i = 0; i < limit; ++i) {
+    third.prepend(i);
+  }
+  test(
+    !(first == third),
+    "Same length but different content should be different"
+  );
 }
 
 //=============================================================================
