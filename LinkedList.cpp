@@ -318,6 +318,13 @@ void utest_LinkedList::test_equal()
 void utest_LinkedList::test_not_equal()
 {
   print(__func__);
+  LinkedList<char> first;
+  LinkedList<char> second;
+  test(!(first != second), "Empty lists should not be unequal");
+  first.append('a');
+  test(first != second, "Different length lists should be unequal.");
+  second.append('b');
+  test(first != second, "Same length, different content should be unequal.");
 }
 
 //=============================================================================
