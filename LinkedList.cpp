@@ -171,11 +171,11 @@ void utest_LinkedList::test_size()
   LinkedList<char> list;
   test(list.size() == 0, "Empty list should have size 0.");
   list.append('a');
-  test(list.size() == 1, "list should have size 1.");
+  test(list.size() == 1, "List should have size 1.");
   list.append('b');
-  test(list.size() == 2, "list should have size 2.");
+  test(list.size() == 2, "List should have size 2.");
   list.append('c');
-  test(list.size() == 3, "list should have size 3.");
+  test(list.size() == 3, "List should have size 3.");
 }
 
 //=============================================================================
