@@ -88,7 +88,7 @@ bool LinkedList<T>::operator==(const LinkedList& other) const
 template <typename T>
 bool LinkedList<T>::operator!=(const LinkedList& other) const
 {
-  return true;
+  return !(this->operator==(other));
 }
 
 //=============================================================================
