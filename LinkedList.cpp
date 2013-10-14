@@ -24,8 +24,8 @@ public:
 
   const T& operator[](int i) const;
 
-  bool operator==(const LinkedList& other);
-  bool operator!=(const LinkedList& other);
+  bool operator==(const LinkedList& other) const;
+  bool operator!=(const LinkedList& other) const;
   
 private:
 
@@ -66,6 +66,20 @@ const T& LinkedList<T>::operator[](int index) const
     n = n->next;
   }
   return n->data;
+}
+
+//=============================================================================
+template <typename T>
+bool LinkedList<T>::operator==(const LinkedList& other) const
+{
+  return true;
+}
+
+//=============================================================================
+template <typename T>
+bool LinkedList<T>::operator!=(const LinkedList& other) const
+{
+  return true;
 }
 
 //=============================================================================
@@ -159,7 +173,7 @@ public:
 //=============================================================================
 void utest_LinkedList::test_random_access()
 {
-  print(__FUNCTION__);
+  print(__func__);
   LinkedList<int> list;
   list.append(0);
   list.append(1);
@@ -176,7 +190,7 @@ void utest_LinkedList::test_random_access()
 //=============================================================================
 void utest_LinkedList::test_size()
 {
-  print(__FUNCTION__);
+  print(__func__);
   LinkedList<char> list;
   test(list.size() == 0, "Empty list should have size 0.");
   list.append('a');
@@ -190,7 +204,7 @@ void utest_LinkedList::test_size()
 //=============================================================================
 void utest_LinkedList::test_string_list()
 {
-  print(__FUNCTION__);
+  print(__func__);
   LinkedList<string> string_list;
   string_list.append("hello");
   string_list.append("world");
@@ -201,7 +215,7 @@ void utest_LinkedList::test_string_list()
 //=============================================================================
 void utest_LinkedList::test_prepend()
 {
-  print(__FUNCTION__);
+  print(__func__);
   LinkedList<int> l;
   l.append(1);
   l.append(2);
@@ -214,7 +228,7 @@ void utest_LinkedList::test_prepend()
 //=============================================================================
 void utest_LinkedList::test_append()
 {
-  print(__FUNCTION__);
+  print(__func__);
   LinkedList<int> l;
   l.append(1);
   test(l.m_head->data == 1, "Append has not appended 1.");
@@ -241,7 +255,7 @@ void utest_LinkedList::test_append()
 //=============================================================================
 void utest_LinkedList::test_prev()
 {
-  print(__FUNCTION__);
+  print(__func__);
   LinkedList<int> l;
   l.append(0);
   LinkedList<int>::Node* n_0 = l.last_node();
@@ -257,7 +271,7 @@ void utest_LinkedList::test_prev()
 //=============================================================================
 void utest_LinkedList::test_last_node()
 {
-  print(__FUNCTION__);
+  print(__func__);
   LinkedList<int> l;
   LinkedList<int>::Node* last = l.last_node();
   test(last == 0, "Last should be null.");
@@ -269,13 +283,24 @@ void utest_LinkedList::test_last_node()
 //=============================================================================
 void utest_LinkedList::test_equal()
 {
-  print(__FUNCTION__);
+  print(__func__);
+  LinkedList<int> first;
+  LinkedList<int> second;
+  int limit = 50;
+  for (int i = 0; i < limit; ++i) {
+    first.append(i);
+  }
+  test(!(first == second), "operator== returns incorrectly.");
+  for (int i = 0; i < limit; ++i) {
+    second.append(i);
+  }
+  test(first == second, "operator== returns incorrectly.");
 }
 
 //=============================================================================
 void utest_LinkedList::test_not_equal()
 {
-  print(__FUNCTION__);
+  print(__func__);
 }
 
 //=============================================================================
