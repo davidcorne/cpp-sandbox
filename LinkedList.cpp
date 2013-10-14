@@ -74,7 +74,12 @@ bool LinkedList<T>::operator==(const LinkedList& other) const
 {
   bool equal = size() == other.size();
   if (equal) {
-    
+    for (int i = 0; i < size(); ++i) {
+      equal = this->operator[](i) == other[i];
+      if (!equal) {
+        break;
+      }
+    }
   }
   return equal;
 }
