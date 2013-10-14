@@ -20,7 +20,7 @@ public:
 
   void prepend(T i);
 
-  int size() const;
+  int length() const;
 
   const T& operator[](int i) const;
 
@@ -45,14 +45,14 @@ private:
   friend class utest_LinkedList;
   
   Node* m_head;
-  int m_size;
+  int m_length;
 };
 
 //=============================================================================
 template <typename T>
 LinkedList<T>::LinkedList()
   : m_head(0),
-    m_size(0)
+    m_length(0)
 {
 }
 
@@ -60,7 +60,7 @@ LinkedList<T>::LinkedList()
 template <typename T>
 const T& LinkedList<T>::operator[](int index) const
 {
-  assert(0 <= index && index <= size());
+  assert(0 <= index && index <= length());
   Node* n = m_head;
   for (int i = 0; i < index; ++i) {
     n = n->next;
@@ -72,9 +72,9 @@ const T& LinkedList<T>::operator[](int index) const
 template <typename T>
 bool LinkedList<T>::operator==(const LinkedList& other) const
 {
-  bool equal = size() == other.size();
+  bool equal = length() == other.length();
   if (equal) {
-    for (int i = 0; i < size(); ++i) {
+    for (int i = 0; i < length(); ++i) {
       equal = this->operator[](i) == other[i];
       if (!equal) {
         break;
@@ -93,9 +93,9 @@ bool LinkedList<T>::operator!=(const LinkedList& other) const
 
 //=============================================================================
 template <typename T>
-int LinkedList<T>::size() const
+int LinkedList<T>::length() const
 {
-  return m_size;
+  return m_length;
 }
 
 //=============================================================================
@@ -132,7 +132,7 @@ void LinkedList<T>::prepend(T i)
   n->next = m_head;
   n->prev = 0;
   m_head = n;
-  ++m_size;
+  ++m_length;
 }
 
 //=============================================================================
@@ -150,7 +150,7 @@ void LinkedList<T>::append(T i)
   } else {
     m_head = n;
   }
-  ++m_size;
+  ++m_length;
 }
 
 //=============================================================================
@@ -158,7 +158,7 @@ class utest_LinkedList : public UnitTest {
 public:
   void test_last_node();
   void test_append();
-  void test_size();
+  void test_length();
   void test_prepend();
   void test_prev();
   void test_string_list();
@@ -168,7 +168,7 @@ public:
   
   void run_tests() {
     test_append();
-    test_size();
+    test_length();
     test_prepend();
     test_last_node();
     test_prev();
@@ -197,17 +197,17 @@ void utest_LinkedList::test_random_access()
 }
 
 //=============================================================================
-void utest_LinkedList::test_size()
+void utest_LinkedList::test_length()
 {
   print(__func__);
   LinkedList<char> list;
-  test(list.size() == 0, "Empty list should have size 0.");
+  test(list.length() == 0, "Empty list should have length 0.");
   list.append('a');
-  test(list.size() == 1, "List should have size 1.");
+  test(list.length() == 1, "List should have length 1.");
   list.append('b');
-  test(list.size() == 2, "List should have size 2.");
+  test(list.length() == 2, "List should have length 2.");
   list.append('c');
-  test(list.size() == 3, "List should have size 3.");
+  test(list.length() == 3, "List should have length 3.");
 }
 
 //=============================================================================
