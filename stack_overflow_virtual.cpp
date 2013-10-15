@@ -6,7 +6,7 @@ using namespace std;
 class Animal
 {
 public:
-   void speak() const { std::cout << getSound() << std::endl; }
+  void speak() const { std::cout << getSound().c_str() << std::endl; }
 private:
    virtual std::string getSound() const = 0;
 };
