@@ -4,10 +4,10 @@
 
 CC = g++
 EXT = cpp
-CC_OPTS = -std=c++0x -g -o $@ -Wall -Werror
+CC_OPTS = -std=c++0x -g -Wall -Werror
 OBJECTS = *.o *.obj *.ilk *.pdb *.suo *.stackdump
 
-TO_TEST = LinkedList.exe
+TO_TEST = LinkedList.exe PointerOffset.exe ClassToStructCast.exe
 
 #==============================================================================
 #D Makes all of the $(EXT) files into exe files using $(CC)
@@ -47,7 +47,7 @@ all: $(SOURCE)
 #D Build the executables from each .$(EXT) file
 #------------------------------------------------------------------------------
 %.exe: %.$(EXT)
-	$(CC) $(CC_OPTS) $<
+	$(CC) $(CC_OPTS) -o $@ $<
 	@echo ""
 
 #==============================================================================
