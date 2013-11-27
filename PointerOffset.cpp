@@ -42,7 +42,7 @@ private:
 //=============================================================================
 void utest_Dummy::test_standard()
 {
-  print(__func__);
+  print(DGC_CURRENT_FUNCTION);
   Dummy d;
   assert(d.m_int == INT_VALUE);
   assert(d.m_double == 3.14);

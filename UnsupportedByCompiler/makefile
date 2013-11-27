@@ -45,7 +45,7 @@ all: $(SOURCE)
 #==============================================================================
 #D Build the executables from each .$(EXT) file
 #------------------------------------------------------------------------------
-%.exe: %.$(EXT) makefile
+%.exe: %.$(EXT) makefile ../UnitTest.h
 	$(CC) $(CC_OPTS) $<
 	@echo ""
 

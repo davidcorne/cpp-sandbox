@@ -31,7 +31,7 @@ private:
 //=============================================================================
 void utest_UndefinedClass::test_pointer()
 {
-  print(__func__);
+  print(DGC_CURRENT_FUNCTION);
   UndefinedClass* undef = 0;
   test(!undef, "undef should be null");
   undef = reinterpret_cast<UndefinedClass*>(new int);
@@ -41,7 +41,7 @@ void utest_UndefinedClass::test_pointer()
 //=============================================================================
 void utest_UndefinedClass::test_reference()
 {
-  print(__func__);
+  print(DGC_CURRENT_FUNCTION);
   UndefinedClass& undef = *reinterpret_cast<UndefinedClass*>(new int);
   test(&undef, "undef is not null.");
 }

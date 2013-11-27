@@ -63,7 +63,7 @@ private:
 //=============================================================================
 void utest_Dummy::test_getters()
 {
-  print(__func__);
+  print(DGC_CURRENT_FUNCTION);
   Dummy d;
   test(d.get_int() == 5, "Int getter failed");
   test(d.get_double() == 1.2345, "Double getter failed");
@@ -106,7 +106,7 @@ private:
 //=============================================================================
 void utest_DummyStruct::test_cast()
 {
-  print(__func__);
+  print(DGC_CURRENT_FUNCTION);
   Dummy d;
   DummyStruct* dummy = reinterpret_cast<DummyStruct*>(&d);
   test(dummy, "Cast failed");
@@ -118,7 +118,7 @@ void utest_DummyStruct::test_cast()
 //=============================================================================
 void utest_DummyStruct::test_change()
 {
-  print(__func__);
+  print(DGC_CURRENT_FUNCTION);
   Dummy d;
   DummyStruct* dummy = reinterpret_cast<DummyStruct*>(&d);
   test(dummy, "Cast failed");

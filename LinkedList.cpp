@@ -182,7 +182,7 @@ public:
 //=============================================================================
 void utest_LinkedList::test_random_access()
 {
-  print(__func__);
+  print(DGC_CURRENT_FUNCTION);
   LinkedList<int> list;
   list.append(0);
   list.append(1);
@@ -199,7 +199,7 @@ void utest_LinkedList::test_random_access()
 //=============================================================================
 void utest_LinkedList::test_length()
 {
-  print(__func__);
+  print(DGC_CURRENT_FUNCTION);
   LinkedList<char> list;
   test(list.length() == 0, "Empty list should have length 0.");
   list.append('a');
@@ -213,7 +213,7 @@ void utest_LinkedList::test_length()
 //=============================================================================
 void utest_LinkedList::test_string_list()
 {
-  print(__func__);
+  print(DGC_CURRENT_FUNCTION);
   LinkedList<string> string_list;
   string_list.append("hello");
   string_list.append("world");
@@ -224,7 +224,7 @@ void utest_LinkedList::test_string_list()
 //=============================================================================
 void utest_LinkedList::test_prepend()
 {
-  print(__func__);
+  print(DGC_CURRENT_FUNCTION);
   LinkedList<int> l;
   l.append(1);
   l.append(2);
@@ -237,7 +237,7 @@ void utest_LinkedList::test_prepend()
 //=============================================================================
 void utest_LinkedList::test_append()
 {
-  print(__func__);
+  print(DGC_CURRENT_FUNCTION);
   LinkedList<int> l;
   l.append(1);
   test(l.m_head->data == 1, "Append has not appended 1.");
@@ -264,7 +264,7 @@ void utest_LinkedList::test_append()
 //=============================================================================
 void utest_LinkedList::test_prev()
 {
-  print(__func__);
+  print(DGC_CURRENT_FUNCTION);
   LinkedList<int> l;
   l.append(0);
   LinkedList<int>::Node* n_0 = l.last_node();
@@ -280,7 +280,7 @@ void utest_LinkedList::test_prev()
 //=============================================================================
 void utest_LinkedList::test_last_node()
 {
-  print(__func__);
+  print(DGC_CURRENT_FUNCTION);
   LinkedList<int> l;
   LinkedList<int>::Node* last = l.last_node();
   test(last == 0, "Last should be null.");
@@ -292,7 +292,7 @@ void utest_LinkedList::test_last_node()
 //=============================================================================
 void utest_LinkedList::test_equal()
 {
-  print(__func__);
+  print(DGC_CURRENT_FUNCTION);
   LinkedList<int> first;
   LinkedList<int> second;
   int limit = 50;
@@ -317,7 +317,7 @@ void utest_LinkedList::test_equal()
 //=============================================================================
 void utest_LinkedList::test_not_equal()
 {
-  print(__func__);
+  print(DGC_CURRENT_FUNCTION);
   LinkedList<char> first;
   LinkedList<char> second;
   test(!(first != second), "Empty lists should not be unequal");
