@@ -1,5 +1,3 @@
-// even_lambda.cpp
-// compile with: cl /EHsc /nologo /W4 /MTd
 #include <algorithm>
 #include <iostream>
 #include <vector>
