@@ -2,10 +2,6 @@
 //
 // 
 
-#include <assert.h>
-#include <iostream>
-#include <functional>
-#include <exception>
 #include <crtdbg.h>
 
 #include "../UnitTest.h"
@@ -77,7 +73,7 @@ void utest_MemoryLeakDetector::test_no_memory_leak()
   try {
     MemoryLeakDetector leak_detector;
     int* i = new int;
-    delete[] i;
+    delete i;
   } catch (MemoryLeakDetector::MemoryLeakDetected execption) {
     exception = false;
   }
