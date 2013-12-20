@@ -1,64 +1,46 @@
-//=============================================================================
-//
-// 
-
 #include <iostream>
-
-#include "UnitTest.h"
+#include <stdexcept>
 
 using namespace std;
 
-const int INT_VALUE = 55;
-
-//=============================================================================
-class Dummy {
+class Bank {
 public:
 
-  Dummy()
-    : m_int(INT_VALUE),
-      m_double(3.14)
+  Bank(int money)
+    : m_money(money),
+      m_thing(false),
+      another_thing(-5.3234)
     {}
-    
-private:
-  friend class utest_Dummy;
   
-  int m_int;
-  double m_double;
-};
-
-//=============================================================================
-class utest_Dummy : public UnitTest {
-public:
-  
-  void run_tests() {
-    print(__FILE__);
-    test_standard();
+  void show_balance() {
+    cout << "Your balance is: " << m_money << endl;
   }
-private:
-  void test_standard();
   
+private:
+  int m_money;
+  bool m_thing;
+  double another_thing;
 };
 
-//=============================================================================
-void utest_Dummy::test_standard()
+void printf(const char *s)
 {
-  print(DGC_CURRENT_FUNCTION);
-  Dummy d;
-  assert(d.m_int == INT_VALUE);
-  assert(d.m_double == 3.14);
-  Dummy* d_ptr = &d;
-  
-  int* m_int = reinterpret_cast<int*>(d_ptr);
-  test(*m_int == INT_VALUE, "Reinterpret cast failed to get class internals");
-
-  // <nnn> void* offset = reinterpret_cast<char*>(&d);
-  // <nnn> offset += sizeof(d);
-  // <nnn> cout << sizeof(d.m_int) << " " <<  sizeof(d.m_double) << " " <<  sizeof(d) << " " << offset << endl;
+    while (*s) {
+        if (*s == '%') {
+            if (*(s + 1) == '%') {
+                ++s;
+            }
+            else {
+                throw std::runtime_error("invalid format string: missing arguments");
+            }
+        }
+        std::cout << *s++;
+    }
 }
-
-//=============================================================================
+ 
 int main() {
-  utest_Dummy test;
-  test.run_tests();
+  Bank my_bank(14);
+  // printf("hi");
+  // <nnn> change<Bank, int, double, bool>(my_bank, 2000);
+  
   return 0;
 }

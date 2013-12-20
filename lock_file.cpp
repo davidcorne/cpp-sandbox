@@ -3,6 +3,7 @@
 //D An RAII file locker. On creation, this will lock the file given.
 //
 
+#include <assert.h>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -52,6 +53,7 @@ LockedFile::LockedFile(std::string file)
     m_file_handle, // HANDLE hFile,            
     &file_size     // PLARGE_INTEGER lpFileSize
   );
+  assert(ok);
 
   OVERLAPPED sOverlapped;
   // lock the file

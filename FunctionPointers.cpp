@@ -28,7 +28,7 @@ void print_list(const list<T>& to_print, const string& title)
     cout << "Printing list: " << title << endl;
   }
   for(
-    list<T>::const_iterator iter = to_print.cbegin();
+    typename list<T>::const_iterator iter = to_print.cbegin();
     iter != to_print.cend();
     ++iter
   ) {
@@ -45,7 +45,7 @@ int ascii_sum(const string& in)
 //
 {
   int sum = 0;
-  for (int i = 0; i < in.length(); ++i) {
+  for (unsigned int i = 0; i < in.length(); ++i) {
     sum += static_cast<int>(in[i]);
   }
   return sum;
@@ -89,7 +89,7 @@ int main()
   auto ascii_order_function = ascii_order;
   
   list<string> ascii_sorted_strings = strings;
-  ascii_sorted_strings.sort(ascii_order);
+  ascii_sorted_strings.sort(ascii_order_function);
   print_list<string>(ascii_sorted_strings, "strings sorted by ascii value");
 
   return 0;

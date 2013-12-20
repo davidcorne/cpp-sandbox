@@ -62,7 +62,7 @@ void print_list(const list<T>& to_print, const string& title)
     cout << "Printing list: " << title << endl;
   }
   for(
-    list<T>::const_iterator iter = to_print.cbegin();
+    typename list<T>::const_iterator iter = to_print.cbegin();
     iter != to_print.cend();
     ++iter
   ) {
