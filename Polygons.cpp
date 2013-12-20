@@ -13,7 +13,12 @@ class CPolygon {
     virtual int area (void) =0;
     void printarea (void)
       { cout << area() << endl; }
+  virtual ~CPolygon() = 0;
   };
+
+CPolygon::~CPolygon()
+{
+}
 
 class CRectangle: public CPolygon {
   public:
