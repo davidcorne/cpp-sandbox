@@ -2,10 +2,15 @@
 //
 // Idea from http://www.drdobbs.com/cpp/mixin-based-programming-in-c/184404445
  
+
 #include <iostream>
 #include <string>
 
+#include "gcc_version.h"
+
 using namespace std;
+
+#if GCC_VERSION > 408000
 
 //=============================================================================
 class Printable {
@@ -132,3 +137,11 @@ int main() {
   delcam.print();
   return 0;
 }
+
+#else // GCC_VERSION > 408000
+int main()
+{
+  return 0;
+}
+
+#endif // GCC_VERSION > 408000
