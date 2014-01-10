@@ -115,7 +115,7 @@ int main(int num_arguments, char* arguments[])
 
 int main(int num_arguments, char* arguments[])
 {
-  return EXIT_SUCCESS;
+  return 0;
 }
 
 #endif //#ifdef __CYGWIN__
