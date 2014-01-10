@@ -3,9 +3,11 @@
 // 
 
 #include <iostream>
+#include "gcc_version.h"
 
 using namespace std;
 
+#if GCC_VERSION > 408000
 //=============================================================================
 class Base {
 public:
@@ -21,6 +23,7 @@ public:
   virtual void thing() override;
   
 };
+#endif
 
 //=============================================================================
 int main() {
