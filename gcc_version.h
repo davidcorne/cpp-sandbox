@@ -14,6 +14,3 @@
   + __GNUC_PATCHLEVEL__ \
 )
 
-
-/* Test for GCC > 3.2.0 */
-
