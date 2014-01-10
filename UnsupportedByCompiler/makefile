@@ -6,7 +6,7 @@ CC = cl
 EXT = cpp
 CC_OPTS = /EHsc /Z7
 OBJECTS = *.obj
-TO_TEST = MemoryLeakDetector.exe Closure.exe
+TO_TEST = MemoryLeakDetector.exe
 
 #==============================================================================
 #D Makes all of the $(EXT) files into exe files using $(CC)
