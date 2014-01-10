@@ -3,6 +3,8 @@
 //D An RAII file locker. On creation, this will lock the file given.
 //
 
+#ifdef __CYGWIN__
+
 #include <assert.h>
 #include <fstream>
 #include <iostream>
@@ -108,3 +110,12 @@ int main(int num_arguments, char* arguments[])
   std::cout << "Unlocked file deleted? " << result << std::endl;
   return EXIT_SUCCESS;
 }
+
+#else //#ifdef __CYGWIN__
+
+int main(int num_arguments, char* arguments[])
+{
+  return EXIT_SUCCESS;
+}
+
+#endif //#ifdef __CYGWIN__
