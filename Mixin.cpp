@@ -10,7 +10,7 @@
 
 using namespace std;
 
-#if GCC_VERSION > 408000
+#if GCC_VERSION > 40800
 
 //=============================================================================
 class Printable {
@@ -78,6 +78,9 @@ protected:
     }
   
 private:
+  Company(Company&);
+  Company& operator=(const Company&);
+  
   string m_company_name;
 };
 
@@ -93,12 +96,17 @@ public:
 
   ~PhoneContact() {}
 
-private:
+protected:
 
   virtual string to_str() const override
     {
       return Base::to_str() + ", Phone: " + m_phone_number;
     }
+
+private:
+  PhoneContact(PhoneContact&);
+  PhoneContact& operator=(const PhoneContact&);
+  
 
   string m_phone_number;
 };
@@ -115,33 +123,46 @@ public:
 
   ~EmailContact() {}
 
-private:
+protected:
 
   virtual string to_str() const override
     {
       return Base::to_str() + ", Email: " + m_email_address;
     }
 
+private:
+  EmailContact(EmailContact&);
+  EmailContact& operator=(const EmailContact&);
+  
+
   string m_email_address;
 };
-  
+
+typedef PhoneContact<Customer, string, string> CustomerPhoneContact;
+typedef EmailContact<Customer, string, string> CustomerEmailContact;
+
 //=============================================================================
 int main() {
   Customer pete("Peter", "Calderson");
   pete.print();
-  PhoneContact<Customer, string, string> dave("David", "Corne", "01254 453873");
+  CustomerPhoneContact dave("David", "Corne", "01254 453873");
   dave.print();
-  EmailContact<Customer, string, string> tim("Tim", "Timson", "tim_timson@gmail.com");
+  CustomerEmailContact tim("Tim", "Timson", "tim_timson@gmail.com");
   tim.print();
   PhoneContact<Company, string> delcam("Delcam", "01254 453873");
   delcam.print();
+
+  EmailContact<CustomerPhoneContact, string, string, string> me(
+    "David", "Corne", "07921143821", "davidcorne@gmail.com"
+  );
+  me.print();
   return 0;
 }
 
-#else // GCC_VERSION > 408000
+#else // GCC_VERSION > 40800
 int main()
 {
   return 0;
 }
 
-#endif // GCC_VERSION > 408000
+#endif // GCC_VERSION > 40800

@@ -7,7 +7,7 @@
 
 using namespace std;
 
-#if GCC_VERSION > 408000
+#if GCC_VERSION > 40800
 //=============================================================================
 class Base {
 public:
