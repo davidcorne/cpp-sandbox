@@ -35,7 +35,7 @@ REMOVE_TEMP_FILES = @rm -f *~ \#*\#
 #D will be made.
 #------------------------------------------------------------------------------
 all: $(SOURCE)
-	@echo "make: \`all' is up to date."
+	@echo "make: \`all' is up to date with" $(shell ./gcc_version.exe)"."
 	$(REMOVE_OBJECTS)
 	$(REMOVE_TEMP_FILES)
 	@echo ""
@@ -55,6 +55,8 @@ all: $(SOURCE)
 test: all
 	@chmod +x $(TO_TEST)
 	$(foreach test, $(TO_TEST), ./$(test);)
+	@echo
+	@echo "tested:" $(TO_TEST) "made with" $(shell ./gcc_version.exe)"."
 
 #==============================================================================
 #D For deleting all temporary and made files
