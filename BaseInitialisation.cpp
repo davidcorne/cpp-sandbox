@@ -8,6 +8,10 @@
 
 using namespace std;
 
+#include "gcc_version.h"
+
+#if GCC_VERSION > 40800
+
 //=============================================================================
 class Base {
 public:
@@ -76,3 +80,8 @@ int main() {
   test.run_tests();
   return 0;
 }
+#else
+int main() {
+  return 0;
+}
+#endif
