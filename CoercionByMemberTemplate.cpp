@@ -9,6 +9,10 @@
 using namespace std;
 
 
+#include "gcc_version.h"
+
+#if GCC_VERSION > 40800
+
 //=============================================================================
 template <class T>
 class Ptr {
@@ -26,7 +30,7 @@ public:
     }
 
   template <class U>
-  Ptr (Ptr <U> const & p)
+  Ptr (Ptr<U> const & p)
   // Supporting coercion using member template constructor.
   // This is not a copy constructor, but behaves similarly.
     : m_ptr (p.m_ptr) // Implicit conversion from U to T required
@@ -104,3 +108,8 @@ int main() {
   test.run_tests();
   return 0;
 }
+#else
+int main() {
+  return 0;
+}
+#endif
