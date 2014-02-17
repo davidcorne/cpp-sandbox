@@ -8,7 +8,7 @@ CC_OPTS = -std=c++0x -g -Wall -Werror
 OBJECTS = *.o *.obj *.ilk *.pdb *.suo *.stackdump
 
 TO_TEST = LinkedList.exe PointerOffset.exe ClassToStructCast.exe \
-          OddArrayAccess.exe Closure.exe
+          OddArrayAccess.exe Closure.exe RingBuffer.exe
 
 #==============================================================================
 #D Makes all of the $(EXT) files into exe files using $(CC)
