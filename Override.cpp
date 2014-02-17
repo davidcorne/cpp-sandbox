@@ -3,11 +3,11 @@
 // 
 
 #include <iostream>
-#include "gcc_version.h"
+#include "compiler_guards.h"
 
 using namespace std;
 
-#if GCC_VERSION > 40800
+#if CPP_ELEVEN_SUPPORTED
 //=============================================================================
 class Base {
 public:

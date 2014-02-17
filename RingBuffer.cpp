@@ -11,32 +11,26 @@
 using namespace std;
 
 //=============================================================================
-struct Request {
-  int Num;
-  string Descriptiton;
-};
-
-//=============================================================================
-class RequestRing {
+template <typename T>
+class Ring {
 public:
 
-  RequestRing()
+  Ring()
     : m_head(0),
       m_tail(0)
     {}
 
-  void add(Request r) {
+  void add(T t) {
     assert((m_tail + 1) % MAX_ARRAY != m_head);
-    m_array[m_tail].Num = r.Num;
-    m_array[m_tail].Descriptiton = r.Descriptiton;
+    m_array[m_tail] = t;
     m_tail = (m_tail + 1) % MAX_ARRAY;
   }
     
-  Request update() {
+  T update() {
     // basically a pop
-    Request request = m_array[m_head];
+    T t = m_array[m_head];
     m_head = (m_head + 1) % MAX_ARRAY;
-    return request;
+    return t;
   }
 
   int size() const {
@@ -56,15 +50,23 @@ public:
     return MAX_ARRAY;
   }
   
-  ~RequestRing(){}
+  ~Ring(){}
       
 private:
   friend class utest_RingBuffer;
   static const int MAX_ARRAY = 5;
   int m_head;
   int m_tail;
-  Request m_array[MAX_ARRAY];
+  T m_array[MAX_ARRAY];
 };
+
+//=============================================================================
+struct Request {
+  int Num;
+  string Descriptiton;
+};
+
+typedef Ring<Request> RequestRing;
 
 //=============================================================================
 class utest_RingBuffer : public UnitTest {

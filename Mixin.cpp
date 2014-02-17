@@ -6,11 +6,11 @@
 #include <iostream>
 #include <string>
 
-#include "gcc_version.h"
+#include "compiler_guards.h"
 
 using namespace std;
 
-#if GCC_VERSION > 40800
+#if CPP_ELEVEN_SUPPORTED
 
 //=============================================================================
 class Printable {
@@ -159,10 +159,6 @@ int main() {
   return 0;
 }
 
-#else // GCC_VERSION > 40800
-int main()
-{
-  return 0;
-}
-
-#endif // GCC_VERSION > 40800
+#else // CPP_ELEVEN_SUPPORTED
+NOT_SUPPORTED_MAIN
+#endif // CPP_ELEVEN_SUPPORTED

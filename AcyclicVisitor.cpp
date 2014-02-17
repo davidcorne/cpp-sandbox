@@ -4,9 +4,9 @@
 // http://www.objectmentor.com/resources/articles/acv.pdf
 
 #include "UnitTest.h"
-#include "gcc_version.h"
+#include "compiler_guards.h"
 
-#if GCC_VERSION > 40800
+#if CPP_ELEVEN_SUPPORTED
 
 //=============================================================================
 // Degenerate class, only used for passing around. Anyone who wants to use
@@ -397,9 +397,5 @@ double ortParameterDataModel::orthotic_thickness() const
 }
   
 #else
-
-int main()
-{
-  return 0;
-}
+NOT_SUPPORTED_MAIN
 #endif

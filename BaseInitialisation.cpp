@@ -8,9 +8,9 @@
 
 using namespace std;
 
-#include "gcc_version.h"
+#include "compiler_guards.h"
 
-#if GCC_VERSION > 40800
+#if CPP_ELEVEN_SUPPORTED
 
 //=============================================================================
 class Base {
@@ -81,7 +81,5 @@ int main() {
   return 0;
 }
 #else
-int main() {
-  return 0;
-}
+NOT_SUPPORTED_MAIN
 #endif
