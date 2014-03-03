@@ -3,7 +3,6 @@
 // Based on:
 // http://bartoszmilewski.com/2013/11/13/functional-data-structures-in-c-lists/
 
-#include <iostream>
 #include <memory>
 
 #include "UnitTest.h"
@@ -21,11 +20,21 @@ public:
   List(T val, List tail)
     : m_head(make_shared<Item<T> >(val, tail.m_head))
     {}
+
+  static List make_repeat(T val, int repeats)
+    {
+      List list;
+      for (int i = 0; i < repeats; ++i) {
+        list = List(val, list);
+      }
+      return list;
+    }
   
   bool empty() const
     {
       return !m_head;
     }
+
   T front() const
     {
       assert(!empty());
@@ -78,6 +87,7 @@ public:
     test_front();
     test_pop_front();
     test_size();
+    test_make_repeat();
   }
 
 private:
@@ -86,6 +96,7 @@ private:
   void test_front();
   void test_pop_front();
   void test_size();
+  void test_make_repeat();
 
 };
 
@@ -140,7 +151,32 @@ void utest_List<T>::test_size()
   test(list_3.size() == 3, "Incorrect size for list size 3.");
   T list_4(4, list_3);
   test(list_4.size() == 4, "Incorrect size for list size 4.");
+}
 
+//=============================================================================
+template <typename T>
+void utest_List<T>::test_make_repeat()
+{
+  print(DGC_CURRENT_FUNCTION);
+  // put each in it's own scope so that they clear up all the repeat lists
+  {
+    int size = 10;
+    T list = T::make_repeat(-10, size);
+    test(list.size() == size, "Wrong size of repeated list.");
+    for (int i = 0; i < size; ++i) {
+      test(list.front() == -10, "Wrong value in list.");
+      list = list.pop_front();
+    }
+    test(list.empty(), "List should be empty now.");
+  }
+  {
+    T repeated_list = T::make_repeat(5, 100);
+    test(repeated_list.size() == 100, "Wrong size of repeated list.");
+  }
+  {
+    T repeated_list = T::make_repeat(5, 1000);
+    test(repeated_list.size() == 1000, "Wrong size of repeated list.");
+  }
 }
 
 //=============================================================================
