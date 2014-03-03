@@ -16,7 +16,7 @@ class List {
 public:
 
   List()
-    : m_head(0)
+    : m_head(nullptr)
     {}
   List(T val, List tail)
     : m_head(make_shared<Item<T> >(val, tail.m_head))
@@ -39,7 +39,7 @@ public:
     }
 
   int size() const
-  // O(n) complexity
+  // O(n) complexity, at least
     {
       if (empty()) {
         return 0;
@@ -60,7 +60,6 @@ private:
     shared_ptr<Item> next;
   };
 
-  friend class utest_List;
   explicit List(shared_ptr<Item<T> > items)
     : m_head(items)
     {}
@@ -69,6 +68,7 @@ private:
 };
 
 //=============================================================================
+template <typename T>
 class utest_List : public UnitTest {
 public:
 
@@ -90,58 +90,63 @@ private:
 };
 
 //=============================================================================
-void utest_List::test_empty()
+template <typename T>
+void utest_List<T>::test_empty()
 {
   print(DGC_CURRENT_FUNCTION);
-  List<int> list_1;
+  T list_1;
   test(list_1.empty(), "list_1 should be empty");
-  List<int> list_2(5, List<int>());
+  T list_2(5, T());
   test(!list_2.empty(), "list_2 should not be empty");
-  List<int> list_3(0, list_2);
+  T list_3(0, list_2);
   test(!list_3.empty(), "list_3 should not be empty");
 }
 
 //=============================================================================
-void utest_List::test_front()
+template <typename T>
+void utest_List<T>::test_front()
 {
   print(DGC_CURRENT_FUNCTION);
-  List<int> list_1(5, List<int>());
+  T list_1(5, T());
   test(list_1.front() == 5, "Front has returned the wrong thing.");
 }
 
 //=============================================================================
-void utest_List::test_pop_front()
+template <typename T>
+void utest_List<T>::test_pop_front()
 {
   print(DGC_CURRENT_FUNCTION);
-  List<int> list_0;
-  List<int> list_1(1, list_0);
-  List<int> popped = list_1.pop_front();
+  T list_0;
+  T list_1(1, list_0);
+  T popped = list_1.pop_front();
   test(popped.empty(), "Popped list should be empty.");
-  List<int> list_2(2, list_1);
+  T list_2(2, list_1);
   popped = list_2.pop_front();
   test(popped.front() == 1, "Incorrect value popped.");
 }
 
 //=============================================================================
-void utest_List::test_size()
+template <typename T>
+void utest_List<T>::test_size()
 {
   print(DGC_CURRENT_FUNCTION);
-  List<int> list_0;
+  T list_0;
   test(list_0.size() == 0, "Incorrect size for empty list.");
-  List<int> list_1(1, list_0);
+  T list_1(1, list_0);
   test(list_1.size() == 1, "Incorrect size for list size 1.");
-  List<int> list_2(2, list_1);
+  T list_2(2, list_1);
   test(list_2.size() == 2, "Incorrect size for list size 2.");
-  List<int> list_3(3, list_2);
+  T list_3(3, list_2);
   test(list_3.size() == 3, "Incorrect size for list size 3.");
-  List<int> list_4(4, list_3);
+  T list_4(4, list_3);
   test(list_4.size() == 4, "Incorrect size for list size 4.");
 
 }
 
 //=============================================================================
 int main() {
-  utest_List test;
-  test.run_tests();
+  utest_List<List<int> >().run_tests();
+  utest_List<List<double> >().run_tests();
+  utest_List<List<float> >().run_tests();
   return 0;
 }
