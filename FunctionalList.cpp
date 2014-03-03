@@ -11,17 +11,6 @@
 using namespace std;
 
 //=============================================================================
-template <typename T>
-struct Item {
-  Item(T val, Item const * tail)
-    : value(val),
-      next(tail)
-    {}
-  T value;
-  Item const * next;
-};
-
-//=============================================================================
 template<typename T>
 class List {
 public:
@@ -30,7 +19,7 @@ public:
     : m_head(0)
     {}
   List(T val, List tail)
-    : m_head(new Item<T>(val, tail.m_head))
+    : m_head(make_shared<Item<T> >(val, tail.m_head))
     {}
   
   bool empty() const
@@ -49,13 +38,34 @@ public:
       return List(m_head->next);
     }
 
+  int size() const
+  // O(n) complexity
+    {
+      if (empty()) {
+        return 0;
+      } else {
+        return 1 + pop_front().size();
+      }
+    }
+
 private:
+  //===========================================================================
+  template <typename U>
+  struct Item {
+    Item(U val, shared_ptr<Item> tail)
+      : value(val),
+        next(tail)
+      {}
+    U value;
+    shared_ptr<Item> next;
+  };
+
   friend class utest_List;
-  explicit List(Item<T> const * items)
+  explicit List(shared_ptr<Item<T> > items)
     : m_head(items)
     {}
 
-  Item<T> const * m_head;
+  shared_ptr<Item<T> > m_head;
 };
 
 //=============================================================================
@@ -67,6 +77,7 @@ public:
     test_empty();
     test_front();
     test_pop_front();
+    test_size();
   }
 
 private:
@@ -74,6 +85,7 @@ private:
   void test_empty();
   void test_front();
   void test_pop_front();
+  void test_size();
 
 };
 
@@ -108,6 +120,23 @@ void utest_List::test_pop_front()
   List<int> list_2(2, list_1);
   popped = list_2.pop_front();
   test(popped.front() == 1, "Incorrect value popped.");
+}
+
+//=============================================================================
+void utest_List::test_size()
+{
+  print(DGC_CURRENT_FUNCTION);
+  List<int> list_0;
+  test(list_0.size() == 0, "Incorrect size for empty list.");
+  List<int> list_1(1, list_0);
+  test(list_1.size() == 1, "Incorrect size for list size 1.");
+  List<int> list_2(2, list_1);
+  test(list_2.size() == 2, "Incorrect size for list size 2.");
+  List<int> list_3(3, list_2);
+  test(list_3.size() == 3, "Incorrect size for list size 3.");
+  List<int> list_4(4, list_3);
+  test(list_4.size() == 4, "Incorrect size for list size 4.");
+
 }
 
 //=============================================================================
