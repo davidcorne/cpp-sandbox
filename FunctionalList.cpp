@@ -50,11 +50,7 @@ public:
   int size() const
   // O(n) complexity, at least
     {
-      if (empty()) {
-        return 0;
-      } else {
-        return 1 + pop_front().size();
-      }
+      return empty() ? 0 : 1 + pop_front().size();
     }
 
 private:
