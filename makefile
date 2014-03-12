@@ -9,7 +9,7 @@ OBJECTS = *.o *.obj *.ilk *.pdb *.suo *.stackdump
 
 TO_TEST = LinkedList.exe PointerOffset.exe ClassToStructCast.exe \
           OddArrayAccess.exe Closure.exe RingBuffer.exe \
-          FunctionalList.exe UIBuilder.exe
+          FunctionalList.exe UIBuilder.exe MachineEpsilon.exe
 
 #==============================================================================
 #D Makes all of the $(EXT) files into exe files using $(CC)
@@ -57,7 +57,10 @@ test: all
 	@chmod +x $(TO_TEST)
 	$(foreach test, $(TO_TEST), ./$(test);)
 	@echo
-	@echo "tested:" $(TO_TEST) "made with" $(shell ./gcc_version.exe)"."
+	@echo "Tested:" 
+	@$(foreach test, $(TO_TEST), echo "        $(test)";)
+	@echo
+	@echo "Made with" $(shell ./gcc_version.exe)"."
 
 #==============================================================================
 #D For deleting all temporary and made files
