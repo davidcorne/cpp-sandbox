@@ -4,9 +4,10 @@
 // http://isa.unomaha.edu/wp-content/uploads/2012/08/Design-Patterns.pdf
 
 #include "compiler_guards.h"
+#include <iostream>
 
 #if CPP_ELEVEN_SUPPORTED
-#include <iostream>
+
 #include <string>
 #include <vector>
 #include <algorithm>
