@@ -20,6 +20,18 @@
 // local forward function declarations
 
 //=============================================================================
+class Error {
+public:
+
+  Error(std::string message);
+  
+  std::string to_string() const;
+
+private:
+  std::string m_message;
+};
+
+//=============================================================================
 class LockedFile {
 public:
 
@@ -37,6 +49,69 @@ private:
   HANDLE m_file_handle;
 };
 
+
+//=============================================================================
+class utest_lock_file : public UnitTest {
+public:
+
+  void run_tests() {
+    print(__FILE__);
+    test_lock();
+    test_valid_handle();
+  }
+
+private:
+
+  void test_lock();
+  void test_valid_handle();
+  void write_file(std::string path, std::string contents)
+    {
+      std::ofstream file_stream(path);
+      file_stream << contents;
+      file_stream.close();
+    }
+
+};
+
+//=============================================================================
+void utest_lock_file::test_valid_handle()
+{
+  print(DGC_CURRENT_FUNCTION);
+  // write a file
+  std::string path("lock_file.txt");
+  write_file(path, "");
+  {
+    LockedFile lock_file(path);
+    test(lock_file.handle(), "Invalid handle.");
+  }
+  // Clean up
+  int result = remove(path.c_str());
+  assert(result == 0);
+}
+
+//=============================================================================
+void utest_lock_file::test_lock()
+{
+  print(DGC_CURRENT_FUNCTION);
+  // write a file
+  std::string path("lock_file.txt");
+  write_file(path, "Test file\n");
+  int result = 0;
+  {
+    LockedFile lock(path);
+    result = remove(path.c_str());
+    test(result != 0, "Locked file was deleted.");
+  }
+  result = remove(path.c_str());
+  test(result == 0, "Unlocked file could not be deleted.");
+}
+
+//=============================================================================
+int main() {
+  utest_lock_file test;
+  test.run_tests();
+  return 0;
+}
 
 //=============================================================================
 LockedFile::LockedFile(std::string file)
@@ -86,44 +161,15 @@ LockedFile::~LockedFile()
 }
 
 //=============================================================================
-class utest_lock_file : public UnitTest {
-public:
-
-  void run_tests() {
-    print(__FILE__);
-    test_lock();
-  }
-
-private:
-
-  void test_lock();
-
-};
-
-//=============================================================================
-void utest_lock_file::test_lock()
+Error::Error(std::string message)
+  : m_message(message)
 {
-  print(DGC_CURRENT_FUNCTION);
-  // write a file
-  std::string path("lock_file.txt");
-  std::ofstream file_stream(path);
-  file_stream << "Test file\n";
-  file_stream.close();
-  int result = 0;
-  {
-    LockedFile lock(path);
-    result = remove(path.c_str());
-    test(result != 0, "Locked file was deleted.");
-  }
-  result = remove(path.c_str());
-  test(result == 0, "Unlocked file could not be deleted.");
 }
 
 //=============================================================================
-int main() {
-  utest_lock_file test;
-  test.run_tests();
-  return 0;
+std::string Error::to_string() const
+{
+  return m_message;
 }
 
 #else //#ifdef __CYGWIN__
