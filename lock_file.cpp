@@ -5,6 +5,8 @@
 
 #ifdef __CYGWIN__
 
+#include "UnitTest.h"
+
 #include <assert.h>
 #include <fstream>
 #include <iostream>
@@ -84,31 +86,44 @@ LockedFile::~LockedFile()
 }
 
 //=============================================================================
-void write_file(std::string path)
+class utest_lock_file : public UnitTest {
+public:
+
+  void run_tests() {
+    print(__FILE__);
+    test_lock();
+  }
+
+private:
+
+  void test_lock();
+
+};
+
+//=============================================================================
+void utest_lock_file::test_lock()
 {
+  print(DGC_CURRENT_FUNCTION);
+  // write a file
+  std::string path("lock_file.txt");
   std::ofstream file_stream(path);
   file_stream << "Test file\n";
   file_stream.close();
-}
-
-//=============================================================================
-int main(int num_arguments, char* arguments[])
-//
-//D The entry point and single function of this program
-//
-{
-  // write a file
-  std::string path("lock_file.txt");
-  write_file(path);
   int result = 0;
   {
     LockedFile lock(path);
     result = remove(path.c_str());
-    std::cout << "Locked file deleted? " << result << std::endl;
+    test(result != 0, "Locked file was deleted.");
   }
   result = remove(path.c_str());
-  std::cout << "Unlocked file deleted? " << result << std::endl;
-  return EXIT_SUCCESS;
+  test(result == 0, "Unlocked file could not be deleted.");
+}
+
+//=============================================================================
+int main() {
+  utest_lock_file test;
+  test.run_tests();
+  return 0;
 }
 
 #else //#ifdef __CYGWIN__
