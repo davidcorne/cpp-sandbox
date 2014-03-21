@@ -12,8 +12,8 @@
 #include <iostream>
 #include <string>
 #include <stdio.h>
+#include <memory>
 
-#include <Windows.h>
 // types: classes, enums, typedefs, namespaces
 
 // variables: consts, statics, exported variables (declared extern elsewhere)
@@ -31,6 +31,8 @@ private:
   std::string m_message;
 };
 
+struct FileHandle;
+
 //=============================================================================
 class LockedFile {
 public:
@@ -38,7 +40,7 @@ public:
   LockedFile(std::string file);
   // Locks file
 
-  HANDLE handle() const;
+  void* handle() const;
   // 
 
   ~LockedFile();
@@ -46,7 +48,7 @@ public:
 
 private:
 
-  HANDLE m_file_handle;
+  std::unique_ptr<FileHandle> m_file_handle;
 };
 
 
@@ -113,10 +115,19 @@ int main() {
   return 0;
 }
 
+#include <Windows.h>
+
+//=============================================================================
+struct FileHandle
+{
+  HANDLE handle;
+};
+
 //=============================================================================
 LockedFile::LockedFile(std::string file)
+  : m_file_handle(new FileHandle)
 {
-  m_file_handle = CreateFile(
+  m_file_handle->handle = CreateFile(
     file.c_str(),                 // LPCTSTR lpFileName,
     GENERIC_READ | GENERIC_WRITE, // DWORD dwDesiredAccess,
     FILE_SHARE_READ,              // DWORD dwShareMode,
@@ -129,8 +140,8 @@ LockedFile::LockedFile(std::string file)
   LARGE_INTEGER file_size;
   BOOL ok = FALSE;
   ok = GetFileSizeEx(
-    m_file_handle, // HANDLE hFile,            
-    &file_size     // PLARGE_INTEGER lpFileSize
+    m_file_handle->handle,        // HANDLE hFile,            
+    &file_size                    // PLARGE_INTEGER lpFileSize
   );
   assert(ok);
 
@@ -138,7 +149,7 @@ LockedFile::LockedFile(std::string file)
   // lock the file
 
   ok = LockFileEx(
-    m_file_handle,             // HANDLE hFile,
+    m_file_handle->handle,     // HANDLE hFile,
     LOCKFILE_EXCLUSIVE_LOCK |
     LOCKFILE_FAIL_IMMEDIATELY, // DWORD dwFlags,
     0,                         // DWORD dwReserved,
@@ -146,18 +157,19 @@ LockedFile::LockedFile(std::string file)
     file_size.HighPart,        // DWORD nNumberOfBytesToLockHigh,
     &sOverlapped               // LPOVERLAPPED lpOverlapped
   );
+  assert(ok);
 }
 
 //=============================================================================
 HANDLE LockedFile::handle() const
 {
-  return m_file_handle;
+  return m_file_handle->handle;
 }
 
 //=============================================================================
 LockedFile::~LockedFile()
 {
-  CloseHandle(m_file_handle);
+  CloseHandle(m_file_handle->handle);
 }
 
 //=============================================================================
