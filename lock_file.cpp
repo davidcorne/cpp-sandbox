@@ -201,11 +201,11 @@ std::string LockedFile::read() const
   char* buffer = new char[file_size.LowPart + 1];
   DWORD  bytes_read = 0;
   ReadFile(
-    m_file_handle->handle,       // HANDLE hFile,
-    buffer,            // LPVOID lpBuffer,
-    file_size.LowPart, // DWORD nNumberOfBytesToRead,
-    &bytes_read,       // LPDWORD lpNumberOfBytesRead,
-    NULL               // LPOVERLAPPED lpOverlapped
+    m_file_handle->handle, // HANDLE hFile,
+    buffer,                // LPVOID lpBuffer,
+    file_size.LowPart,     // DWORD nNumberOfBytesToRead,
+    &bytes_read,           // LPDWORD lpNumberOfBytesRead,
+    NULL                   // LPOVERLAPPED lpOverlapped
   );
   // null terminate the string
   buffer[bytes_read] = '\0';
