@@ -40,6 +40,8 @@ public:
   LockedFile(std::string file);
   // Locks file
 
+  std::string read() const;
+  
   void* handle() const;
   // 
 
@@ -60,11 +62,13 @@ public:
     print(__FILE__);
     test_lock();
     test_valid_handle();
+    test_read();
   }
 
 private:
 
   void test_lock();
+  void test_read();
   void test_valid_handle();
   void write_file(std::string path, std::string contents)
     {
@@ -85,6 +89,23 @@ void utest_lock_file::test_valid_handle()
   {
     LockedFile lock_file(path);
     test(lock_file.handle(), "Invalid handle.");
+  }
+  // Clean up
+  int result = remove(path.c_str());
+  assert(result == 0);
+}
+
+//=============================================================================
+void utest_lock_file::test_read()
+{
+  print(DGC_CURRENT_FUNCTION);
+  // write a file
+  std::string path("lock_file.txt");
+  std::string contents("File contents\n\nOn multiple lines");
+  write_file(path, contents);
+  {
+    LockedFile lock_file(path);
+    test(lock_file.read() == contents, "Contents is wrong.");
   }
   // Clean up
   int result = remove(path.c_str());
@@ -161,9 +182,36 @@ LockedFile::LockedFile(std::string file)
 }
 
 //=============================================================================
-HANDLE LockedFile::handle() const
+void* LockedFile::handle() const
 {
   return m_file_handle->handle;
+}
+
+//=============================================================================
+std::string LockedFile::read() const
+{
+  BOOL ok = FALSE;
+  LARGE_INTEGER file_size;
+  ok = GetFileSizeEx(
+    m_file_handle->handle, // HANDLE hFile,
+    &file_size             // PLARGE_INTEGER lpFileSize
+  );
+  assert(ok);
+
+  char* buffer = new char[file_size.LowPart + 1];
+  DWORD  bytes_read = 0;
+  ReadFile(
+    m_file_handle->handle,       // HANDLE hFile,
+    buffer,            // LPVOID lpBuffer,
+    file_size.LowPart, // DWORD nNumberOfBytesToRead,
+    &bytes_read,       // LPDWORD lpNumberOfBytesRead,
+    NULL               // LPOVERLAPPED lpOverlapped
+  );
+  // null terminate the string
+  buffer[bytes_read] = '\0';
+  std::string contents(buffer);
+  delete[] buffer;
+  return contents;
 }
 
 //=============================================================================
