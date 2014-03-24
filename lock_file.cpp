@@ -24,12 +24,11 @@
 class Error {
 public:
 
-  Error(std::string message);
+  Error();
   
-  std::string to_string() const;
+  virtual std::string to_string() const = 0;
 
-private:
-  std::string m_message;
+  virtual ~Error() = 0;
 };
 
 struct FileHandle;
@@ -38,7 +37,7 @@ struct FileHandle;
 class LockedFile {
 public:
 
-  LockedFile(std::string file);
+  LockedFile(std::string file, std::shared_ptr<Error> error);
   // Locks file
 
   std::string read() const;
@@ -94,7 +93,9 @@ void utest_lock_file::test_write()
   std::string path("lock_file.txt");
   write_file(path, "");
   {
-    LockedFile lock_file(path);
+    std::shared_ptr<Error> error;
+    LockedFile lock_file(path, error);
+    assert(!error);
     std::string new_contents("New file contents\n\nEven multiline.");
     lock_file.write(new_contents);
     std::string whole_file = lock_file.read();
@@ -113,7 +114,9 @@ void utest_lock_file::test_overwrite()
   std::string path("lock_file.txt");
   write_file(path, "");
   {
-    LockedFile lock_file(path);
+    std::shared_ptr<Error> error;
+    LockedFile lock_file(path, error);
+    assert(!error);
     std::string new_contents("New file contents\n\nEven multiline.");
     lock_file.write(new_contents);
     assert(lock_file.read() == new_contents);
@@ -134,7 +137,9 @@ void utest_lock_file::test_multiple_read()
   std::string contents("File contents\n\nOn multiple lines");
   write_file(path, contents);
   {
-    LockedFile locked_file(path);
+    std::shared_ptr<Error> error;
+    LockedFile locked_file(path, error); 
+    assert(!error);
     std::string first_read(locked_file.read());
     assert(first_read == contents);
     std::string second_read(locked_file.read());
@@ -154,7 +159,9 @@ void utest_lock_file::test_read()
   std::string contents("File contents\n\nOn multiple lines");
   write_file(path, contents);
   {
-    LockedFile lock_file(path);
+    std::shared_ptr<Error> error;
+    LockedFile lock_file(path, error);
+    assert(!error);
     test(lock_file.read() == contents, "Contents is wrong.");
   }
   // Clean up
@@ -171,7 +178,9 @@ void utest_lock_file::test_lock()
   write_file(path, "Test file\n");
   int result = 0;
   {
-    LockedFile lock(path);
+    std::shared_ptr<Error> error;
+    LockedFile lock(path, error);
+    assert(!error);
     result = remove(path.c_str());
     test(result != 0, "Locked file was deleted.");
   }
@@ -195,7 +204,7 @@ struct FileHandle
 };
 
 //=============================================================================
-LockedFile::LockedFile(std::string file)
+LockedFile::LockedFile(std::string file, std::shared_ptr<Error> error)
   : m_file_handle(new FileHandle)
 {
   m_file_handle->handle = CreateFile(
@@ -301,15 +310,13 @@ void LockedFile::reset_file_pointer() const
 }
 
 //=============================================================================
-Error::Error(std::string message)
-  : m_message(message)
+Error::Error()
 {
 }
 
 //=============================================================================
-std::string Error::to_string() const
+Error::~Error()
 {
-  return m_message;
 }
 
 #else //#ifdef __CYGWIN__
