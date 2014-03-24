@@ -8,6 +8,7 @@
 #include "UnitTest.h"
 
 #include <assert.h>
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -65,6 +66,8 @@ public:
     test_lock();
     test_read();
     test_write();
+    test_multiple_read();
+    test_overwrite();
   }
 
 private:
@@ -72,6 +75,8 @@ private:
   void test_lock();
   void test_read();
   void test_write();
+  void test_multiple_read();
+  void test_overwrite();
   void write_file(std::string path, std::string contents)
     {
       std::ofstream file_stream(path);
@@ -94,6 +99,46 @@ void utest_lock_file::test_write()
     lock_file.write(new_contents);
     std::string whole_file = lock_file.read();
     test(whole_file == new_contents, "Write incorrect.");
+  }
+  // Clean up
+  int result = remove(path.c_str());
+  assert(result == 0);
+}
+
+//=============================================================================
+void utest_lock_file::test_overwrite()
+{
+  print(DGC_CURRENT_FUNCTION);
+  // write a file
+  std::string path("lock_file.txt");
+  write_file(path, "");
+  {
+    LockedFile lock_file(path);
+    std::string new_contents("New file contents\n\nEven multiline.");
+    lock_file.write(new_contents);
+    assert(lock_file.read() == new_contents);
+    lock_file.write("");
+    test(lock_file.read() == std::string(""), "Overwriting file fails.");
+  }
+  // Clean up
+  int result = remove(path.c_str());
+  assert(result == 0);
+}
+
+//=============================================================================
+void utest_lock_file::test_multiple_read()
+{
+  print(DGC_CURRENT_FUNCTION);
+  // write a file
+  std::string path("lock_file.txt");
+  std::string contents("File contents\n\nOn multiple lines");
+  write_file(path, contents);
+  {
+    LockedFile locked_file(path);
+    std::string first_read(locked_file.read());
+    assert(first_read == contents);
+    std::string second_read(locked_file.read());
+    test(first_read == second_read, "Read inconsistent.");
   }
   // Clean up
   int result = remove(path.c_str());
@@ -190,11 +235,20 @@ LockedFile::LockedFile(std::string file)
 void LockedFile::write(std::string contents)
 {
   reset_file_pointer();
+  LARGE_INTEGER file_size;
+  BOOL ok = FALSE;
+  ok = GetFileSizeEx(
+    m_file_handle->handle,        // HANDLE hFile,            
+    &file_size                    // PLARGE_INTEGER lpFileSize
+  );
+  assert(ok);
+  // If the file is longer you want to overwrite it all.
+  DWORD to_write = std::max<DWORD>(file_size.LowPart, contents.size());
   DWORD bytes_written;
   WriteFile(
     m_file_handle->handle, // HANDLE hFile,
     contents.c_str(),      // LPCVOID lpBuffer,
-    contents.size(),       // DWORD nNumberOfBytesToWrite,
+    to_write,              // DWORD nNumberOfBytesToWrite,
     &bytes_written,        // LPDWORD lpNumberOfBytesWritten,
     NULL                   // LPOVERLAPPED lpOverlapped
   );
