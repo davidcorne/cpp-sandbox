@@ -42,6 +42,8 @@ public:
 
   std::string read() const;
   
+  void write(std::string contents);
+  
   void* handle() const;
   // 
 
@@ -49,7 +51,10 @@ public:
   // Unlocks the file
 
 private:
-
+  void reset_file_pointer() const;
+  // Resets the file pointer to the beginning of the file
+  // Note: treat the location of the file pointer as mutable.
+  
   std::unique_ptr<FileHandle> m_file_handle;
 };
 
@@ -63,12 +68,14 @@ public:
     test_lock();
     test_valid_handle();
     test_read();
+    test_write();
   }
 
 private:
 
   void test_lock();
   void test_read();
+  void test_write();
   void test_valid_handle();
   void write_file(std::string path, std::string contents)
     {
@@ -89,6 +96,25 @@ void utest_lock_file::test_valid_handle()
   {
     LockedFile lock_file(path);
     test(lock_file.handle(), "Invalid handle.");
+  }
+  // Clean up
+  int result = remove(path.c_str());
+  assert(result == 0);
+}
+
+//=============================================================================
+void utest_lock_file::test_write()
+{
+  print(DGC_CURRENT_FUNCTION);
+  // write a file
+  std::string path("lock_file.txt");
+  write_file(path, "");
+  {
+    LockedFile lock_file(path);
+    std::string new_contents("New file contents\n\nEven multiline.");
+    lock_file.write(new_contents);
+    std::string whole_file = lock_file.read();
+    test(whole_file == new_contents, "Write incorrect.");
   }
   // Clean up
   int result = remove(path.c_str());
@@ -188,8 +214,24 @@ void* LockedFile::handle() const
 }
 
 //=============================================================================
+void LockedFile::write(std::string contents)
+{
+  reset_file_pointer();
+  DWORD bytes_written;
+  WriteFile(
+    m_file_handle->handle,    // HANDLE hFile,
+    contents.c_str(),    // LPCVOID lpBuffer,
+    contents.size(),   // DWORD nNumberOfBytesToWrite,
+    &bytes_written, // LPDWORD lpNumberOfBytesWritten,
+    NULL            // LPOVERLAPPED lpOverlapped
+  );
+  
+}
+
+//=============================================================================
 std::string LockedFile::read() const
 {
+  reset_file_pointer();
   BOOL ok = FALSE;
   LARGE_INTEGER file_size;
   ok = GetFileSizeEx(
@@ -218,6 +260,17 @@ std::string LockedFile::read() const
 LockedFile::~LockedFile()
 {
   CloseHandle(m_file_handle->handle);
+}
+
+//=============================================================================
+void LockedFile::reset_file_pointer() const
+{
+  SetFilePointer(
+    m_file_handle->handle, // HANDLE hFile,
+    0,                     // LONG lDistanceToMove,
+    NULL,                  // PLONG lpDistanceToMoveHigh,
+    FILE_BEGIN             // DWORD dwMoveMethod
+  );
 }
 
 //=============================================================================
