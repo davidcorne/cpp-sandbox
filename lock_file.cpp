@@ -44,9 +44,6 @@ public:
   
   void write(std::string contents);
   
-  void* handle() const;
-  // 
-
   ~LockedFile();
   // Unlocks the file
 
@@ -66,7 +63,6 @@ public:
   void run_tests() {
     print(__FILE__);
     test_lock();
-    test_valid_handle();
     test_read();
     test_write();
   }
@@ -76,7 +72,6 @@ private:
   void test_lock();
   void test_read();
   void test_write();
-  void test_valid_handle();
   void write_file(std::string path, std::string contents)
     {
       std::ofstream file_stream(path);
@@ -85,22 +80,6 @@ private:
     }
 
 };
-
-//=============================================================================
-void utest_lock_file::test_valid_handle()
-{
-  print(DGC_CURRENT_FUNCTION);
-  // write a file
-  std::string path("lock_file.txt");
-  write_file(path, "");
-  {
-    LockedFile lock_file(path);
-    test(lock_file.handle(), "Invalid handle.");
-  }
-  // Clean up
-  int result = remove(path.c_str());
-  assert(result == 0);
-}
 
 //=============================================================================
 void utest_lock_file::test_write()
@@ -205,12 +184,6 @@ LockedFile::LockedFile(std::string file)
     &sOverlapped               // LPOVERLAPPED lpOverlapped
   );
   assert(ok);
-}
-
-//=============================================================================
-void* LockedFile::handle() const
-{
-  return m_file_handle->handle;
 }
 
 //=============================================================================
