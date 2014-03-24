@@ -192,11 +192,11 @@ void LockedFile::write(std::string contents)
   reset_file_pointer();
   DWORD bytes_written;
   WriteFile(
-    m_file_handle->handle,    // HANDLE hFile,
-    contents.c_str(),    // LPCVOID lpBuffer,
-    contents.size(),   // DWORD nNumberOfBytesToWrite,
-    &bytes_written, // LPDWORD lpNumberOfBytesWritten,
-    NULL            // LPOVERLAPPED lpOverlapped
+    m_file_handle->handle, // HANDLE hFile,
+    contents.c_str(),      // LPCVOID lpBuffer,
+    contents.size(),       // DWORD nNumberOfBytesToWrite,
+    &bytes_written,        // LPDWORD lpNumberOfBytesWritten,
+    NULL                   // LPOVERLAPPED lpOverlapped
   );
   
 }
