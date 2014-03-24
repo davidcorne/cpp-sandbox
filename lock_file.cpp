@@ -31,13 +31,39 @@ public:
   virtual ~Error() = 0;
 };
 
+//=============================================================================
+class LockFileError : public Error {
+public:
+  LockFileError(std::string path);
+
+  virtual std::string to_string() const;
+
+  virtual ~LockFileError();
+  
+private:
+  std::string m_path;
+};
+
+//=============================================================================
+class GenericError : public Error {
+public:
+  GenericError(std::string error);
+
+  virtual std::string to_string() const;
+
+  virtual ~GenericError();
+  
+private:
+  std::string m_error;
+};
+
 struct FileHandle;
 
 //=============================================================================
 class LockedFile {
 public:
 
-  LockedFile(std::string file, std::shared_ptr<Error> error);
+  LockedFile(std::string file, std::shared_ptr<Error>& error);
   // Locks file
 
   std::string read() const;
@@ -63,6 +89,7 @@ public:
   void run_tests() {
     print(__FILE__);
     test_lock();
+    test_multiple_lock();
     test_read();
     test_write();
     test_multiple_read();
@@ -72,6 +99,7 @@ public:
 private:
 
   void test_lock();
+  void test_multiple_lock();
   void test_read();
   void test_write();
   void test_multiple_read();
@@ -189,6 +217,28 @@ void utest_lock_file::test_lock()
 }
 
 //=============================================================================
+void utest_lock_file::test_multiple_lock()
+{
+  print(DGC_CURRENT_FUNCTION);
+  // write a file
+  std::string path("lock_file.txt");
+  write_file(path, "Test file\n");
+  int result = 0;
+  {
+    std::shared_ptr<Error> error;
+    LockedFile lock(path, error);
+    assert(!error);
+    LockedFile second_lock(path, error);
+    test(!!error, "Error expected.");
+    std::cout << error->to_string() << std::endl;
+    Error* err = error.get();
+    test(dynamic_cast<LockFileError*>(err), "Wrong error type.");
+  }
+  result = remove(path.c_str());
+  test(result == 0, "Unlocked file could not be deleted.");
+}
+
+//=============================================================================
 int main() {
   utest_lock_file test;
   test.run_tests();
@@ -204,11 +254,11 @@ struct FileHandle
 };
 
 //=============================================================================
-LockedFile::LockedFile(std::string file, std::shared_ptr<Error> error)
+LockedFile::LockedFile(std::string path, std::shared_ptr<Error>& error)
   : m_file_handle(new FileHandle)
 {
   m_file_handle->handle = CreateFile(
-    file.c_str(),                 // LPCTSTR lpFileName,
+    path.c_str(),                 // LPCTSTR lpFileName,
     GENERIC_READ | GENERIC_WRITE, // DWORD dwDesiredAccess,
     FILE_SHARE_READ,              // DWORD dwShareMode,
     NULL,                         // LPSECURITY_ATTRIBUTES lpSecurityAttribs,
@@ -216,28 +266,51 @@ LockedFile::LockedFile(std::string file, std::shared_ptr<Error> error)
     FILE_ATTRIBUTE_NORMAL,        // DWORD dwFlagsAndAttributes,
     NULL                          // HANDLE hTemplateFile
   );
-  // find the file size
-  LARGE_INTEGER file_size;
-  BOOL ok = FALSE;
-  ok = GetFileSizeEx(
-    m_file_handle->handle,        // HANDLE hFile,            
-    &file_size                    // PLARGE_INTEGER lpFileSize
-  );
-  assert(ok);
+  if (m_file_handle->handle == INVALID_HANDLE_VALUE) {
+    DWORD error_code = GetLastError();
+    if (error_code == ERROR_SHARING_VIOLATION) {
+      error = std::shared_ptr<Error>(new LockFileError(path));
+    } else {
+      PVOID lpMsgBuf;
+      FormatMessage(
+        FORMAT_MESSAGE_ALLOCATE_BUFFER |           
+        FORMAT_MESSAGE_FROM_SYSTEM |               
+        FORMAT_MESSAGE_IGNORE_INSERTS,             // DWORD dwFlags,      
+        NULL,                                      // LPCVOID lpSource,   
+        error_code,                                // DWORD dwMessageId,  
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // DWORD dwLanguageId, 
+        (LPTSTR) &lpMsgBuf,                        // LPTSTR lpBuffer,    
+        0,                                         // DWORD nSize,        
+        NULL                                       // va_list *Arguments  
+      );
+      char* msg = static_cast<char*>(lpMsgBuf);
+      std::string error_message(msg);
+      error = std::shared_ptr<Error>(new GenericError(error_message));
+    }
+  } else {
+    // find the file size
+    LARGE_INTEGER file_size;
+    BOOL ok = FALSE;
+    ok = GetFileSizeEx(
+      m_file_handle->handle,        // HANDLE hFile,            
+      &file_size                    // PLARGE_INTEGER lpFileSize
+    );
+    assert(ok);
 
-  OVERLAPPED sOverlapped;
-  // lock the file
+    OVERLAPPED sOverlapped;
+    // lock the file
 
-  ok = LockFileEx(
-    m_file_handle->handle,     // HANDLE hFile,
-    LOCKFILE_EXCLUSIVE_LOCK |
-    LOCKFILE_FAIL_IMMEDIATELY, // DWORD dwFlags,
-    0,                         // DWORD dwReserved,
-    file_size.LowPart,         // DWORD nNumberOfBytesToLockLow,
-    file_size.HighPart,        // DWORD nNumberOfBytesToLockHigh,
-    &sOverlapped               // LPOVERLAPPED lpOverlapped
-  );
-  assert(ok);
+    ok = LockFileEx(
+      m_file_handle->handle,     // HANDLE hFile,
+      LOCKFILE_EXCLUSIVE_LOCK |
+      LOCKFILE_FAIL_IMMEDIATELY, // DWORD dwFlags,
+      0,                         // DWORD dwReserved,
+      file_size.LowPart,         // DWORD nNumberOfBytesToLockLow,
+      file_size.HighPart,        // DWORD nNumberOfBytesToLockHigh,
+      &sOverlapped               // LPOVERLAPPED lpOverlapped
+    );
+    assert(ok);
+  }
 }
 
 //=============================================================================
@@ -316,6 +389,43 @@ Error::Error()
 
 //=============================================================================
 Error::~Error()
+{
+}
+
+//=============================================================================
+LockFileError::LockFileError(std::string path)
+  : m_path(path)
+{
+}
+
+//=============================================================================
+std::string LockFileError::to_string() const
+{
+  return
+    std::string("File \"") +
+    m_path +
+    std::string("\" could not be locked. Another process may be using it.");
+}
+
+//=============================================================================
+LockFileError::~LockFileError()
+{
+}
+
+//=============================================================================
+GenericError::GenericError(std::string error)
+  : m_error(error)
+{
+}
+
+//=============================================================================
+std::string GenericError::to_string() const
+{
+  return m_error;
+}
+
+//=============================================================================
+GenericError::~GenericError()
 {
 }
 
