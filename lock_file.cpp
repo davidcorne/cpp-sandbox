@@ -230,7 +230,6 @@ void utest_lock_file::test_multiple_lock()
     assert(!error);
     LockedFile second_lock(path, error);
     test(!!error, "Error expected.");
-    std::cout << error->to_string() << std::endl;
     Error* err = error.get();
     test(dynamic_cast<LockFileError*>(err), "Wrong error type.");
   }
