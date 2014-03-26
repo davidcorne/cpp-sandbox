@@ -7,7 +7,9 @@ EXT = cpp
 CC_OPTS = -std=c++0x -g -Wall -Werror
 OBJECTS = *.o *.obj *.ilk *.pdb *.suo *.stackdump
 
-TO_TEST =  $(shell grep -l "class *utest_" *.cpp | sed -e 's/\.cpp/\.exe/')
+SIN_BIN = CoercionByMemberTemplate.exe 
+
+TO_TEST =  $(shell grep -l "class *utest_" *.cpp | sed -e 's/\.cpp/\.exe/' $(foreach test, $(SIN_BIN), | grep -v $(test)))
 
 #==============================================================================
 #D Makes all of the $(EXT) files into exe files using $(CC)
@@ -53,7 +55,7 @@ all: $(SOURCE)
 #==============================================================================
 test: all
 	@chmod +x $(TO_TEST)
-	$(foreach test, $(TO_TEST), ./$(test);)
+	@$(foreach test, $(TO_TEST), ./$(test) &&) echo "Passed";
 	@echo
 	@echo "Tested:" 
 	@$(foreach test, $(TO_TEST), echo "        $(test)";)
