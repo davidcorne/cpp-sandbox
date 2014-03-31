@@ -116,6 +116,7 @@ void utest_DoubleDispatch::test_collision()
   asteroid.collide(enterprise);
   SpaceShip trader("Trader");
   trader.collide(asteroid);
+  trader.collide(enterprise);
 }
 
 //=============================================================================
@@ -174,12 +175,26 @@ void asteroid_collide_space_ship(
 }
 
 //=============================================================================
+void space_ship_collide_space_ship(
+  GameObject& ship_1,
+  GameObject& ship_2
+)
+{
+  cout << "Space ship collision." << endl;
+}
+
+//=============================================================================
 HitMap::HitMap()
 {
   m_hit_map[make_pair("SpaceShip", "Asteroid")] = space_ship_collide_asteroid;
   m_hit_map[make_pair("Asteroid", "SpaceShip")] = asteroid_collide_space_ship;
+
   m_hit_map[make_pair("MilitarySpaceShip", "Asteroid")] = space_ship_collide_asteroid;
   m_hit_map[make_pair("Asteroid", "MilitarySpaceShip")] = asteroid_collide_space_ship;
+
+  m_hit_map[make_pair("MilitarySpaceShip", "SpaceShip")] = space_ship_collide_space_ship;
+  m_hit_map[make_pair("SpaceShip", "MilitarySpaceShip")] = space_ship_collide_space_ship;
+  m_hit_map[make_pair("SpaceShip", "SpaceShip")] = space_ship_collide_space_ship;
 }
 
 //=============================================================================
