@@ -17,7 +17,7 @@ class GameObject;
 class HitMap {
 public:
 
-  HitMap();
+  static HitMap& get();
   
   function<void(GameObject&, GameObject&)> collision(
     string name_1,
@@ -25,24 +25,10 @@ public:
   );
 
 private:
+  HitMap();
+
   map<pair<string, string>, function<void(GameObject&, GameObject&)> > m_hit_map;
 };
-
-//=============================================================================
-class Game {
-public:
-  Game();
-
-  HitMap& hit_map()
-    {
-      return m_hit_map;
-    }
-
-private:
-  HitMap m_hit_map;
-};
-
-static Game* GAME = 0;
 
 //=============================================================================
 struct GameObject {
@@ -131,24 +117,15 @@ void utest_DoubleDispatch::test_collision()
 
 //=============================================================================
 int main() {
-  GAME = new Game;
   utest_DoubleDispatch test;
   test.run_tests();
-  delete GAME;
   return 0;
 }
 
 //=============================================================================
-Game::Game()
-{
-}
-
-
-
-//=============================================================================
 void GameObject::collide(GameObject& object)
 {
-  auto collide_function = GAME->hit_map().collision(
+  auto collide_function = HitMap::get().collision(
     type(),
     object.type()
   );
@@ -201,3 +178,11 @@ HitMap::HitMap()
   m_hit_map[make_pair("MilitarySpaceShip", "Asteroid")] = space_ship_collide_asteroid;
   m_hit_map[make_pair("Asteroid", "MilitarySpaceShip")] = asteroid_collide_space_ship;
 }
+
+//=============================================================================
+HitMap& HitMap::get()
+{
+  static HitMap hit_map;
+  return hit_map;
+}
+
