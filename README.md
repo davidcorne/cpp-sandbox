@@ -17,7 +17,6 @@ Testing out what you can do with const pointers. With a const Class* const you c
 
 
 ## Constness ##
-Found an unusual bug and tested it here. If you have a reference (or a pointer) as a member of your class, in a const function you can call non-const functions on the member. This is because it doesn't change the reference (or pointer) which the class keeps, what it does is change is the object it references.
 
 ## CopyReference ##
 Trying to copy a reference without using the copy constructor or assignment operator.
@@ -34,9 +33,6 @@ This was testing the newly added lambda functions, but changed to using [standar
 
 ## MustOverride ##
 This was playing around with pure virtual functions with implementations. So you can call them using Base::function() in the derived class.
-
-## Mutable ##
-Testing using a mutable member for data caching. This was the basis for the blog post [mutable and data caching](http://davidcorne.com/2012/10/26/mutable-and-data-caching/).
 
 ## Operators ##
 Testing calling operator() on pointer. Here is the calling code.
@@ -55,14 +51,8 @@ A common mistake doing this is to leave off the final brackets so.
 
 But these will return a function pointer to operator(), they won't call it.
 
-## Polygons ##
-Archetypal polygon example for inheritance. A base polygon, a derived rectangle and triangle. Not great as you use a width and height for the polygon but not all polygons have it. Also I prepended all the classes with the letter C and allocated the instances as pointers to the base class.
-
 ## SelfDeleting ##
 Trying to make an executable to delete itself, unsurprisingly this doesn't work.
-
-## SpareMemory ##
-Something picked up from a [dirty programming trick](http://www.gamasutra.com/view/feature/132500/dirty_coding_tricks.php) called the programming antihero (if you haven't read that article I can't recommend it enough!). In this there was a game programmer who reserved 2Mb of memory to lose later when memory was tight. I was testing to see how this worked by reserving some memory and checking memory usage. It is had to see the exact memory usage from this sort of thing due to differences in types of memory (i.e. private bytes/working set...) but it certainly took some memory.
 
 ## StructClass ##
 Testing out the differences between structs and classes in C++. I found that apart from private/public as default there is no difference! This includes if you declare class T in a template, you can still use a struct.
@@ -74,22 +64,13 @@ Trying to use C++ 11 user [defined literals](http://enreference.com/w/cpp/langua
 I was following a good guide from [here](http://akrzemi1.wordpress.com/2012/08/12/user-defined-literals-part-i/).
 
 ## VariadicPointerOffset ##
-Quite a complicated file. I was trying to use variadic templates to access private methods of a class. Hopefully not of any practical use (it breaks encapsulation and is extremely fragile) but an interesting idea to try, 
 
 ## Windows ##
 Unimplemented test for [SetEvent()](http://msdn.microsoft.com/en-gb/library/windows/desktop/ms686211(v=vs.85).aspx) in windows.h.
 
-## get\_env ##
-Made to test getenv from cstdlib for getting environmental variables.
-
 ## hashes ##
 Using C preprocessor magic to join together variable names.
-
-## number\_of\_coins ##
-Given an amount in cents (American currency as it was taken from an answer on stackoverflow) find the number of ways you can make it from quarters, dimes, nickles and pennies. This was taken from [this answer](http://stackoverflow.com/a/1107115/1548429).
 
 ## stack\_overflow\_virtual ##
 I didn't think the reply to [this question](http://stackoverflow.com/questions/6481260/non-virtual-interface-design-pattern-question-in-c-c) would compile so I tried it out. I realised you can override private virtual functions but not call them.
 
-## upper ##
-My thoughts about the answer to [this stackoverflow question](http://stackoverflow.com/questions/1096341/function-pointers-casting-in-c) being wrong, and my idea for a better way.

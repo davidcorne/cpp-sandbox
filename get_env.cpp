@@ -1,3 +1,6 @@
+//=============================================================================
+// Made to test getenv from cstdlib for getting environmental variables.
+
 #include <cstdlib>
 #include <iostream>
 

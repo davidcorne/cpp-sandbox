@@ -1,3 +1,9 @@
+//=============================================================================
+//
+// Quite a complicated file. I was trying to use variadic templates to access
+// private methods of a class. Hopefully not of any practical use (it breaks
+// encapsulation and is extremely fragile) but an interesting idea to try, 
+
 #include <iostream>
 // #include <const char*>
 

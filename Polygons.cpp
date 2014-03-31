@@ -1,5 +1,10 @@
 // from http://www.cplusplus.com/doc/tutorial/polymorphism/
 // dynamic allocation and polymorphism
+//
+// Archetypal polygon example for inheritance. A base polygon, a derived
+// rectangle and triangle. Not great as you use a width and height for the
+// polygon but not all polygons have it. Also I prepended all the classes with
+// the letter C and allocated the instances as pointers to the base class.
 
 #include <iostream>
 using namespace std;

@@ -1,5 +1,7 @@
+//=============================================================================
 //adapted from here
 // http://stackoverflow.com/questions/1106929/find-all-combinations-of-coins-when-given-some-dollar-value
+
 
 #include <iostream>
 
