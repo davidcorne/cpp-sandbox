@@ -19,15 +19,18 @@ public:
 
   static HitMap& get();
   
-  function<void(GameObject&, GameObject&)> collision(
+  function<void(GameObject&, GameObject&)> collision_function(
     string name_1,
     string name_2
-  );
+  ) const;
 
 private:
   HitMap();
 
-  map<pair<string, string>, function<void(GameObject&, GameObject&)> > m_hit_map;
+  map<
+    pair<string, string>,
+    function<void(GameObject&, GameObject&)>
+  > m_hit_map;
 };
 
 //=============================================================================
@@ -125,7 +128,7 @@ int main() {
 //=============================================================================
 void GameObject::collide(GameObject& object)
 {
-  auto collide_function = HitMap::get().collision(
+  auto collide_function = HitMap::get().collision_function(
     type(),
     object.type()
   );
@@ -137,10 +140,10 @@ GameObject::~GameObject()
 {}
 
 //=============================================================================
-function<void(GameObject&, GameObject&)> HitMap::collision(
+function<void(GameObject&, GameObject&)> HitMap::collision_function(
   string name_1,
   string name_2
-)
+) const
 {
   auto name_pair = make_pair(name_1, name_2);
   auto it = m_hit_map.find(name_pair);
