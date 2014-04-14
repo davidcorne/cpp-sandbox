@@ -38,6 +38,7 @@ REMOVE_TEMP_FILES = @rm -f *~ \#*\#
 #D will be made.
 #------------------------------------------------------------------------------
 all: $(SOURCE)
+	@echo ""
 	@echo "make: \`all' is up to date with" $(shell ./gcc_version.exe)"."
 	$(REMOVE_OBJECTS)
 	$(REMOVE_TEMP_FILES)
@@ -51,8 +52,8 @@ all: $(SOURCE)
 #D Build the executables from each .$(EXT) file
 #------------------------------------------------------------------------------
 %.exe: %.$(EXT) UnitTest.h
-	$(CC) $(CC_OPTS) -o $@ $<
 	@echo ""
+	$(CC) $(CC_OPTS) -o $@ $<
 
 #==============================================================================
 .DELETE_ON_ERROR: %.test_result
@@ -75,7 +76,7 @@ test: $(TEST_RESULTS)
 clean: FRC
 	$(REMOVE_OBJECTS)
 	$(REMOVE_TEMP_FILES)
-	@rm -f *.exe
+	@rm -f *.exe *.test_result
 	@echo "Removed all: objects, executables, and temp files."
 
 #==============================================================================
