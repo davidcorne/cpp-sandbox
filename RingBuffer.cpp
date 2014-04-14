@@ -1,7 +1,7 @@
 //=============================================================================
 //
 //D Inspired by
-// http://gameprogrammingpatterns.com/event-queue.html?utm_source=Game+Programming+Patterns&utm_campaign=cbce6efb6e-Observer&utm_medium=email&utm_term=0_0c27329244-cbce6efb6e-38213733
+// http://gameprogrammingpatterns.com/event-queue.html
 
 #include <iostream>
 #include <string>
