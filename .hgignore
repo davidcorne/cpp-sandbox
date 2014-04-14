@@ -3,6 +3,7 @@ syntax: glob
 *~
 *.exe
 *.stackdump
+*.test_result
 
 # for the MS compiler rubbish
 *.obj

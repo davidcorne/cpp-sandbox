@@ -9,7 +9,9 @@ OBJECTS = *.o *.obj *.ilk *.pdb *.suo *.stackdump
 
 SIN_BIN = CoercionByMemberTemplate.exe 
 
+
 TO_TEST =  $(shell grep -l "class *utest_" *.cpp | sed -e 's/\.cpp/\.exe/' $(foreach test, $(SIN_BIN), | grep -v $(test)))
+TEST_RESULTS := $(TO_TEST:.exe=.test_result)
 
 #==============================================================================
 #D Makes all of the $(EXT) files into exe files using $(CC)
@@ -53,14 +55,19 @@ all: $(SOURCE)
 	@echo ""
 
 #==============================================================================
-test: all
-	@chmod +x $(TO_TEST)
-	@$(foreach test, $(TO_TEST), ./$(test) &&) echo "Passed";
+.DELETE_ON_ERROR: %.test_result
+
+#==============================================================================
+%.test_result: %.exe
+	@chmod +x $<
+	@printf "%-30s" $<:
+	@./$< > $@
+	@echo -e "\e[0;32m Passed.\e[1;37m"
+
+#==============================================================================
+test: $(TEST_RESULTS)
 	@echo
-	@echo "Tested:" 
-	@$(foreach test, $(TO_TEST), echo "        $(test)";)
-	@echo
-	@echo "Made with" $(shell ./gcc_version.exe)"."
+	@echo "Finished."
 
 #==============================================================================
 #D For deleting all temporary and made files
