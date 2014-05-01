@@ -16,7 +16,6 @@ int main() {
     std::getline(infile, line);
     whole_file += line;
     whole_file += "\n";
-    
   }
   infile.close();
   std::cout << whole_file << std::endl;
