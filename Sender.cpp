@@ -44,7 +44,7 @@ protected:
   
 private:
   friend class Receiver;
-
+  
   virtual void add_receiver(Reason reason, function<void(void)> callback);
 
   map<Reason, function<void(void)> > m_callbacks;
@@ -65,30 +65,31 @@ public:
     function<void(void)> callback
   );
 
-  virtual void listen_to(
-    const Sender& sender,
-    Reason reason,
-    int i
-  );
-
 private:
 };
+
 //=============================================================================
 class utest_Sender : public UnitTest {
 public:
 
   void run_tests() {
     print(__FILE__);
-    test_listening();
+    test_listening_1();
+    test_listening_2();
+    test_listening_3();
   }
 
 private:
 
-  void test_listening();
+  void test_listening_1();
+  void test_listening_2();
+  void test_listening_3();
 
 };
 
-Reason TestSender_message;
+Reason TestSender_message_1;
+Reason TestSender_message_2;
+Reason TestSender_message_3;
 
 //=============================================================================
 class TestSender : public Sender {
@@ -99,6 +100,7 @@ public:
 
   void call_1();
   void call_2();
+  void call_3();
 
 private:
 };
@@ -115,11 +117,17 @@ TestSender::~TestSender()
 
 //=============================================================================
 void TestSender::call_1() {
-  send_call(TestSender_message);
+  send_call(TestSender_message_1);
 }
 
 //=============================================================================
 void TestSender::call_2() {
+  send_call(TestSender_message_2);
+}
+
+//=============================================================================
+void TestSender::call_3() {
+  send_call(TestSender_message_3);
 }
 
 //=============================================================================
@@ -139,10 +147,33 @@ private:
 };
 
 //=============================================================================
+static bool GLOBAL_CALLBACK_CALLED = false;
+
+//=============================================================================
+void global_callback()
+{
+  GLOBAL_CALLBACK_CALLED = true;
+}
+
+//=============================================================================
 TestReceiver::TestReceiver(TestSender& test_sender)
   : m_received(false)
 {
-  listen_to(test_sender, TestSender_message, [this](){callback();});
+  listen_to(
+    test_sender,
+    TestSender_message_1,
+    bind(&TestReceiver::callback, this)
+  );
+  listen_to(
+    test_sender,
+    TestSender_message_2,
+    [this](){callback();}
+  );
+  listen_to(
+    test_sender,
+    TestSender_message_3,
+    global_callback
+  );
 }
 
 //=============================================================================
@@ -163,13 +194,34 @@ void TestReceiver::callback()
 }
 
 //=============================================================================
-void utest_Sender::test_listening()
+void utest_Sender::test_listening_1()
 {
   print(DGC_CURRENT_FUNCTION);
   TestSender sender;
   TestReceiver receiver(sender);
   sender.call_1();
   test(receiver.received(), "Message received.");
+}
+
+//=============================================================================
+void utest_Sender::test_listening_2()
+{
+  print(DGC_CURRENT_FUNCTION);
+  TestSender sender;
+  TestReceiver receiver(sender);
+  sender.call_2();
+  test(receiver.received(), "Message received.");
+}
+
+//=============================================================================
+void utest_Sender::test_listening_3()
+{
+  print(DGC_CURRENT_FUNCTION);
+  TestSender sender;
+  TestReceiver receiver(sender);
+  assert(!GLOBAL_CALLBACK_CALLED);
+  sender.call_3();
+  test(GLOBAL_CALLBACK_CALLED, "global callback called.");
 }
 
 //=============================================================================
@@ -226,7 +278,9 @@ Sender::~Sender()
 //=============================================================================
 void Sender::send_call(Reason reason)
 {
-  m_callbacks.at(reason)();
+  if (end(m_callbacks) != m_callbacks.find(reason)) {
+    m_callbacks.at(reason)();
+  }
 }
 
 //=============================================================================
@@ -254,14 +308,5 @@ void Receiver::listen_to(
 {
   Sender& unconst_sender = const_cast<Sender&>(sender);
   unconst_sender.add_receiver(reason, callback);
-}
-
-//=============================================================================
-void Receiver::listen_to(
-  const Sender& sender,
-  Reason reason,
-  int i
-)
-{
 }
 
