@@ -199,6 +199,7 @@ void utest_Sender::test_listening_1()
   print(DGC_CURRENT_FUNCTION);
   TestSender sender;
   TestReceiver receiver(sender);
+  assert(!receiver.received());
   sender.call_1();
   test(receiver.received(), "Message received.");
 }
@@ -209,6 +210,7 @@ void utest_Sender::test_listening_2()
   print(DGC_CURRENT_FUNCTION);
   TestSender sender;
   TestReceiver receiver(sender);
+  assert(!receiver.received());
   sender.call_2();
   test(receiver.received(), "Message received.");
 }
