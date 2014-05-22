@@ -4,6 +4,7 @@ syntax: glob
 *.exe
 *.stackdump
 *.test_result
+deps/*.P
 
 # for the MS compiler rubbish
 *.obj
