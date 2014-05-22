@@ -19,13 +19,13 @@ public:
 
   AbsIterator();
 
-  ~AbsIterator();
+  virtual ~AbsIterator();
 
   virtual std::unique_ptr<AbsIterator<T> > clone() const = 0;
   
   virtual bool operator++() = 0;
 
-  // <nnn> virtual T& operator()() = 0;
+  virtual T& operator()() = 0;
 
   virtual const T& operator()() const = 0;
 
@@ -51,7 +51,7 @@ public:
 
   bool operator++();
 
-  // <nnn> T& operator()();
+  T& operator()();
 
   const T& operator()() const;
   
@@ -65,7 +65,7 @@ private:
 namespace IteratorCreators {
 
   template <typename CONTAINER>
-  Iterator<typename CONTAINER::value_type> iter(const CONTAINER& container);
+  Iterator<typename CONTAINER::value_type> iter(CONTAINER& container);
   
 }
 
@@ -79,39 +79,22 @@ int main()
   array.push_back(3);
   array.push_back(4);
   
-  Iterator<int> iter = IteratorCreators::iter(array);
-  bool end = false;
-  end = ++iter;
-  std::cout << end << " " << iter() << std::endl;
-  end = ++iter;
-  std::cout << end << " " << iter() << std::endl;
-  end = ++iter;
-  std::cout << end << " " << iter() << std::endl;
-  end = ++iter;
-  std::cout << end << " " << iter() << std::endl;
-  end = ++iter;
-  std::cout << end << " " << iter() << std::endl;
-  end = ++iter;
-  std::cout << end << " " << iter() << std::endl;
-  end = ++iter;
-  std::cout << end << " " << iter() << std::endl;
-  end = ++iter;
-  std::cout << end << " " << iter() << std::endl;
-  // <nnn> while (++iter_1) {
-  // <nnn>   std::cout << iter_1() << std::endl;
-  // <nnn> }
+  Iterator<int> iter_1 = IteratorCreators::iter(array);
+  while (++iter_1) {
+    std::cout << iter_1() << std::endl;
+  }
   
-  // <nnn> Iterator<int> iter_2 = IteratorCreators::iter(array);
-  // <nnn> while (++iter_2) {
-  // <nnn>   iter_2() += 1;
-  // <nnn> }
+  Iterator<int> iter_2 = IteratorCreators::iter(array);
+  while (++iter_2) {
+    iter_2() += 1;
+  }
   
-  // <nnn> std::cout << std::endl;
+  std::cout << std::endl;
   
-  // <nnn> Iterator<int> iter_3 = IteratorCreators::iter(array);
-  // <nnn> while (++iter_3) {
-  // <nnn>   std::cout << iter_3() << std::endl;
-  // <nnn> }
+  Iterator<int> iter_3 = IteratorCreators::iter(array);
+  while (++iter_3) {
+    std::cout << iter_3() << std::endl;
+  }
   
   return 0;
 }
@@ -163,12 +146,12 @@ bool Iterator<T>::operator++()
   return m_iter->operator++();
 }
 
-// <nnn> //=============================================================================
-// <nnn> template <typename T>
-// <nnn> T& Iterator<T>::operator()()
-// <nnn> {
-// <nnn>   return m_iter->operator()();
-// <nnn> }
+//=============================================================================
+template <typename T>
+T& Iterator<T>::operator()()
+{
+  return m_iter->operator()();
+}
 
 //=============================================================================
 template <typename T>
@@ -192,14 +175,14 @@ public:
   
   virtual bool operator++() override;
 
-  // <nnn> virtual typename ITER::value_type& operator()() override;
+  virtual typename ITER::value_type& operator()() override;
 
   virtual const CONTAINED& operator()() const override;
 
 private:
 
-  const ITER& m_begin;
-  const ITER& m_end;
+  const ITER m_begin;
+  const ITER m_end;
   
   ITER m_iter;
 
@@ -208,11 +191,11 @@ private:
 //=============================================================================
 namespace IteratorCreators {
   template <typename CONTAINER>
-  Iterator<typename CONTAINER::value_type> iter(const CONTAINER& container)
+  Iterator<typename CONTAINER::value_type> iter(CONTAINER& container)
   {
     typedef typename CONTAINER::value_type T;
     AbsIterator<T>* abs_iter =
-      new STLIteratorWrapper<typename CONTAINER::const_iterator>(
+      new STLIteratorWrapper<typename CONTAINER::iterator>(
         std::begin(container),
         std::end(container)
       );
@@ -261,16 +244,15 @@ bool STLIteratorWrapper<ITER>::operator++()
     ++m_iter;
   }
   bool ok = m_iter != m_end;
-  // <nnn> std::cout << ok << std::endl;
   return ok;
 }
 
-// <nnn> //=============================================================================
-// <nnn> template <typename ITER>
-// <nnn> typename ITER::value_type& STLIteratorWrapper<ITER>::operator()()
-// <nnn> {
-// <nnn>   return *m_iter;
-// <nnn> }
+//=============================================================================
+template <typename ITER>
+typename ITER::value_type& STLIteratorWrapper<ITER>::operator()()
+{
+  return *m_iter;
+}
 
 //=============================================================================
 template <typename ITER>
