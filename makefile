@@ -11,14 +11,19 @@ SIN_BIN = CoercionByMemberTemplate.exe
 
 
 TO_TEST =  $(shell grep -l "class *utest_" *.cpp | sed -e 's/\.cpp/\.exe/' $(foreach test, $(SIN_BIN), | grep -v $(test)))
-TEST_RESULTS := $(TO_TEST:.exe=.test_result)
+TEST_RESULTS := $(shell \
+  echo $(TO_TEST) |\
+  sed -e 's: : result/:g' \
+      -e 's:^:result/:g' \
+      -e 's:\.exe:.test_result:g'\
+)
 
 #==============================================================================
 #D Makes all of the $(EXT) files into exe files using $(CC)
 #D Requires: $(EXT), $(CC) and $(CC_OPTS) to be defined.
 #------------------------------------------------------------------------------
 
-SOURCE = $(shell ls *.$(EXT) | sed -e 's/\.$(EXT)/\.exe/')
+EXE_FILES = $(shell ls *.$(EXT) | sed -e 's:^:exe/:' -e 's/\.$(EXT)/\.exe/')
 
 OS = $(shell uname -o)
 
@@ -37,9 +42,9 @@ REMOVE_TEMP_FILES = @rm -f *~ \#*\#
 #D Target depending on all .exe files made from a .hs file so that all of them 
 #D will be made.
 #------------------------------------------------------------------------------
-all: $(SOURCE)
+all: $(EXE_FILES)
 	@echo ""
-	@echo "make: \`all' is up to date with" $(shell ./gcc_version.exe)"."
+	@echo "make: \`all' is up to date with" $(shell ./exe/gcc_version.exe)"."
 	$(REMOVE_OBJECTS)
 	$(REMOVE_TEMP_FILES)
 	@echo ""
@@ -51,22 +56,23 @@ all: $(SOURCE)
 #==============================================================================
 #D Build the executables from each .$(EXT) file
 #------------------------------------------------------------------------------
-%.exe: %.$(EXT)
-	@mkdir -p deps
+exe/%.exe: %.$(EXT)
+	@mkdir -p deps exe
 	@echo ""
 	$(CC) $(CC_OPTS) -MD -o $@ $<
-	@cp $*.d deps/$*.P
+	@cp exe/$*.d deps/$*.P
 	@sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
-        -e '/^$$/ d' -e 's/$$/ :/' < $*.d >> deps/$*.P
-	@rm -f $*.d
+        -e '/^$$/ d' -e 's/$$/ :/' < exe/$*.d >> deps/$*.P
+	@rm -f exe/$*.d
 
 #==============================================================================
-.DELETE_ON_ERROR: %.test_result
+.DELETE_ON_ERROR: result/%.test_result
 
 #==============================================================================
-%.test_result: %.exe
+result/%.test_result: exe/%.exe
+	@mkdir -p result
 	@chmod +x $<
-	@printf "%-30s" $<:
+	@printf "%-35s" $<:
 	@./$< > $@
 	@echo -e "\e[0;32m Passed.\e[1;37m"
 
@@ -81,7 +87,7 @@ test: $(TEST_RESULTS)
 clean: FRC
 	$(REMOVE_OBJECTS)
 	$(REMOVE_TEMP_FILES)
-	@rm -f *.exe *.test_result
+	@rm -fr exe result
 	@echo "Removed all: objects, executables, and temp files."
 
 #==============================================================================
