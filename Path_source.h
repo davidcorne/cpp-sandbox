@@ -2,6 +2,8 @@
 // Source for Path
 // Path is a utility class for this repository, so it has the source included.
 
+#include <fstream>
+
 //=============================================================================
 Path::Path(std::string path)
   : m_path(path)
@@ -40,4 +42,11 @@ bool Path::operator==(Path other) const
 bool Path::operator!=(Path other) const
 {
   return !(*this == other);
+}
+
+//=============================================================================
+bool Path::exists() const
+{
+  std::ifstream ifile(m_path);
+  return ifile;
 }

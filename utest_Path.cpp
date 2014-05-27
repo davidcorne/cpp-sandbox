@@ -74,7 +74,18 @@ void utest_Path::test_extension()
 void utest_Path::test_exists()
 {
   print(DGC_CURRENT_FUNCTION);
-  // not implemented yet
+  Path non_existant("non existant");
+  test(!non_existant.exists(), "non_existant should not exist");
+
+  Path test_file("data/test.txt");
+  test(test_file.exists(), "data/test.txt should exist.");
+
+  Path test_directory("data");
+  test(test_directory.exists(), "data should exist.");
+
+  Path test_nonexistant_directory("data2");
+  test(!test_nonexistant_directory.exists(), "data2 should not exist.");
+
 }
 
 //=============================================================================
