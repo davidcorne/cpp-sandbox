@@ -4,6 +4,7 @@
 #define Iterator_H
 
 #include "AbsIterator.h"
+#include <assert.h>
 
 //=============================================================================
 template<typename T>
@@ -35,6 +36,7 @@ template <typename T>
 Iterator<T>::Iterator(std::unique_ptr<AbsIterator<T> > iter)
   : m_iter(std::move(iter))
 {
+  assert(m_iter);
 }
 
 //=============================================================================
