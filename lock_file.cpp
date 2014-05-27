@@ -6,6 +6,7 @@
 #ifdef __CYGWIN__
 
 #include "UnitTest.h"
+#include "Path.h"
 
 #include <assert.h>
 #include <algorithm>
@@ -34,14 +35,15 @@ public:
 //=============================================================================
 class LockFileError : public Error {
 public:
-  LockFileError(std::string path);
+  
+  LockFileError(Path path);
 
   virtual std::string to_string() const;
 
   virtual ~LockFileError();
   
 private:
-  std::string m_path;
+  Path m_path;
 };
 
 //=============================================================================
@@ -63,8 +65,8 @@ struct FileHandle;
 class LockedFile {
 public:
 
-  LockedFile(std::string file, std::shared_ptr<Error>& error);
-  // Locks file
+  LockedFile(Path file, std::shared_ptr<Error>& error);
+  // Locks file.
 
   std::string read() const;
   
@@ -104,9 +106,9 @@ private:
   void test_write();
   void test_multiple_read();
   void test_overwrite();
-  void write_file(std::string path, std::string contents)
+  void write_file(Path path, std::string contents)
     {
-      std::ofstream file_stream(path);
+      std::ofstream file_stream(path.path());
       file_stream << contents;
       file_stream.close();
     }
@@ -118,7 +120,7 @@ void utest_lock_file::test_write()
 {
   print(DGC_CURRENT_FUNCTION);
   // write a file
-  std::string path("lock_file.txt");
+  Path path("lock_file.txt");
   write_file(path, "");
   {
     std::shared_ptr<Error> error;
@@ -130,7 +132,7 @@ void utest_lock_file::test_write()
     test(whole_file == new_contents, "Write incorrect.");
   }
   // Clean up
-  int result = remove(path.c_str());
+  int result = remove(path.path().c_str());
   assert(result == 0);
 }
 
@@ -139,7 +141,7 @@ void utest_lock_file::test_overwrite()
 {
   print(DGC_CURRENT_FUNCTION);
   // write a file
-  std::string path("lock_file.txt");
+  Path path("lock_file.txt");
   write_file(path, "");
   {
     std::shared_ptr<Error> error;
@@ -152,7 +154,7 @@ void utest_lock_file::test_overwrite()
     test(lock_file.read() == std::string(""), "Overwriting file fails.");
   }
   // Clean up
-  int result = remove(path.c_str());
+  int result = remove(path.path().c_str());
   assert(result == 0);
 }
 
@@ -161,7 +163,7 @@ void utest_lock_file::test_multiple_read()
 {
   print(DGC_CURRENT_FUNCTION);
   // write a file
-  std::string path("lock_file.txt");
+  Path path("lock_file.txt");
   std::string contents("File contents\n\nOn multiple lines");
   write_file(path, contents);
   {
@@ -174,7 +176,7 @@ void utest_lock_file::test_multiple_read()
     test(first_read == second_read, "Read inconsistent.");
   }
   // Clean up
-  int result = remove(path.c_str());
+  int result = remove(path.path().c_str());
   assert(result == 0);
 }
 
@@ -183,7 +185,7 @@ void utest_lock_file::test_read()
 {
   print(DGC_CURRENT_FUNCTION);
   // write a file
-  std::string path("lock_file.txt");
+  Path path("lock_file.txt");
   std::string contents("File contents\n\nOn multiple lines");
   write_file(path, contents);
   {
@@ -193,7 +195,7 @@ void utest_lock_file::test_read()
     test(lock_file.read() == contents, "Contents is wrong.");
   }
   // Clean up
-  int result = remove(path.c_str());
+  int result = remove(path.path().c_str());
   assert(result == 0);
 }
 
@@ -202,17 +204,17 @@ void utest_lock_file::test_lock()
 {
   print(DGC_CURRENT_FUNCTION);
   // write a file
-  std::string path("lock_file.txt");
+  Path path("lock_file.txt");
   write_file(path, "Test file\n");
   int result = 0;
   {
     std::shared_ptr<Error> error;
     LockedFile lock(path, error);
     assert(!error);
-    result = remove(path.c_str());
+    result = remove(path.path().c_str());
     test(result != 0, "Locked file was deleted.");
   }
-  result = remove(path.c_str());
+  result = remove(path.path().c_str());
   test(result == 0, "Unlocked file could not be deleted.");
 }
 
@@ -221,7 +223,7 @@ void utest_lock_file::test_multiple_lock()
 {
   print(DGC_CURRENT_FUNCTION);
   // write a file
-  std::string path("lock_file.txt");
+  Path path("lock_file.txt");
   write_file(path, "Test file\n");
   int result = 0;
   {
@@ -233,7 +235,7 @@ void utest_lock_file::test_multiple_lock()
     Error* err = error.get();
     test(dynamic_cast<LockFileError*>(err), "Wrong error type.");
   }
-  result = remove(path.c_str());
+  result = remove(path.path().c_str());
   test(result == 0, "Unlocked file could not be deleted.");
 }
 
@@ -253,11 +255,11 @@ struct FileHandle
 };
 
 //=============================================================================
-LockedFile::LockedFile(std::string path, std::shared_ptr<Error>& error)
+LockedFile::LockedFile(Path path, std::shared_ptr<Error>& error)
   : m_file_handle(new FileHandle)
 {
   m_file_handle->handle = CreateFile(
-    path.c_str(),                 // LPCTSTR lpFileName,
+    path.path().c_str(),          // LPCTSTR lpFileName,
     GENERIC_READ | GENERIC_WRITE, // DWORD dwDesiredAccess,
     FILE_SHARE_READ,              // DWORD dwShareMode,
     NULL,                         // LPSECURITY_ATTRIBUTES lpSecurityAttribs,
@@ -392,7 +394,7 @@ Error::~Error()
 }
 
 //=============================================================================
-LockFileError::LockFileError(std::string path)
+LockFileError::LockFileError(Path path)
   : m_path(path)
 {
 }
@@ -402,7 +404,7 @@ std::string LockFileError::to_string() const
 {
   return
     std::string("File \"") +
-    m_path +
+    m_path.path() +
     std::string("\" could not be locked. Another process may be using it.");
 }
 
