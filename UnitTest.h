@@ -54,7 +54,8 @@ protected:
     assert(pass);
   }
 
-  void print(std::string message) {
+  template <typename T>
+  void print(T message) {
     std::string banner(
       "======================================="
       "========================================"
