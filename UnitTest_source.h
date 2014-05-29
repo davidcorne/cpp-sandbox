@@ -24,6 +24,12 @@ void UnitTest::test(bool pass, std::string message)
 template <typename T, typename... Args>
 void UnitTest::print(const T& message, Args... arguments)
 {
+  static std::string banner(
+    "======================================"
+    "======================================="
+  );
+  m_printer.print("\n" + banner);
   m_printer.print(message, arguments...);
+  m_printer.print(banner + "\n");
 }
   
