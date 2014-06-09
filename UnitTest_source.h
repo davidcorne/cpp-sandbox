@@ -9,14 +9,17 @@ UnitTest::UnitTest()
 }
 
 //=============================================================================
-void UnitTest::test(bool pass, std::string message)
+template <typename... Args>
+void UnitTest::test(bool pass, Args... arguments)
 {
+  std::string message("");
   if (pass) {
-    message = "Pass: " + message;
+    message += "Pass: ";
   } else {
-    message = "Fail: " + message;
+    message += "Fail: ";
   }
-  std::cout << message << std::endl;
+  std::cout << message;
+  m_printer.print(arguments...);
   assert(pass);
 }
 

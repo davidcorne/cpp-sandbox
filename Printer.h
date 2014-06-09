@@ -16,9 +16,9 @@ public:
   template <typename T, typename... Args>
   void print(const T& to_print, Args... arguments);
 
-private:
-
   void print();
+
+private:
 
   std::ostream& m_os;
 };

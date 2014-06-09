@@ -19,7 +19,8 @@ public:
 
 protected:
 
-  void test(bool pass, std::string message);
+  template <typename... Args>
+  void test(bool pass, Args... arguments);
   
   template <typename T, typename... Args>
   void print(const T& message, Args... arguments);
