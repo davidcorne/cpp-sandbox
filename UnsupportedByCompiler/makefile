@@ -4,16 +4,19 @@
 
 CC = cl
 EXT = cpp
-CC_OPTS = /EHsc /Z7
+CC_OPTS = /EHsc /Z7 /nologo
 OBJECTS = *.obj
 TO_TEST = MemoryLeakDetector.exe
+
+EXE_DIR = exe
+OBJ_DIR = obj
 
 #==============================================================================
 #D Makes all of the $(EXT) files into exe files using $(CC)
 #D Requires: $(EXT), $(CC) and $(CC_OPTS) to be defined.
 #------------------------------------------------------------------------------
 
-SOURCE = $(shell ls *.$(EXT) | sed -e 's/\.$(EXT)/\.exe/')
+SOURCE = $(shell find -name "*.$(EXT)" | sed -e 's/\.$(EXT)/\.exe/' -e 's:\./:$(EXE_DIR)/:')
 
 OS = $(shell uname -o)
 
@@ -25,8 +28,8 @@ ifeq ($(OS), Cygwin)
 endif
 
 # common commands
-REMOVE_OBJECTS = @rm -f $(OBJECTS)
-REMOVE_TEMP_FILES = @rm -f *.stackdump *~ \#*\#
+REMOVE_OBJECTS = @rm -fr obj exe
+REMOVE_TEMP_FILES = @rm -f *.stackdump *~ \#*\# 
 
 #==============================================================================
 #D Target depending on all .exe files made from a .hs file so that all of them 
@@ -34,8 +37,6 @@ REMOVE_TEMP_FILES = @rm -f *.stackdump *~ \#*\#
 #------------------------------------------------------------------------------
 all: $(SOURCE)
 	@echo "make: \`all' is up to date."
-	$(REMOVE_OBJECTS)
-	$(REMOVE_TEMP_FILES)
 	@echo ""
 
 #==============================================================================
@@ -43,10 +44,19 @@ all: $(SOURCE)
 #------------------------------------------------------------------------------
 
 #==============================================================================
-#D Build the executables from each .$(EXT) file
+#D Build the executables from each .obj file
 #------------------------------------------------------------------------------
-%.exe: %.$(EXT) makefile ../UnitTest.h
-	$(CC) $(CC_OPTS) $<
+$(EXE_DIR)/%.exe: $(OBJ_DIR)/%.obj
+	@mkdir -p $(EXE_DIR)
+	$(CC) $(CC_OPTS) /Fe$@ $< 
+	@echo ""
+
+#==============================================================================
+#D Build the objects from each .$(EXT) file
+#------------------------------------------------------------------------------
+$(OBJ_DIR)/%.obj: %.$(EXT)
+	@mkdir -p $(OBJ_DIR)
+	$(CC) $(CC_OPTS) /c /Fo$@ $< 
 	@echo ""
 
 #==============================================================================
