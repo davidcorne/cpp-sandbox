@@ -50,3 +50,10 @@ bool Path::exists() const
   std::ifstream ifile(m_path);
   return ifile;
 }
+
+//=============================================================================
+std::ostream& operator<<(std::ostream& os, const Path& path)
+{
+  os << path.path();
+  return os;
+}

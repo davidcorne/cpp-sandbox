@@ -1,5 +1,6 @@
 //=============================================================================
 #include "Path.h"
+#include <sstream>
 
 #include "UnitTest.h"
 
@@ -20,6 +21,7 @@ public:
     test_equal();
     test_moveable();
     test_swapable();
+    test_stream();
   }
 
 private:
@@ -41,6 +43,8 @@ private:
   void test_swapable();
 
   void test_equal();
+
+  void test_stream();
 
 };
 
@@ -148,6 +152,16 @@ void utest_Path::test_equal()
   test(one != three, "One should not be equal to three.");
   test(three != one, "Three should not be equal to one.");
 
+}
+
+//=============================================================================
+void utest_Path::test_stream()
+{
+  print(DGC_CURRENT_FUNCTION);
+  stringstream ss;
+  Path test_path("test");
+  ss << test_path;
+  test(ss.str() == "test", "Correct string output.");
 }
 
 //=============================================================================

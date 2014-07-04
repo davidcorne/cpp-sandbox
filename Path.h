@@ -45,5 +45,8 @@ private:
   std::string m_path;
 };
 
+//=============================================================================
+std::ostream& operator<<(std::ostream& os, const Path& path);
+
 #include "Path_source.h"
 #endif
