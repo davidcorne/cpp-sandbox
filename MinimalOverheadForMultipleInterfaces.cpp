@@ -7,30 +7,7 @@
 #include <string>
 
 #include "UnitTest.h"
-
-
-//=============================================================================
-class Path {
-public:
-
-  Path(std::string path)
-    : m_path(path)
-    {}
-
-  std::string to_string() const {
-    return m_path;
-  }
-  
-private:
-  std::string m_path;
-};
-
-//=============================================================================
-std::ostream& operator<<(std::ostream& os, const Path& path)
-{
-  os << path.to_string();
-  return os;
-}
+#include "Path.h"
 
 //=============================================================================
 class FileSystemImplementation {
