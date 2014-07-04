@@ -8,13 +8,39 @@
 
 #include "UnitTest.h"
 
+
 //=============================================================================
-typedef std::string Path;
+class Path {
+public:
+
+  Path(std::string path)
+    : m_path(path)
+    {}
+
+  std::string to_string() const {
+    return m_path;
+  }
+  
+private:
+  std::string m_path;
+};
+
+//=============================================================================
+std::ostream& operator<<(std::ostream& os, const Path& path)
+{
+  os << path.to_string();
+  return os;
+}
 
 //=============================================================================
 class FileSystemImplementation {
 protected:
 
+  FileSystemImplementation()
+    : m_path(""),
+      m_mode("")
+    {}
+  
   void remove(Path path) {
     std::cout << "\"" << path << "\" removed." << std::endl;
   }
@@ -34,7 +60,7 @@ protected:
     std::cout << "Read: " << m_path << std::endl;
   }
 
-  void write(Path contents) {
+  void write(std::string contents) {
     assert(m_mode == "W");
     std::cout << "Write: \"" << contents << "\" to " << m_path << std::endl;
   }
@@ -45,7 +71,7 @@ protected:
 
 private:
   Path m_path;
-  Path m_mode;
+  std::string m_mode;
 };
 
 //=============================================================================
@@ -92,7 +118,11 @@ protected:
 };
 
 //=============================================================================
-class FileSystem : private Reader, private Writer, private PathRemover {
+class FileSystem :
+  private Reader,
+  private Writer,
+  private PathRemover
+{
 public:
 
   Reader& reader(Path path) {
@@ -150,7 +180,7 @@ void utest_MinimalOverheadForMultipleInterfaces::test_reading()
 {
   print(DGC_CURRENT_FUNCTION);
   FileSystem file_system;
-  read(file_system.reader("dummy"));
+  read(file_system.reader(Path("dummy")));
 }
 
 //=============================================================================
@@ -158,7 +188,7 @@ void utest_MinimalOverheadForMultipleInterfaces::test_writing()
 {
   print(DGC_CURRENT_FUNCTION);
   FileSystem file_system;
-  write(file_system.writer("dummy"));
+  write(file_system.writer(Path("dummy")));
 }
 
 //=============================================================================
@@ -167,7 +197,7 @@ void utest_MinimalOverheadForMultipleInterfaces::test_removing()
   print(DGC_CURRENT_FUNCTION);
   FileSystem file_system;
   PathRemover& remover = file_system.path_remover();
-  remover.remove("to-delete");
+  remover.remove(Path("to-delete"));
 }
 
 //=============================================================================
