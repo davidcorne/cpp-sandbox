@@ -55,6 +55,8 @@ $(EXE_DIR)/%.exe: $(OBJ_DIR)/%.obj
 #D Build the objects from each .$(EXT) file
 #------------------------------------------------------------------------------
 $(OBJ_DIR)/%.obj: %.$(EXT)
+	@mkdir -p deps
+	g++ -MM $< 2>  /dev/null | sed -e 's:\.o:.obj:' -e 's/^\([^:]*\):/obj\/\1:/'
 	@mkdir -p $(OBJ_DIR)
 	$(CC) $(CC_OPTS) /c /Fo$@ $< 
 	@echo ""
@@ -79,3 +81,5 @@ clean: FRC
 #D called FRC in the directory.
 #------------------------------------------------------------------------------
 FRC:
+
+-include deps/*.P
