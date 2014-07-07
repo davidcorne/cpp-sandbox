@@ -45,6 +45,11 @@ void utest_Enumeration::test_vector()
     printer.print(pair.first, " x 2 = ", pair.second);
   }
 
+  printer.print("\nUsing make_enumeration()\n");
+  for (std::pair<int, double> pair: make_enumeration(array)) {
+    printer.print(pair.first, " x 2 = ", pair.second);
+  }
+
 }
 
 //=============================================================================

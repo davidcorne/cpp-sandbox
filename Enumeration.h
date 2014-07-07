@@ -22,6 +22,10 @@ private:
 
 //=============================================================================
 template <typename CONTAINER>
+Enumeration<CONTAINER> make_enumeration(const CONTAINER& container);
+
+//=============================================================================
+template <typename CONTAINER>
 Enumeration<CONTAINER>::Enumeration(const CONTAINER& container)
   : m_container(container)
 {
@@ -49,6 +53,13 @@ EnumerationIterator<CONTAINER> Enumeration<CONTAINER>::end()
     std::end(m_container),
     m_container.size()
   );
+}
+
+//=============================================================================
+template <typename CONTAINER>
+Enumeration<CONTAINER> make_enumeration(const CONTAINER& container)
+{
+  return Enumeration<CONTAINER>(container);
 }
 
 
