@@ -56,7 +56,7 @@ $(EXE_DIR)/%.exe: $(OBJ_DIR)/%.obj
 #------------------------------------------------------------------------------
 $(OBJ_DIR)/%.obj: %.$(EXT)
 	@mkdir -p deps
-	g++ -MM $< 2>  /dev/null | sed -e 's:\.o:.obj:' -e 's/^\([^:]*\):/obj\/\1:/'
+	@g++ -MM $< 2>  /dev/null | sed -e 's:\.o:.obj:' -e 's:\(.*\)\.obj:obj/\1.obj:' > deps/$*.P
 	@mkdir -p $(OBJ_DIR)
 	$(CC) $(CC_OPTS) /c /Fo$@ $< 
 	@echo ""
