@@ -5,38 +5,51 @@
 #include "EnumerationIterator.h"
 
 //=============================================================================
-template<typename CONTAINER>
+template <typename CONTAINER>
 class Enumeration {
 public:
 
-  Enumeration(const CONTAINER& array)
-    : m_array(array)
-    {}
+  Enumeration(const CONTAINER& container);
 
-  EnumerationIterator<CONTAINER> begin() {
-    return EnumerationIterator<CONTAINER>(
-      std::begin(m_array),
-      std::end(m_array),
-      std::begin(m_array),
-      0
-    );
-  }
+  EnumerationIterator<CONTAINER> begin();
   
-  EnumerationIterator<CONTAINER> end() {
-    return EnumerationIterator<CONTAINER>(
-      std::begin(m_array),
-      std::end(m_array),
-      std::end(m_array),
-      m_array.size()
-    );
-  }
-      
+  EnumerationIterator<CONTAINER> end();      
   
 private:
   friend class utest_Enumeration;
-  const CONTAINER& m_array;
+  const CONTAINER& m_container;
 };
 
+//=============================================================================
+template <typename CONTAINER>
+Enumeration<CONTAINER>::Enumeration(const CONTAINER& container)
+  : m_container(container)
+{
+}
+
+//=============================================================================
+template <typename CONTAINER>
+EnumerationIterator<CONTAINER> Enumeration<CONTAINER>::begin()
+{
+  return EnumerationIterator<CONTAINER>(
+    std::begin(m_container),
+    std::end(m_container),
+    std::begin(m_container),
+    0
+  );
+}
+
+//=============================================================================
+template <typename CONTAINER>
+EnumerationIterator<CONTAINER> Enumeration<CONTAINER>::end()
+{
+  return EnumerationIterator<CONTAINER>(
+    std::begin(m_container),
+    std::end(m_container),
+    std::end(m_container),
+    m_container.size()
+  );
+}
 
 
 #endif
