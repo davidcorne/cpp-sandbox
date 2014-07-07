@@ -43,11 +43,50 @@ void work(T t)
 }
 
 //=============================================================================
+template <typename T>
+void other_work_dispatch(const T& t, std::false_type)
+{
+  std::cout << "Not copied." << std::endl;
+}
+
+//=============================================================================
+template <typename T>
+void other_work_dispatch(T t, std::true_type)
+{
+  std::cout << "Copied." << std::endl;
+}
+
+//=============================================================================
+template <typename T>
+void other_work(const T& t)
+{
+  other_work_dispatch(t, std::is_copy_constructible<T>());
+}
+
+//=============================================================================
+class Copyable {
+};
+
+//=============================================================================
+class NonCopyable {
+public:
+  NonCopyable(){}
+
+private:
+  NonCopyable(NonCopyable&);
+  NonCopyable& operator=(NonCopyable&);
+};
+
+//=============================================================================
 int main () {
   ThreadSafeData thread_safe;
   NonThreadSafeData non_thread_safe;
   work(thread_safe);
   work(non_thread_safe);
 
+  Copyable copyable;
+  NonCopyable non_copyable;
+  other_work(copyable);
+  other_work(non_copyable);
   return 0;
 }
