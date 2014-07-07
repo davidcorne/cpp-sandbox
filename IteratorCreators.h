@@ -14,12 +14,16 @@
 #include "AbsIterator.h"
 #include "Iterator.h"
 #include "STLIteratorWrapper.h"
+#include "GenericIteratorWrapper.h"
 
 //=============================================================================
 namespace IteratorCreators {
 
   template <typename CONTAINER>
   Iterator<typename CONTAINER::value_type> iter(CONTAINER& container);
+  
+  template <typename CONTAINER>
+  Iterator<typename CONTAINER::DGC_VALUE_TYPE> iter(CONTAINER& container);
   
 }
 
@@ -29,13 +33,23 @@ namespace IteratorCreators {
   Iterator<typename CONTAINER::value_type> iter(CONTAINER& container)
   {
     typedef typename CONTAINER::value_type T;
-    AbsIterator<T>* abs_iter =
+    std::unique_ptr<AbsIterator<T> > ptr(
       new STLIteratorWrapper<typename CONTAINER::iterator>(
         std::begin(container),
         std::end(container)
-      );
-    std::unique_ptr<AbsIterator<T> > ptr(abs_iter);
-    
+      )
+    );
+    Iterator<T> iter(std::move(ptr));
+    return iter;
+  }
+
+  template <typename CONTAINER>
+  Iterator<typename CONTAINER::DGC_VALUE_TYPE> iter(CONTAINER& container)
+  {
+    typedef typename CONTAINER::DGC_VALUE_TYPE T;
+    std::unique_ptr<AbsIterator<T> > ptr(
+      new GenericIteratorWrapper<CONTAINER>(container)
+    );
     Iterator<T> iter(std::move(ptr));
     return iter;
   }
