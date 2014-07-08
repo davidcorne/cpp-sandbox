@@ -22,6 +22,10 @@ public:
   class WrongTypeException{};
   
   Primitive();
+
+  Primitive(const Primitive&) = default;
+  Primitive& operator=(const Primitive&) = default;
+  
   ~Primitive() = default;
 
   double d() const;
@@ -43,6 +47,9 @@ private:
   };
 
   friend std::ostream& operator<<(std::ostream&, const Primitive&);
+
+  std::string type_to_string(Type type) const;
+  
   void validate_type(Type type) const;
   
   Type m_type;
@@ -123,8 +130,30 @@ Primitive& Primitive::s(std::string string)
 void Primitive::validate_type(Type type) const
 {
   if (type != m_type) {
+    print(
+      "Wrong type, expecting ",
+      type_to_string(type),
+      " got ",
+      type_to_string(m_type)
+    );
     throw WrongTypeException();
   }
+}
+
+//=============================================================================
+std::string Primitive::type_to_string(Type type) const
+{
+  std::string type_string;
+  if (type == Primitive::TypeDouble) {
+    type_string = "double";
+  } else if (type == Primitive::TypeString) {
+    type_string = "string";
+  } else if (type == Primitive::TypeInt) {
+    type_string = "int";
+  } else if (type == Primitive::TypeUnknown) {
+    type_string = "unknown";
+  }
+  return type_string;
 }
 
 class Object;
@@ -137,10 +166,13 @@ public:
 
   Object() = default;
 
-  Object(const Object&) = default;
-  Object& operator=(const Object&) = default;
-
+  //----- Moveable type
+  Object(Object&&) = default;
+  Object& operator=(Object&&) = default;
+  
   ~Object() = default;
+
+  Object clone() const;
   
   Primitive& operator[](std::string property_name);
   const Primitive& operator[](std::string property_name) const;
@@ -150,9 +182,21 @@ public:
   
 private:
 
+  Object(const Object&) = delete;
+  Object& operator=(const Object&) = delete;
+
   std::map<std::string, Primitive> m_properties;
   std::map<std::string, Method> m_methods;
 };
+
+//=============================================================================
+Object Object::clone() const
+{
+  Object o;
+  o.m_properties = m_properties;
+  o.m_methods = m_methods;
+  return std::move(o);
+}
 
 //=============================================================================
 Primitive& Object::operator[](std::string property_name)
@@ -175,6 +219,8 @@ Method& Object::set_method(std::string method_name)
 //=============================================================================
 BoundMethod Object::operator()(std::string method_name)
 {
-  return std::bind(m_methods[method_name], *this, std::placeholders::_1);
+  return [this, method_name](Object& o) -> Primitive {
+    return m_methods[method_name](*this, o);
+  };
 }
 

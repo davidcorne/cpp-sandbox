@@ -5,6 +5,7 @@
 #include "DuckTyping.h"
 #include <random>
 #include <chrono>
+#include <thread>
 #include <assert.h>
 
 // construct a trivial random generator engine from a time-based seed:
@@ -39,7 +40,7 @@ Primitive attack(Object& attacker, Object& defender)
 }
 
 //=============================================================================
-void print_health(Object one, Object two)
+void print_health(const Object& one, const Object& two)
 {
   print("");
   print(one["name"], ": ", one["hp"]);
@@ -56,12 +57,14 @@ Primitive fight(Object& one, Object& two)
     print(one["name"], " attacked ", two["name"], " for ", damage, " damage.");
     print_health(one, two);
     if (two["hp"].d() <= 0) break;
+    std::this_thread::sleep_for(std::chrono::seconds(1));
     damage = two("attack")(one);
     print(two["name"], " attacked ", one["name"], " for ", damage, " damage.");
     print_health(one, two);
     if (one["hp"].d() <= 0) break;
+    std::this_thread::sleep_for(std::chrono::seconds(1));
   }
-  Object dead = (one["hp"].d() <= 0) ? one : two;
+  Object dead = (one["hp"].d() <= 0) ? one.clone() : two.clone();
   assert(dead["hp"].d() <= 0);
   print(dead["name"], " died.");
   return Primitive();
@@ -95,13 +98,13 @@ Object create_enemy(
   enemy["name"] = Primitive().s(enemy_class);
   enemy["hp"] = Primitive().d(hp);
   enemy.set_method("attack") = attack;
-  return enemy;
+  return std::move(enemy);
 }
 
 //=============================================================================
 // Prototype enemies to create others from.
-const Object ORC = create_enemy("Orc", 5, 4, 8);
-const Object GOBLIN = create_enemy("Goblin", 4, 3, 5);
+const Object ORC = create_enemy("Orc", 5, 4, 15);
+const Object GOBLIN = create_enemy("Goblin", 4, 3, 12);
 const Object DRAGON = create_enemy("Dragon", 10, 10, 20);
 
 //=============================================================================
@@ -115,13 +118,14 @@ Object random_enemy(
     {orc_weight, goblin_weight, dragon_weight}
   );
   int choice = distribution(GENERATOR);
+  assert(0 <= choice && choice <= 2);
   Object enemy;
   if (choice == 0) {
-    enemy = ORC;
+    enemy = ORC.clone();
   } else if (choice == 1) {
-    enemy = GOBLIN;
+    enemy = GOBLIN.clone();
   } else if (choice == 2) {
-    enemy = DRAGON;
+    enemy = DRAGON.clone();
   }
   return enemy;
 }
@@ -142,39 +146,67 @@ int user_input_range(std::initializer_list<std::string> input)
 }
 
 //=============================================================================
-void encounter(Object& hero, Object& enemy)
+bool encounter(Object& hero, Object& enemy)
 {
   print("You encounter an enemy ", enemy["class"]);
   print("What will you do?");
   int option = user_input_range({"Fight", "Run", "Sneak Past"});
   if (option == 0) {
     hero("fight")(enemy);
+    print("");
   } else if (option == 1) {
     print("\nYOU CAN'T RUN!!!!!\n");
     encounter(hero, enemy);
   } else if (option == 2) {
     
   }
+  bool ok = hero["hp"].d() > 0;
+  return ok;
 }
 
 //=============================================================================
-int main() {
+bool adventure()
+{
   Object hero = create_hero();
   // 4 (weighted) random encounters, then a dragon
   Object enemy;
   enemy = random_enemy(50, 50, 1);
-  encounter(hero, enemy);
+
+  bool alive = true;
+  alive = encounter(hero, enemy);
+  if (!alive) return alive;
 
   enemy = random_enemy(50, 50, 2);
-  encounter(hero, enemy);
+  alive = encounter(hero, enemy);
+  if (!alive) return alive;
 
   enemy = random_enemy(50, 50, 20);
-  encounter(hero, enemy);
+  alive = encounter(hero, enemy);
+  if (!alive) return alive;
 
   enemy = random_enemy(50, 50, 50);
-  encounter(hero, enemy);
+  alive = encounter(hero, enemy);
+  if (!alive) return alive;
   
-  Object dragon = DRAGON;
-  encounter(hero, dragon);
+  Object dragon = DRAGON.clone();
+  alive = encounter(hero, dragon);
+  return alive;
+}
+
+//=============================================================================
+int main() {
+  while (true) {
+    bool succeeded = adventure();
+    if (succeeded) {
+      print("!!!Congratulations!!!");
+      print("You have defeated the monsters and saved the kingdom.");
+    } else {
+      print("You have died.");
+    }
+    print("");
+    print("Play again?");
+    int input = user_input_range({"Yes", "No"});
+    if (input == 1) break;
+  }
   return 0;
 }
