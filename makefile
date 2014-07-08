@@ -72,7 +72,7 @@ exe/%.exe: %.$(EXT)
 result/%.test_result: exe/%.exe
 	@mkdir -p result
 	@chmod +x $<
-	@printf "%-35s" $<:
+	@printf "%-45s" $<:
 	@./$< > $@
 	@echo -e "\e[0;32m Passed.\e[1;37m"
 
