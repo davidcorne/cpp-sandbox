@@ -84,7 +84,7 @@ test: $(TEST_RESULTS)
 #==============================================================================
 retest: FRC
 	@rm -fr result
-	@make test
+	@$(MAKE) test
 
 #==============================================================================
 #D For deleting all temporary and made files
