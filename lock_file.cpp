@@ -4,6 +4,8 @@
 //
 
 #ifdef __CYGWIN__
+#define DGC_WINDOWS_DEV
+#endif
 
 #include "UnitTest.h"
 #include "Path.h"
@@ -32,6 +34,8 @@ public:
   virtual ~Error() = 0;
 };
 
+typedef std::shared_ptr<Error> ErrorPtr;
+
 //=============================================================================
 class LockFileError : public Error {
 public:
@@ -59,13 +63,24 @@ private:
   std::string m_error;
 };
 
-struct FileHandle;
+//=============================================================================
+class LockedFileImpl {
+public:
+
+  LockedFileImpl();
+
+  virtual std::string read() const = 0;
+
+  virtual void write(std::string contents) = 0;
+  
+  virtual ~LockedFileImpl() = 0;
+};
 
 //=============================================================================
 class LockedFile {
 public:
 
-  LockedFile(Path file, std::shared_ptr<Error>& error);
+  LockedFile(Path file, ErrorPtr& error);
   // Locks file.
 
   std::string read() const;
@@ -76,13 +91,8 @@ public:
   // Unlocks the file
 
 private:
-  void reset_file_pointer() const;
-  // Resets the file pointer to the beginning of the file
-  // Note: treat the location of the file pointer as mutable.
-  
-  std::unique_ptr<FileHandle> m_file_handle;
+  std::unique_ptr<LockedFileImpl> m_impl;
 };
-
 
 //=============================================================================
 class utest_lock_file : public UnitTest {
@@ -90,12 +100,14 @@ public:
 
   void run_tests() {
     print(__FILE__);
+#ifdef DGC_WINDOWS_DEV
     test_lock();
     test_multiple_lock();
     test_read();
     test_write();
     test_multiple_read();
     test_overwrite();
+#endif
   }
 
 private:
@@ -123,7 +135,7 @@ void utest_lock_file::test_write()
   Path path("lock_file.txt");
   write_file(path, "");
   {
-    std::shared_ptr<Error> error;
+    ErrorPtr error;
     LockedFile lock_file(path, error);
     assert(!error);
     std::string new_contents("New file contents\n\nEven multiline.");
@@ -144,7 +156,7 @@ void utest_lock_file::test_overwrite()
   Path path("lock_file.txt");
   write_file(path, "");
   {
-    std::shared_ptr<Error> error;
+    ErrorPtr error;
     LockedFile lock_file(path, error);
     assert(!error);
     std::string new_contents("New file contents\n\nEven multiline.");
@@ -167,7 +179,7 @@ void utest_lock_file::test_multiple_read()
   std::string contents("File contents\n\nOn multiple lines");
   write_file(path, contents);
   {
-    std::shared_ptr<Error> error;
+    ErrorPtr error;
     LockedFile locked_file(path, error); 
     assert(!error);
     std::string first_read(locked_file.read());
@@ -189,7 +201,7 @@ void utest_lock_file::test_read()
   std::string contents("File contents\n\nOn multiple lines");
   write_file(path, contents);
   {
-    std::shared_ptr<Error> error;
+    ErrorPtr error;
     LockedFile lock_file(path, error);
     assert(!error);
     test(lock_file.read() == contents, "Contents is wrong.");
@@ -208,7 +220,7 @@ void utest_lock_file::test_lock()
   write_file(path, "Test file\n");
   int result = 0;
   {
-    std::shared_ptr<Error> error;
+    ErrorPtr error;
     LockedFile lock(path, error);
     assert(!error);
     result = remove(path.path().c_str());
@@ -227,7 +239,7 @@ void utest_lock_file::test_multiple_lock()
   write_file(path, "Test file\n");
   int result = 0;
   {
-    std::shared_ptr<Error> error;
+    ErrorPtr error;
     LockedFile lock(path, error);
     assert(!error);
     LockedFile second_lock(path, error);
@@ -246,142 +258,38 @@ int main() {
   return 0;
 }
 
-#include <Windows.h>
+//=============================================================================
+std::unique_ptr<LockedFileImpl> lock_file(Path path, ErrorPtr& error);
 
 //=============================================================================
-struct FileHandle
+LockedFile::LockedFile(Path path, ErrorPtr& error)
+  : m_impl(nullptr)
 {
-  HANDLE handle;
-};
-
-//=============================================================================
-LockedFile::LockedFile(Path path, std::shared_ptr<Error>& error)
-  : m_file_handle(new FileHandle)
-{
-  m_file_handle->handle = CreateFile(
-    path.path().c_str(),          // LPCTSTR lpFileName,
-    GENERIC_READ | GENERIC_WRITE, // DWORD dwDesiredAccess,
-    FILE_SHARE_READ,              // DWORD dwShareMode,
-    NULL,                         // LPSECURITY_ATTRIBUTES lpSecurityAttribs,
-    OPEN_EXISTING,                // DWORD dwCreationDisposition,
-    FILE_ATTRIBUTE_NORMAL,        // DWORD dwFlagsAndAttributes,
-    NULL                          // HANDLE hTemplateFile
-  );
-  if (m_file_handle->handle == INVALID_HANDLE_VALUE) {
-    DWORD error_code = GetLastError();
-    if (error_code == ERROR_SHARING_VIOLATION) {
-      error = std::shared_ptr<Error>(new LockFileError(path));
-    } else {
-      PVOID lpMsgBuf;
-      FormatMessage(
-        FORMAT_MESSAGE_ALLOCATE_BUFFER |           
-        FORMAT_MESSAGE_FROM_SYSTEM |               
-        FORMAT_MESSAGE_IGNORE_INSERTS,             // DWORD dwFlags,      
-        NULL,                                      // LPCVOID lpSource,   
-        error_code,                                // DWORD dwMessageId,  
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // DWORD dwLanguageId, 
-        (LPTSTR) &lpMsgBuf,                        // LPTSTR lpBuffer,    
-        0,                                         // DWORD nSize,        
-        NULL                                       // va_list *Arguments  
-      );
-      char* msg = static_cast<char*>(lpMsgBuf);
-      std::string error_message(msg);
-      error = std::shared_ptr<Error>(new GenericError(error_message));
-    }
-  } else {
-    // find the file size
-    LARGE_INTEGER file_size;
-    BOOL ok = FALSE;
-    ok = GetFileSizeEx(
-      m_file_handle->handle,        // HANDLE hFile,            
-      &file_size                    // PLARGE_INTEGER lpFileSize
-    );
-    assert(ok);
-
-    OVERLAPPED sOverlapped;
-    // lock the file
-
-    ok = LockFileEx(
-      m_file_handle->handle,     // HANDLE hFile,
-      LOCKFILE_EXCLUSIVE_LOCK |
-      LOCKFILE_FAIL_IMMEDIATELY, // DWORD dwFlags,
-      0,                         // DWORD dwReserved,
-      file_size.LowPart,         // DWORD nNumberOfBytesToLockLow,
-      file_size.HighPart,        // DWORD nNumberOfBytesToLockHigh,
-      &sOverlapped               // LPOVERLAPPED lpOverlapped
-    );
-    assert(ok);
-  }
+  m_impl = lock_file(path, error);
 }
 
 //=============================================================================
 void LockedFile::write(std::string contents)
 {
-  reset_file_pointer();
-  LARGE_INTEGER file_size;
-  BOOL ok = FALSE;
-  ok = GetFileSizeEx(
-    m_file_handle->handle,        // HANDLE hFile,            
-    &file_size                    // PLARGE_INTEGER lpFileSize
-  );
-  assert(ok);
-  // If the file is longer you want to overwrite it all.
-  DWORD to_write = std::max<DWORD>(file_size.LowPart, contents.size());
-  DWORD bytes_written;
-  WriteFile(
-    m_file_handle->handle, // HANDLE hFile,
-    contents.c_str(),      // LPCVOID lpBuffer,
-    to_write,              // DWORD nNumberOfBytesToWrite,
-    &bytes_written,        // LPDWORD lpNumberOfBytesWritten,
-    NULL                   // LPOVERLAPPED lpOverlapped
-  );
-  
+  assert(m_impl);
+  m_impl->write(contents);
 }
 
 //=============================================================================
 std::string LockedFile::read() const
 {
-  reset_file_pointer();
-  BOOL ok = FALSE;
-  LARGE_INTEGER file_size;
-  ok = GetFileSizeEx(
-    m_file_handle->handle, // HANDLE hFile,
-    &file_size             // PLARGE_INTEGER lpFileSize
-  );
-  assert(ok);
-
-  char* buffer = new char[file_size.LowPart + 1];
-  DWORD  bytes_read = 0;
-  ReadFile(
-    m_file_handle->handle, // HANDLE hFile,
-    buffer,                // LPVOID lpBuffer,
-    file_size.LowPart,     // DWORD nNumberOfBytesToRead,
-    &bytes_read,           // LPDWORD lpNumberOfBytesRead,
-    NULL                   // LPOVERLAPPED lpOverlapped
-  );
-  // null terminate the string
-  buffer[bytes_read] = '\0';
-  std::string contents(buffer);
-  delete[] buffer;
-  return contents;
+  assert(m_impl);
+  return m_impl->read();
 }
 
 //=============================================================================
 LockedFile::~LockedFile()
 {
-  CloseHandle(m_file_handle->handle);
+  m_impl = nullptr;
 }
 
-//=============================================================================
-void LockedFile::reset_file_pointer() const
-{
-  SetFilePointer(
-    m_file_handle->handle, // HANDLE hFile,
-    0,                     // LONG lDistanceToMove,
-    NULL,                  // PLONG lpDistanceToMoveHigh,
-    FILE_BEGIN             // DWORD dwMoveMethod
-  );
-}
+LockedFileImpl::LockedFileImpl() = default;
+LockedFileImpl::~LockedFileImpl() = default;
 
 //=============================================================================
 Error::Error()
@@ -430,11 +338,183 @@ GenericError::~GenericError()
 {
 }
 
-#else //#ifdef __CYGWIN__
+#ifdef DGC_WINDOWS_DEV
 
-int main(int num_arguments, char* arguments[])
+#include <Windows.h>
+
+//=============================================================================
+struct FileHandle
 {
-  return 0;
+  HANDLE handle;
+};
+
+//=============================================================================
+class WindowsLockedFileImpl : public LockedFileImpl {
+public:
+
+  WindowsLockedFileImpl(Path file, ErrorPtr& error);
+  // Locks file.
+
+  virtual std::string read() const override;
+  
+  virtual void write(std::string contents) override;
+  
+  virtual ~WindowsLockedFileImpl();
+  // Unlocks the file
+
+private:
+  void reset_file_pointer() const;
+  // Resets the file pointer to the beginning of the file
+  // Note: treat the location of the file pointer as mutable.
+  
+  std::unique_ptr<FileHandle> m_file_handle;
+};
+
+
+//=============================================================================
+WindowsLockedFileImpl::WindowsLockedFileImpl(Path path, ErrorPtr& error)
+  : m_file_handle(new FileHandle)
+{
+  m_file_handle->handle = CreateFile(
+    path.path().c_str(),          // LPCTSTR lpFileName,
+    GENERIC_READ | GENERIC_WRITE, // DWORD dwDesiredAccess,
+    FILE_SHARE_READ,              // DWORD dwShareMode,
+    NULL,                         // LPSECURITY_ATTRIBUTES lpSecurityAttribs,
+    OPEN_EXISTING,                // DWORD dwCreationDisposition,
+    FILE_ATTRIBUTE_NORMAL,        // DWORD dwFlagsAndAttributes,
+    NULL                          // HANDLE hTemplateFile
+  );
+  if (m_file_handle->handle == INVALID_HANDLE_VALUE) {
+    DWORD error_code = GetLastError();
+    if (error_code == ERROR_SHARING_VIOLATION) {
+      error = ErrorPtr(new LockFileError(path));
+    } else {
+      PVOID lpMsgBuf;
+      FormatMessage(
+        FORMAT_MESSAGE_ALLOCATE_BUFFER |           
+        FORMAT_MESSAGE_FROM_SYSTEM |               
+        FORMAT_MESSAGE_IGNORE_INSERTS,             // DWORD dwFlags,      
+        NULL,                                      // LPCVOID lpSource,   
+        error_code,                                // DWORD dwMessageId,  
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // DWORD dwLanguageId, 
+        (LPTSTR) &lpMsgBuf,                        // LPTSTR lpBuffer,    
+        0,                                         // DWORD nSize,        
+        NULL                                       // va_list *Arguments  
+      );
+      char* msg = static_cast<char*>(lpMsgBuf);
+      std::string error_message(msg);
+      error = ErrorPtr(new GenericError(error_message));
+    }
+  } else {
+    // find the file size
+    LARGE_INTEGER file_size;
+    BOOL ok = FALSE;
+    ok = GetFileSizeEx(
+      m_file_handle->handle,        // HANDLE hFile,            
+      &file_size                    // PLARGE_INTEGER lpFileSize
+    );
+    assert(ok);
+
+    OVERLAPPED sOverlapped;
+    // lock the file
+
+    ok = LockFileEx(
+      m_file_handle->handle,     // HANDLE hFile,
+      LOCKFILE_EXCLUSIVE_LOCK |
+      LOCKFILE_FAIL_IMMEDIATELY, // DWORD dwFlags,
+      0,                         // DWORD dwReserved,
+      file_size.LowPart,         // DWORD nNumberOfBytesToLockLow,
+      file_size.HighPart,        // DWORD nNumberOfBytesToLockHigh,
+      &sOverlapped               // LPOVERLAPPED lpOverlapped
+    );
+    assert(ok);
+  }
 }
 
-#endif //#ifdef __CYGWIN__
+//=============================================================================
+void WindowsLockedFileImpl::write(std::string contents)
+{
+  reset_file_pointer();
+  LARGE_INTEGER file_size;
+  BOOL ok = FALSE;
+  ok = GetFileSizeEx(
+    m_file_handle->handle,        // HANDLE hFile,            
+    &file_size                    // PLARGE_INTEGER lpFileSize
+  );
+  assert(ok);
+  // If the file is longer you want to overwrite it all.
+  DWORD to_write = std::max<DWORD>(file_size.LowPart, contents.size());
+  DWORD bytes_written;
+  WriteFile(
+    m_file_handle->handle, // HANDLE hFile,
+    contents.c_str(),      // LPCVOID lpBuffer,
+    to_write,              // DWORD nNumberOfBytesToWrite,
+    &bytes_written,        // LPDWORD lpNumberOfBytesWritten,
+    NULL                   // LPOVERLAPPED lpOverlapped
+  );
+  
+}
+
+//=============================================================================
+std::string WindowsLockedFileImpl::read() const
+{
+  reset_file_pointer();
+  BOOL ok = FALSE;
+  LARGE_INTEGER file_size;
+  ok = GetFileSizeEx(
+    m_file_handle->handle, // HANDLE hFile,
+    &file_size             // PLARGE_INTEGER lpFileSize
+  );
+  assert(ok);
+
+  char* buffer = new char[file_size.LowPart + 1];
+  DWORD  bytes_read = 0;
+  ReadFile(
+    m_file_handle->handle, // HANDLE hFile,
+    buffer,                // LPVOID lpBuffer,
+    file_size.LowPart,     // DWORD nNumberOfBytesToRead,
+    &bytes_read,           // LPDWORD lpNumberOfBytesRead,
+    NULL                   // LPOVERLAPPED lpOverlapped
+  );
+  // null terminate the string
+  buffer[bytes_read] = '\0';
+  std::string contents(buffer);
+  delete[] buffer;
+  return contents;
+}
+
+//=============================================================================
+WindowsLockedFileImpl::~WindowsLockedFileImpl()
+{
+  CloseHandle(m_file_handle->handle);
+}
+
+//=============================================================================
+void WindowsLockedFileImpl::reset_file_pointer() const
+{
+  SetFilePointer(
+    m_file_handle->handle, // HANDLE hFile,
+    0,                     // LONG lDistanceToMove,
+    NULL,                  // PLONG lpDistanceToMoveHigh,
+    FILE_BEGIN             // DWORD dwMoveMethod
+  );
+}
+
+#else //#ifdef DGC_WINDOWS_DEV
+#endif //#ifdef DGC_WINDOWS_DEV
+
+//=============================================================================
+std::unique_ptr<LockedFileImpl> lock_file(Path path, ErrorPtr& error)
+{
+  std::unique_ptr<LockedFileImpl> ptr(
+#ifdef DGC_WINDOWS_DEV    
+    new WindowsLockedFileImpl(path, error)
+#else
+    nullptr
+#endif
+  );
+  if (error) {
+    ptr = nullptr;
+  }
+  return ptr;
+}
