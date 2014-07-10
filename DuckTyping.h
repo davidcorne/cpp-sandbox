@@ -9,13 +9,6 @@
 #include "Printer.h"
 
 //=============================================================================
-template <typename... Args>
-void print(Args... arguments)
-{
-  Printer(std::cout).print(arguments...);
-}
-
-//=============================================================================
 class Primitive {
 public:
 

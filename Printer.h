@@ -23,5 +23,9 @@ private:
   std::ostream& m_os;
 };
 
+//=============================================================================
+template <typename... Args>
+void print(Args... arguments);
+
 #include "Printer_source.h"
 #endif
