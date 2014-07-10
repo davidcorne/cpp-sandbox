@@ -59,7 +59,7 @@ all: $(EXE_FILES)
 exe/%.exe: %.$(EXT)
 	@mkdir -p deps exe
 	@echo ""
-	$(CC) $(CC_OPTS) -MD -o $@ $<
+	$(CC) $(CC_OPTS) -MMD -o $@ $<
 	@cp exe/$*.d deps/$*.P
 	@sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
         -e '/^$$/ d' -e 's/$$/ :/' < exe/$*.d >> deps/$*.P
