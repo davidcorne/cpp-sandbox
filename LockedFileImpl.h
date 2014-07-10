@@ -25,6 +25,7 @@ std::unique_ptr<LockedFileImpl> lock_file(Path path, ErrorPtr& error);
 //----- Source
 
 #include "WindowsLockedFileImpl.h"
+#include "LinuxLockedFileImpl.h"
 #include "DGC_OS.h"
 
 LockedFileImpl::LockedFileImpl() = default;
@@ -37,7 +38,7 @@ std::unique_ptr<LockedFileImpl> lock_file(Path path, ErrorPtr& error)
 #ifdef DGC_WINDOWS_DEV    
     new WindowsLockedFileImpl(path, error)
 #else
-    nullptr
+    new LinuxLockedFileImpl(path, error)
 #endif
   );
   if (error) {

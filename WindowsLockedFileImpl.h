@@ -4,6 +4,8 @@
 #ifndef WindowsLockedFileImpl_H
 #define WindowsLockedFileImpl_H
 
+#include "LockedFileImpl.h"
+
 struct FileHandle;
 
 //=============================================================================

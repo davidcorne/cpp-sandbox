@@ -20,7 +20,7 @@ public:
     test_write();
     test_multiple_read();
     test_overwrite();
-#endif
+#endif // DGC_WINDOWS_DEV
   }
 
 private:
