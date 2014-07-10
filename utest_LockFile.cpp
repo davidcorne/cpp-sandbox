@@ -5,6 +5,7 @@
 
 #include "UnitTest.h"
 #include "LockedFile.h"
+#include "LockFileError.h"
 
 //=============================================================================
 class utest_lock_file : public UnitTest {

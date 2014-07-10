@@ -29,7 +29,7 @@ private:
 };
 
 //----- Source
-
+#ifdef DGC_WINDOWS_DEV 
 #include <Windows.h>
 
 #include "LockFileError.h"
@@ -170,4 +170,5 @@ void WindowsLockedFileImpl::reset_file_pointer() const
   );
 }
 
+#endif // DGC_WINDOWS_DEV
 #endif
