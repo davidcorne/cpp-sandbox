@@ -12,3 +12,4 @@ deps/*.P
 *.ilk
 *.pdb
 *.suo
+.git/*
