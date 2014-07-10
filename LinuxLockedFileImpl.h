@@ -1,3 +1,9 @@
+//=============================================================================
+// Unfortunately this won't work. This is because linux only honours locks ifndef
+// they are looking for it. For instance remove() does not check flock, so it
+// will remove a seemingly locked file :(
+
+
 #ifndef LinuxLockedFileImpl_H
 #define LinuxLockedFileImpl_H
 
