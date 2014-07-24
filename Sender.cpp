@@ -203,7 +203,7 @@ void utest_Sender::test_listening_1()
   print(DGC_CURRENT_FUNCTION);
   TestSender sender;
   TestReceiver receiver(sender);
-  assert(!receiver.received());
+  assert(!receiver.received() && "receiver has not received anything.");
   sender.call_1();
   test(receiver.received(), "Message received.");
 }
