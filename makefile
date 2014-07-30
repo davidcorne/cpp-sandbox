@@ -4,7 +4,7 @@
 
 CC = g++
 EXT = cpp
-CC_OPTS = -std=c++0x -g -Wall -Werror
+CC_OPTS = -std=c++0x -g -Wall -Werror -pthread 
 OBJECTS = *.o *.obj *.ilk *.pdb *.suo *.stackdump
 
 SIN_BIN = CoercionByMemberTemplate.exe 
