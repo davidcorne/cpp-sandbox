@@ -31,7 +31,7 @@ private:
 };
 
 //----- Source
-#ifdef DGC_WINDOWS_DEV 
+#ifndef DGC_WINDOWS_DEV 
 #include <Windows.h>
 
 #include "LockFileError.h"

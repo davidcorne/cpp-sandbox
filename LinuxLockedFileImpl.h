@@ -29,7 +29,7 @@ private:
 
 //----- Source
 
-#ifndef DGC_WINDOWS_DEV 
+#ifdef DGC_WINDOWS_DEV 
 
 #include "LockFileError.h"
 #include <sys/file.h>
