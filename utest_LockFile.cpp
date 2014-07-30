@@ -13,7 +13,7 @@ public:
 
   void run_tests() {
     print(__FILE__);
-#ifdef DGC_WINDOWS_DEV
+#if DGC_WINDOWS_DEV
     test_lock();
     test_multiple_lock();
     test_read();
