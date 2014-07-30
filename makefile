@@ -4,7 +4,7 @@
 
 CC = g++
 EXT = cpp
-CC_OPTS = -std=c++0x -g -Wall -Werror -pthread `pkg-config.exe --cflags-only-I unitcpp`
+CC_OPTS = -std=c++0x -g -Wall -Werror -pthread `pkg-config --cflags-only-I unitcpp`
 OBJECTS = *.o *.obj *.ilk *.pdb *.suo *.stackdump
 
 SIN_BIN = CoercionByMemberTemplate.exe 
