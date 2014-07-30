@@ -4,7 +4,9 @@ This repository is a sandbox for trying out ideas in C++ or new features (like C
 
 Each experiment must be one file with extension .cpp. In the main directory it compiles using gcc with argument -std=c++0x if you need the Microsoft compiler put the file in the UnsupportedByCompiler directory
 
-Here is a short summery of what I was trying to do with each file
+Most files act as a test. These are run automatically on drone.io, [![Build Status](https://drone.io/bitbucket.org/davidcorne/sandbox/status.png)](https://drone.io/bitbucket.org/davidcorne/sandbox/latest)
+
+Here is a short summery of what I was trying to do for some of the files.
 
 ## Arrays ##
 In this file I was playing around with C style arrays, slightly old and a bit dated to be honest.
