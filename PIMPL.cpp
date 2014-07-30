@@ -11,7 +11,6 @@
 
 using namespace std;
 
-struct Pimpl;
 
 //=============================================================================
 class Impl {
@@ -23,6 +22,7 @@ public:
   int file_handle() const;
   
 private:
+  struct Pimpl;
   unique_ptr<Pimpl> m_pimpl;
 };
 
@@ -60,7 +60,7 @@ int main() {
 //=============================================================================
 // Source file
 // <nnn>  #include <some prohibited file> e.g. <windows.h>
-struct Pimpl {
+struct Impl::Pimpl {
   int handle;
 };
 
