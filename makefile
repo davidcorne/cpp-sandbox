@@ -10,7 +10,7 @@ OBJECTS = *.o *.obj *.ilk *.pdb *.suo *.stackdump
 SIN_BIN = CoercionByMemberTemplate.exe 
 
 
-TO_TEST =  $(shell grep -l "class *utest_" *.cpp | sed -e 's/\.cpp/\.exe/' $(foreach test, $(SIN_BIN), | grep -v $(test)))
+TO_TEST =  $(shell grep -l "\(class *utest_\)\|\(<UnitCpp\)" *.cpp | sed -e 's/\.cpp/\.exe/' $(foreach test, $(SIN_BIN), | grep -v $(test)))
 TEST_RESULTS := $(shell \
   echo $(TO_TEST) |\
   sed -e 's: : result/:g' \

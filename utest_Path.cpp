@@ -6,9 +6,6 @@
 
 using namespace std;
 
-// to be picked up by the automatic testing.
-// class utest_
-
 //=============================================================================
 TEST(Path, path)
 {
