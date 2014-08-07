@@ -32,6 +32,8 @@ private:
 
 // non-member operators
 std::ostream& operator<<(std::ostream& os, Length length);
+
+// User Defined Literals
 Length operator"" _mm(long double mil);
 Length operator"" _mm(unsigned long long mil);
 Length operator"" _inches(long double mil);
