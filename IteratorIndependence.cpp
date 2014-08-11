@@ -22,6 +22,14 @@ private:
 };
 
 //=============================================================================
+class GeneralSummer {
+public:
+
+  template <typename ITER>
+  typename ITER::value_type sum(ITER first, ITER last) const;
+};
+
+//=============================================================================
 class utest_IntSummer : public UnitTest {
 public:
 
@@ -50,6 +58,10 @@ void utest_IntSummer::test_vector()
   std::vector<int> array = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
   int sum = summer.sum(std::begin(array), std::end(array));
   test(sum == 55, "Incorrect sum.");
+
+  GeneralSummer general_summer;
+  int general_sum = general_summer.sum(std::begin(array), std::end(array));
+  test(general_sum == sum, "Sums should be the same.");
 }
 
 //=============================================================================
@@ -87,4 +99,15 @@ int IntSummer::sum(IntIter first, IntIter last) const
     result += *iter;
   }
   return result;
+}
+
+//=============================================================================
+template <typename ITER>
+typename ITER::value_type GeneralSummer::sum(ITER first, ITER last) const
+{
+  typename ITER::value_type total = 0;
+  for (auto it = first; it != last; ++it) {
+    total = total + *it;
+  }
+  return total;
 }
