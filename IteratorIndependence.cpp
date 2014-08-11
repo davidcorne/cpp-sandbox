@@ -10,8 +10,6 @@
 
 #include "UnitTest.h"
 
-using namespace std;
-
 //=============================================================================
 class IntSummer {
 public:
@@ -49,8 +47,8 @@ void utest_IntSummer::test_vector()
 {
   print(DGC_CURRENT_FUNCTION);
   IntSummer summer;
-  vector<int> array = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-  int sum = summer.sum(begin(array), end(array));
+  std::vector<int> array = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+  int sum = summer.sum(std::begin(array), std::end(array));
   test(sum == 55, "Incorrect sum.");
 }
 
@@ -59,8 +57,8 @@ void utest_IntSummer::test_set()
 {
   print(DGC_CURRENT_FUNCTION);
   IntSummer summer;
-  set<int> array = {0, 1, 1, 1, 2};
-  int sum = summer.sum(begin(array), end(array));
+  std::set<int> array = {0, 1, 1, 1, 2};
+  int sum = summer.sum(std::begin(array), std::end(array));
   test(sum == 3, "Incorrect sum.");
 }
 
@@ -69,8 +67,8 @@ void utest_IntSummer::test_list()
 {
   print(DGC_CURRENT_FUNCTION);
   IntSummer summer;
-  list<int> array = {0, -1, -2, -3, -4, -5, -6, -7, -8, -9, -10};
-  int sum = summer.sum(begin(array), end(array));
+  std::list<int> array = {0, -1, -2, -3, -4, -5, -6, -7, -8, -9, -10};
+  int sum = summer.sum(std::begin(array), std::end(array));
   test(sum == -55, "Incorrect sum.");
 }
 
