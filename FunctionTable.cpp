@@ -6,13 +6,11 @@
 
 #include "UnitTest.h"
 
-using namespace std;
-
 class V {
 public:
 
   virtual void print() {
-    cout << "print" << endl;
+    std::cout << "print" << std::endl;
   }
 
 };
@@ -57,8 +55,8 @@ void utest_FunctionTable::test_2()
 {
   print(DGC_CURRENT_FUNCTION);
   V v;
-  cout << sizeof(v) << endl;
-  cout << sizeof(&v) << endl;
+  std::cout << sizeof(v) << std::endl;
+  std::cout << sizeof(&v) << std::endl;
 
 }
 

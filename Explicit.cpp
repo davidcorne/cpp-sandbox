@@ -1,7 +1,5 @@
 #include <iostream>
 
-using namespace std;
-
 class IntType {
 public:
 
@@ -20,7 +18,7 @@ private:
 
 void print(IntType i)
 {
-  cout << i.out() << endl;
+  std::cout << i.out() << std::endl;
 }  
   
 //=============================================================================

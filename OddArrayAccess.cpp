@@ -5,8 +5,6 @@
 
 #include "UnitTest.h"
 
-using namespace std;
-
 //=============================================================================
 class utest_OddArrayAccess : public UnitTest {
 public:

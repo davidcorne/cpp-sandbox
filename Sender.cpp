@@ -8,8 +8,6 @@
 
 #include "UnitTest.h"
 
-using namespace std;
-
 //=============================================================================
 class Reason {
 public:
@@ -45,9 +43,9 @@ protected:
 private:
   friend class Receiver;
   
-  virtual void add_receiver(Reason reason, function<void(void*)> callback);
+  virtual void add_receiver(Reason reason, std::function<void(void*)> callback);
 
-  map<Reason, function<void(void*)> > m_callbacks;
+  std::map<Reason, std::function<void(void*)> > m_callbacks;
   friend class utest_Sender;
 };
 
@@ -62,7 +60,7 @@ public:
   virtual void listen_to(
     const Sender& sender,
     Reason reason,
-    function<void(void*)> callback
+    std::function<void(void*)> callback
   );
 
 private:
@@ -166,7 +164,7 @@ TestReceiver::TestReceiver(TestSender& test_sender)
   listen_to(
     test_sender,
     TestSender_message_1,
-    bind(&TestReceiver::callback, this, data)
+    std::bind(&TestReceiver::callback, this, data)
   );
   listen_to(
     test_sender,
@@ -290,7 +288,7 @@ void Sender::send_call(Reason reason, void* data)
 }
 
 //=============================================================================
-void Sender::add_receiver(Reason reason, function<void(void*)> callback)
+void Sender::add_receiver(Reason reason, std::function<void(void*)> callback)
 {
   m_callbacks[reason] = callback;
 }
@@ -309,7 +307,7 @@ Receiver::~Receiver()
 void Receiver::listen_to(
   const Sender& sender,
   Reason reason,
-  function<void(void*)> callback
+  std::function<void(void*)> callback
 )
 {
   Sender& unconst_sender = const_cast<Sender&>(sender);

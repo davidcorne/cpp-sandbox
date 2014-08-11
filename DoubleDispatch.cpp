@@ -9,8 +9,6 @@
 
 #include "UnitTest.h"
 
-using namespace std;
-
 class GameObject;
 
 //=============================================================================
@@ -19,24 +17,24 @@ public:
 
   static HitMap& get();
   
-  function<void(GameObject&, GameObject&)> collision_function(
-    string name_1,
-    string name_2
+  std::function<void(GameObject&, GameObject&)> collision_function(
+    std::string name_1,
+    std::string name_2
   ) const;
 
 private:
   HitMap();
 
-  map<
-    pair<string, string>,
-    function<void(GameObject&, GameObject&)>
+  std::map<
+    std::pair<std::string, std::string>,
+    std::function<void(GameObject&, GameObject&)>
   > m_hit_map;
 };
 
 //=============================================================================
 struct GameObject {
 
-  virtual string name() const
+  virtual std::string name() const
     {
       return m_name;
     }
@@ -46,25 +44,25 @@ struct GameObject {
   virtual ~GameObject() = 0;
 
 protected:
-  GameObject(string type, string name)
+  GameObject(std::string type, std::string name)
     : m_type(type),
       m_name(name)
     {}
 
-  string type() const
+  std::string type() const
     {
       return m_type;
     }
 
 private:
-  string m_type;
-  string m_name;
+  std::string m_type;
+  std::string m_name;
 };
 
 //=============================================================================
 class Asteroid : public GameObject {
 public:
-  Asteroid(string name)
+  Asteroid(std::string name)
     : GameObject("Asteroid", name)
     {}
 };
@@ -72,12 +70,12 @@ public:
 //=============================================================================
 class SpaceShip : public GameObject {
 public:
-  SpaceShip(string name)
+  SpaceShip(std::string name)
     : GameObject("SpaceShip", name)
     {}
 
 protected:
-  SpaceShip(string type, string name)
+  SpaceShip(std::string type, std::string name)
     : GameObject(type, name)
     {}
 };
@@ -85,7 +83,7 @@ protected:
 //=============================================================================
 class MilitarySpaceShip : public SpaceShip {
 public:
-  MilitarySpaceShip(string name)
+  MilitarySpaceShip(std::string name)
     : SpaceShip("MilitarySpaceShip", name)
     {}
   
@@ -141,9 +139,9 @@ GameObject::~GameObject()
 {}
 
 //=============================================================================
-function<void(GameObject&, GameObject&)> HitMap::collision_function(
-  string name_1,
-  string name_2
+std::function<void(GameObject&, GameObject&)> HitMap::collision_function(
+  std::string name_1,
+  std::string name_2
 ) const
 {
   auto name_pair = make_pair(name_1, name_2);
@@ -162,7 +160,7 @@ void space_ship_collide_asteroid(
   assert(&space_ship);
   Asteroid& asteroid = dynamic_cast<Asteroid&>(asteroid_go);
   assert(&asteroid);
-  cout << space_ship.name() << " collided with " << asteroid.name() << endl;
+  std::cout << space_ship.name() << " collided with " << asteroid.name() << std::endl;
 }
 
 //=============================================================================
@@ -180,21 +178,21 @@ void space_ship_collide_space_ship(
   GameObject& ship_2
 )
 {
-  cout << "Space ship collision." << endl;
+  std::cout << "Space ship collision." << std::endl;
 }
 
 //=============================================================================
 HitMap::HitMap()
 {
-  m_hit_map[make_pair("SpaceShip", "Asteroid")] = space_ship_collide_asteroid;
-  m_hit_map[make_pair("Asteroid", "SpaceShip")] = asteroid_collide_space_ship;
+  m_hit_map[std::make_pair("SpaceShip", "Asteroid")] = space_ship_collide_asteroid;
+  m_hit_map[std::make_pair("Asteroid", "SpaceShip")] = asteroid_collide_space_ship;
 
-  m_hit_map[make_pair("MilitarySpaceShip", "Asteroid")] = space_ship_collide_asteroid;
-  m_hit_map[make_pair("Asteroid", "MilitarySpaceShip")] = asteroid_collide_space_ship;
+  m_hit_map[std::make_pair("MilitarySpaceShip", "Asteroid")] = space_ship_collide_asteroid;
+  m_hit_map[std::make_pair("Asteroid", "MilitarySpaceShip")] = asteroid_collide_space_ship;
 
-  m_hit_map[make_pair("MilitarySpaceShip", "SpaceShip")] = space_ship_collide_space_ship;
-  m_hit_map[make_pair("SpaceShip", "MilitarySpaceShip")] = space_ship_collide_space_ship;
-  m_hit_map[make_pair("SpaceShip", "SpaceShip")] = space_ship_collide_space_ship;
+  m_hit_map[std::make_pair("MilitarySpaceShip", "SpaceShip")] = space_ship_collide_space_ship;
+  m_hit_map[std::make_pair("SpaceShip", "MilitarySpaceShip")] = space_ship_collide_space_ship;
+  m_hit_map[std::make_pair("SpaceShip", "SpaceShip")] = space_ship_collide_space_ship;
 }
 
 //=============================================================================

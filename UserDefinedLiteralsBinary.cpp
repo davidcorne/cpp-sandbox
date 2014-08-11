@@ -14,8 +14,6 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-
 // cooked literal
 class Binary
 {
@@ -27,13 +25,13 @@ public:
 
   void print() const
     {
-      cout << "I am: " << m_rep << endl;
+      std::cout << "I am: " << m_rep << std::endl;
     }
 private:
 
   Binary();
 
-  string m_rep;
+  std::string m_rep;
 };
 
 // <nnn> Binary operator"" _b(const char* number)

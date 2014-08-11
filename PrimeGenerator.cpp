@@ -9,8 +9,6 @@
 #include "UnitTest.h"
 #include "Iterator.h"
 
-using namespace std;
-
 //=============================================================================
 class PrimeGenerator {
 public:
@@ -76,13 +74,13 @@ void utest_PrimeGenerator::test_100()
   PrimeGenerator generator(100);
   Iterator<PrimeGenerator::BigNum> prime_iter = generator.primes();
   int count = 0;
-  vector<PrimeGenerator::BigNum> primes;
+  std::vector<PrimeGenerator::BigNum> primes;
   while (++prime_iter) {
     ++count;
     primes.push_back(prime_iter());
   }
   test(count == 25, "Should be 25 primes under 100.");
-  vector<PrimeGenerator::BigNum> reference_primes =
+  std::vector<PrimeGenerator::BigNum> reference_primes =
     {
       2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67,
       71,73, 79, 83, 89, 97
@@ -115,7 +113,7 @@ PrimeGenerator::~PrimeGenerator()
 //=============================================================================
 Iterator<PrimeGenerator::BigNum> PrimeGenerator::primes() const
 {
-  Iterator<BigNum> iter(unique_ptr<PrimeIterator>(new PrimeIterator(m_limit)));
+  Iterator<BigNum> iter(std::unique_ptr<PrimeIterator>(new PrimeIterator(m_limit)));
   return iter;
 }
 
@@ -132,12 +130,12 @@ PrimeGenerator::PrimeIterator::~PrimeIterator()
 }
 
 //=============================================================================
-unique_ptr<AbsIterator<PrimeGenerator::BigNum> > PrimeGenerator::PrimeIterator::clone() const
+std::unique_ptr<AbsIterator<PrimeGenerator::BigNum> > PrimeGenerator::PrimeIterator::clone() const
 {
   PrimeIterator* iter = new PrimeIterator(m_limit);
   iter->m_current = m_current;
 
-  unique_ptr<AbsIterator<PrimeGenerator::BigNum> > ptr(iter);
+  std::unique_ptr<AbsIterator<PrimeGenerator::BigNum> > ptr(iter);
   return ptr;
 }
   

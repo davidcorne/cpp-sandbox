@@ -5,7 +5,6 @@
 #include "compiler_guards.h"
 
 #include <iostream>
-using namespace std;
 
 #if CPP_ELEVEN_SUPPORTED
 //=============================================================================
@@ -15,7 +14,7 @@ constexpr int return_one() {
 
 //=============================================================================
 int main() {
-  cout << return_one() << endl;
+  std::cout << return_one() << std::endl;
   return 0;
 }
 

@@ -6,8 +6,6 @@
 #include <iostream>
 #include <assert.h>
 
-using namespace std;
-
 //=============================================================================
 int main(void)
 {
@@ -18,7 +16,7 @@ int main(void)
                        :"=a"(result)
                        :"a"(foo), "b"(bar)
   );
-  cout << foo << " + " << bar << " = " << result << endl;
+  std::cout << foo << " + " << bar << " = " << result << std::endl;
   assert(result == 25);
   return 0;
 }

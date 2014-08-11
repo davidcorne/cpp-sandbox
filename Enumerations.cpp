@@ -8,36 +8,34 @@
 
 #include "UnitTest.h"
 
-using namespace std;
-
 //=============================================================================
 class Enumerator {
 public:
 
-  Enumerator(string name)
+  Enumerator(std::string name)
     : m_name(name)
     {}
 
 private:
 
-  string m_name;
+  std::string m_name;
 };
 
 //=============================================================================
 class ReferenceEnumeration {
 public:
 
-  ReferenceEnumeration(vector<Enumerator> values)
+  ReferenceEnumeration(std::vector<Enumerator> values)
     : m_values(values)
     {}
   
-  vector<Enumerator> values() const
+  std::vector<Enumerator> values() const
     {
       return m_values;
     }
   
 private:
-  vector<Enumerator> m_values;
+  std::vector<Enumerator> m_values;
 };
 
 //=============================================================================
@@ -46,7 +44,7 @@ public:
 
   Enumeration(
     const ReferenceEnumeration& reference,
-    vector<Enumerator> applicable
+    std::vector<Enumerator> applicable
   )
     : m_reference_enumeration(reference)
     {}

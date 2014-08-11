@@ -8,8 +8,6 @@
 
 #include "UnitTest.h"
 
-using namespace std;
-
 
 #include "compiler_guards.h"
 
@@ -22,7 +20,7 @@ public:
   Ptr (T& ptr)
     : m_ptr(&ptr)
     {
-      cout << m_ptr << endl;
+      std::cout << m_ptr << std::endl;
       assert(m_ptr);
     }
   

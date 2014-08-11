@@ -7,8 +7,6 @@
 #include <iostream>
 // #include <const char*>
 
-using namespace std;
-
 //=============================================================================
 class Bank {
 public:
@@ -20,9 +18,9 @@ public:
     {}
 
   void show_balance() {
-    cout << "Your balance is: " << m_money << endl;
-    cout << "thing: " << m_thing << endl;
-    cout << "another thing: " << another_thing << endl << endl;;
+    std::cout << "Your balance is: " << m_money << std::endl;
+    std::cout << "thing: " << m_thing << std::endl;
+    std::cout << "another thing: " << another_thing << std::endl << std::endl;
   }
 
 private:
@@ -43,7 +41,7 @@ public:
 private:
 
   int m_a;
-  string m_b;
+  std::string m_b;
   double m_c;
   Bank m_bank;
 };
@@ -120,7 +118,7 @@ int main() {
 
   int* i_ptr = change<Bank, int, double, const char*>(ptr);
   *i_ptr = 2000;
-  cout << endl;
+  std::cout << std::endl;
   my_bank.show_balance();
 
   // <nnn> // a new test
@@ -136,6 +134,6 @@ int main() {
   Foo* foo_ptr = &foo;
   ++foo_ptr;
   int* int_ptr = change<Foo, int, long, float, double, bool>(foo_ptr);
-  cout << *int_ptr << endl;
+  std::cout << *int_ptr << std::endl;
   return 0;
 }

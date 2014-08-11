@@ -1,8 +1,6 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
 //=============================================================================
 class Base1 {
 public:
@@ -24,7 +22,7 @@ public:
 template <class Base, typename... Args>
 class Mixin : public Base {
 public:
-  Mixin(string s, Args... arguments)
+  Mixin(std::string s, Args... arguments)
     : Base(arguments...)
     {}
 

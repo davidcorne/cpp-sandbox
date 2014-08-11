@@ -7,11 +7,9 @@
 
 #include "UnitTest.h"
 
-using namespace std;
-
 //=============================================================================
 template <class T>
-class ClassCounter : unary_function<void, T> {
+class ClassCounter : std::unary_function<void, T> {
 public:
   ClassCounter(T start)
     : m_count(start) {}
@@ -27,10 +25,10 @@ private:
 };
 
 //=============================================================================
-function<int(void)> counter()
+std::function<int(void)> counter()
 {
   static int count = 0;
-  function<int(void)> increment = [&]() -> int {
+  std::function<int(void)> increment = [&]() -> int {
     ++count;
     return count;
   };
@@ -38,7 +36,7 @@ function<int(void)> counter()
 }
 
 //=============================================================================
-function<int(void)> class_in_counter()
+std::function<int(void)> class_in_counter()
 {
   ClassCounter<int> counter(0);
   return counter;
@@ -66,7 +64,7 @@ private:
 void utest_Closure::test_counter()
 {
   print(DGC_CURRENT_FUNCTION);
-  function<int(void)> func = counter();
+  std::function<int(void)> func = counter();
   test(func() == 1, "First call should be 1");
   test(func() == 2, "Second call should be 2");
   test(func() == 3, "Third call should be 3");
@@ -78,7 +76,7 @@ void utest_Closure::test_class_counter()
 {
   print(DGC_CURRENT_FUNCTION);
   ClassCounter<int> counter(0);
-  function<int(void)> func = counter;
+  std::function<int(void)> func = counter;
   test(func() == 1, "First call should be 1");
   test(func() == 2, "Second call should be 2");
   test(func() == 3, "Third call should be 3");
@@ -89,7 +87,7 @@ void utest_Closure::test_class_counter()
 void utest_Closure::test_class_in_counter()
 {
   print(DGC_CURRENT_FUNCTION);
-  function<int(void)> func = class_in_counter();
+  std::function<int(void)> func = class_in_counter();
   test(func() == 1, "First call should be 1");
   test(func() == 2, "Second call should be 2");
   test(func() == 3, "Third call should be 3");

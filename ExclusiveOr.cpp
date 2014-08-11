@@ -2,11 +2,9 @@
 
 #include <iostream>
 
-using namespace std;
-
 void print_xor(int a, int b)
 {
-  cout << a << " ^ " << b << " = " << (a ^ b) << endl;
+  std::cout << a << " ^ " << b << " = " << (a ^ b) << std::endl;
 }
 
 void print_xor_combinations(int a, int b)
@@ -15,7 +13,7 @@ void print_xor_combinations(int a, int b)
   print_xor(a, b);
   print_xor(b, a);
   print_xor(b, b);
-  cout << endl << endl;
+  std::cout << std::endl << std::endl;
 }
 
 int main() {

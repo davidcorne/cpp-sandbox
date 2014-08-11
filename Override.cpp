@@ -5,8 +5,6 @@
 #include <iostream>
 #include "compiler_guards.h"
 
-using namespace std;
-
 #if CPP_ELEVEN_SUPPORTED
 //=============================================================================
 class Base {

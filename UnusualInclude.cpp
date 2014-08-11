@@ -5,8 +5,6 @@
 
 #include <iostream>
 
-using namespace std;
-
 struct Person
 {
   const char* Name;
@@ -15,7 +13,15 @@ struct Person
   char Gender;
 
   void print() const {
-    cout << Name << " " << Age << " " << Height << " " << Gender << endl;
+    std::cout
+      << Name
+      << " "
+      << Age
+      << " "
+      << Height
+      << " "
+      << Gender
+      << std::endl;
   }
 };
 

@@ -5,8 +5,6 @@
 #include <iostream>
 #include "UnitTest.h"
 
-using namespace std;
-
 //=============================================================================
 template <typename T>
 class LinkedList {
@@ -214,7 +212,7 @@ void utest_LinkedList::test_length()
 void utest_LinkedList::test_string_list()
 {
   print(DGC_CURRENT_FUNCTION);
-  LinkedList<string> string_list;
+  LinkedList<std::string> string_list;
   string_list.append("hello");
   string_list.append("world");
   test(string_list.m_head->data == "hello", "hello not written to head.");

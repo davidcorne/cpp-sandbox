@@ -2,13 +2,12 @@
 // 
 
 #include <iostream>
-using namespace std;
 
 static int COUNT = 0;
 
 //=============================================================================
 int main() {
   ++COUNT;
-  cout << COUNT << endl;
+  std::cout << COUNT << std::endl;
   return main();
 }

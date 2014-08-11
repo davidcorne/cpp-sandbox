@@ -4,8 +4,6 @@
 
 #include <UnitCpp/Test.h>
 
-using namespace std;
-
 //=============================================================================
 TEST(Path, path)
 {
@@ -106,7 +104,7 @@ TEST(Path, equal)
 //=============================================================================
 TEST(Path, stream)
 {
-  stringstream ss;
+  std::stringstream ss;
   Path test_path("test");
   ss << test_path;
   TEST_EQUAL(ss.str(), "test");

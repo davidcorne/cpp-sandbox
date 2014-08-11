@@ -2,13 +2,11 @@
 
 #include <iostream>
 
-using namespace std;
-
 class Foo {
 public:
 
   void operator()() {
-    cout << "operator() called." << endl;
+    std::cout << "operator() called." << std::endl;
   };
 };
 

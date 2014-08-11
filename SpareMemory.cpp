@@ -11,13 +11,11 @@
 
 #include <iostream>
 
-using namespace std;
-
 // 2 Mb spare memory
 static char spare[1024*1024*2];
 
 int main() {
-  cout << sizeof(spare) << endl;
+  std::cout << sizeof(spare) << std::endl;
   while (true) {
 
   }

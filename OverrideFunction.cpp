@@ -7,8 +7,6 @@
 
 #include "UnitTest.h"
 
-using namespace std;
-
 //=============================================================================
 class OverrideBase {
 public:

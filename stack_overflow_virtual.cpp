@@ -1,7 +1,6 @@
 // http://stackoverflow.com/questions/6481260/non-virtual-interface-design-pattern-question-in-c-c
 
 #include <iostream>
-using namespace std;
 
 class Animal
 {

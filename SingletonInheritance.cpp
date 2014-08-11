@@ -5,8 +5,6 @@
 #include <type_traits>
 #include <assert.h>
 
-using namespace std;
-
 //=============================================================================
 template <class T>
 class Singleton {
@@ -73,7 +71,7 @@ Singleton<T>::~Singleton()
 class Logger : public Singleton<Logger> {
 public:
 
-  void log(string s) const;
+  void log(std::string s) const;
   
   virtual ~Logger();
   
@@ -99,9 +97,9 @@ protected:
 };
 
 //=============================================================================
-void Logger::log(string s) const
+void Logger::log(std::string s) const
 {
-  cout << s.c_str() << endl;
+  std::cout << s.c_str() << std::endl;
 }
 
 //=============================================================================
@@ -129,6 +127,6 @@ int main() {
   const Data& d = Data::get();
   assert(d.data() == 42);
   assert(static_cast<const void*>(&d) != static_cast<const void*>(&l));
-  cout << &n << " " << &l << " " << &d << endl;
+  std::cout << &n << " " << &l << " " << &d << std::endl;
   return 0;
 }

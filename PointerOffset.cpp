@@ -1,8 +1,6 @@
 #include <iostream>
 #include <stdexcept>
 
-using namespace std;
-
 class Bank {
 public:
 
@@ -13,7 +11,7 @@ public:
     {}
   
   void show_balance() {
-    cout << "Your balance is: " << m_money << endl;
+    std::cout << "Your balance is: " << m_money << std::endl;
   }
   
 private:

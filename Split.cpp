@@ -12,10 +12,9 @@
 //=============================================================================
 std::vector<std::string> split(std::string in, char delimiter=' ')
 {
-  using namespace std;
-  vector<string> out;
-  stringstream string_stream(in);
-  string item;
+  std::vector<std::string> out;
+  std::stringstream string_stream(in);
+  std::string item;
   while (getline(string_stream, item, delimiter)) {
     out.push_back(item);
   }

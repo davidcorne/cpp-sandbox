@@ -8,8 +8,6 @@
 
 #include "UnitTest.h"
 
-using namespace std;
-
 //=============================================================================
 template <typename T>
 class Ring {
@@ -63,7 +61,7 @@ private:
 //=============================================================================
 struct Request {
   int Num;
-  string Descriptiton;
+  std::string Descriptiton;
 };
 
 typedef Ring<Request> RequestRing;

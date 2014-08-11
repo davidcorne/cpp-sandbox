@@ -9,9 +9,6 @@
 
 #include "UnitTest.h"
 
-using namespace std;
-
-
 //=============================================================================
 class Impl {
 public:
@@ -23,7 +20,7 @@ public:
   
 private:
   struct Pimpl;
-  unique_ptr<Pimpl> m_pimpl;
+  std::unique_ptr<Pimpl> m_pimpl;
 };
 
 //=============================================================================

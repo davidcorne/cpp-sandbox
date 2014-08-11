@@ -5,14 +5,12 @@
 
 #include <iostream>
 
-using namespace std;
-
 //=============================================================================
 class Parent {
 public:
 
   void out() const {
-    cout << "Parent" << endl;
+    std::cout << "Parent" << std::endl;
   }
 };
 
@@ -21,7 +19,7 @@ class Child : public Parent {
 public:
 
   void out() const {
-    cout << "Child" << endl;
+    std::cout << "Child" << std::endl;
   }
 };
 

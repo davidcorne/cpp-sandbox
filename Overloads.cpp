@@ -4,8 +4,6 @@
 
 #include <iostream>
 
-using namespace std;
-
 //=============================================================================
 class Base_1 {
 public:
@@ -38,7 +36,7 @@ int main() {
   // request for member 'operator==' is ambiguous
   // candidates are: bool Base_2::operator==(const Base_2&)
   //                 bool Base_1::operator==(const Base_1&)
-  cout << (d1.Base_1::operator==(d2)) << endl;
-  cout << (d1.Base_2::operator==(d2)) << endl;
+  std::cout << (d1.Base_1::operator==(d2)) << std::endl;
+  std::cout << (d1.Base_2::operator==(d2)) << std::endl;
   return 0;
 }

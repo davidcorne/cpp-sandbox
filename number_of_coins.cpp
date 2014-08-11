@@ -7,20 +7,18 @@
 
 #include <stdlib.h>
 
-// not hurting anyone here
-using namespace std;
-
+//=============================================================================
 int main(int argc, char *argv[])
 {
   if (argc != 2)
   {
-    cout << "usage: change amount-in-cents" << endl;
+    std::cout << "usage: change amount-in-cents" << std::endl;
     return 1;
   }
 
   int total = atoi(argv[1]);
 
-  cout << "quarter\tdime\tnickle\tpenny\tto make " << total << endl;
+  std::cout << "quarter\tdime\tnickle\tpenny\tto make " << total << std::endl;
 
   int combos = 0;
 
@@ -30,20 +28,20 @@ int main(int argc, char *argv[])
       int total_less_quarters_dimes = total_less_quarters - dimes * 10;
       for (int nickles = 0; nickles <= total_less_quarters_dimes / 5; nickles++) {
         int pennies = total_less_quarters_dimes - nickles * 5;
-        cout << quarters
+        std::cout << quarters
              << "\t"
              << dimes
              << "\t"
              << nickles
              << "\t"
              << pennies
-             << endl;
+             << std::endl;
         combos++;
       }
     }
   }
 
-  cout << combos << " combinations" << endl;
+  std::cout << combos << " combinations" << std::endl;
 
   return 0;
 }

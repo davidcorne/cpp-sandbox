@@ -7,18 +7,16 @@
 #include <stdio.h>
 #include <string>
 
-using namespace std;
-
 //=============================================================================
 int main(int num_arguments, char* arguments[])
 // main function
 {
-  string file_name(arguments[0]);
+  std::string file_name(arguments[0]);
   file_name += + "/SelfDeleting.exe";
   if (remove(file_name.c_str()) == 0) {
-    cout << "Somehow I've deleted myself." << endl;
+    std::cout << "Somehow I've deleted myself." << std::endl;
   } else {
-    cerr << "I've not deleted myself, OUTRAGE!!!!" << endl;
+    std::cerr << "I've not deleted myself, OUTRAGE!!!!" << std::endl;
   }
   return 0;
 }

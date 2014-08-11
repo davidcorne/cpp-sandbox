@@ -2,11 +2,9 @@
 
 #include <iostream>
 
-using namespace std;
-
 //=============================================================================
 int main()
 {
-  cout << "GCC version: " << GCC_VERSION << endl;
+  std::cout << "GCC version: " << GCC_VERSION << std::endl;
   return 0;
 }

@@ -1,7 +1,5 @@
 #include <iostream>
 
-using namespace::std;
-
 //=============================================================================
 class Base {
 public:
@@ -48,6 +46,6 @@ public:
 int main() {
 
   Derived derived(4);
-  cout << derived.get() << endl;
+  std::cout << derived.get() << std::endl;
   return 0;
 }

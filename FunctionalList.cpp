@@ -7,8 +7,6 @@
 
 #include "UnitTest.h"
 
-using namespace std;
-
 //=============================================================================
 template<typename T>
 class List {
@@ -18,7 +16,7 @@ public:
     : m_head(nullptr)
     {}
   List(T val, List tail)
-    : m_head(make_shared<Item<T> >(val, tail.m_head))
+    : m_head(std::make_shared<Item<T> >(val, tail.m_head))
     {}
 
   static List make_repeat(T val, int repeats)
@@ -57,19 +55,19 @@ private:
   //===========================================================================
   template <typename U>
   struct Item {
-    Item(U val, shared_ptr<Item> tail)
+    Item(U val, std::shared_ptr<Item> tail)
       : value(val),
         next(tail)
       {}
     U value;
-    shared_ptr<Item> next;
+    std::shared_ptr<Item> next;
   };
 
-  explicit List(shared_ptr<Item<T> > items)
+  explicit List(std::shared_ptr<Item<T> > items)
     : m_head(items)
     {}
 
-  shared_ptr<Item<T> > m_head;
+  std::shared_ptr<Item<T> > m_head;
 };
 
 //=============================================================================

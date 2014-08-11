@@ -5,8 +5,6 @@
 #include <iostream>
 #include <vector>
 
-using namespace std;
-
 //=============================================================================
 int main() {
 
@@ -17,12 +15,12 @@ int main() {
       I[i][j] = i == j ? 1.0 : 0.0;
     }
   }
-  cout << "ID:" << endl;
+  std::cout << "ID:" << std::endl;
   for (int i = 0; i < N; ++i) {
     for (int j = 0; j < N; ++j) {
-      cout << " " << I[i][j];
+      std::cout << " " << I[i][j];
     }
-    cout << endl;
+    std::cout << std::endl;
   }
   
   return 0;

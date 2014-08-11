@@ -7,8 +7,6 @@
 
 #include "UnitTest.h"
 
-using namespace std;
-
 //=============================================================================
 template <class T>
 class InitialiseSafeStatic {

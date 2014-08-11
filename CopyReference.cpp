@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-using namespace std;
-
 class Foo
 {
 public:
@@ -13,7 +11,7 @@ public:
     
   int member;
   void out() const {
-    cout << member << endl;
+    std::cout << member << std::endl;
   }
 private:
   Foo(const Foo&);

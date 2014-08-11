@@ -7,24 +7,22 @@
 
 #include "UnitTest.h"
 
-using namespace std;
-
 //=============================================================================
 class Keeper {
 public:
 
-  Keeper(const string& name)
+  Keeper(const std::string& name)
     : m_name(name)
     {}
 
-  string name() const
+  std::string name() const
     {
       return m_name;
     }
 
 private:
   friend class utest_ChangeReference;
-  const string& m_name;
+  const std::string& m_name;
 };
 
 //=============================================================================
@@ -46,7 +44,7 @@ private:
 void utest_ChangeReference::test_change_ref()
 {
   print(DGC_CURRENT_FUNCTION);
-  string name("Fred");
+  std::string name("Fred");
   Keeper keeper(name);
   test(keeper.name() == "Fred", "Wrong name");
   name.assign("George");

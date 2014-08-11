@@ -7,8 +7,6 @@
 
 #include "UnitTest.h"
 
-using namespace std;
-
 //=============================================================================
 class VarArgs {
 public:
@@ -19,7 +17,7 @@ public:
     va_start(list, n);
     for (int i = 0; i < n; ++i) {
       const char* val = va_arg(list, const char*);
-      cout << val << endl;
+      std::cout << val << std::endl;
     }
     va_end(list);
   }

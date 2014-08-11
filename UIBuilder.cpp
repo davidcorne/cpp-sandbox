@@ -9,17 +9,15 @@
 #include "UnitTest.h"
 #include "compiler_guards.h"
 
-using namespace std;
-
 #if CPP_ELEVEN_SUPPORTED
 
 //=============================================================================
 class IEmployeeExporter {
 public:
 
-  virtual void set_name(string name) = 0;
+  virtual void set_name(std::string name) = 0;
   virtual void set_wage(double wage) = 0;
-  virtual void set_id(string id) = 0;
+  virtual void set_id(std::string id) = 0;
   
   virtual ~IEmployeeExporter() = 0;
   
@@ -31,7 +29,7 @@ IEmployeeExporter::~IEmployeeExporter() {}
 class Employee {
 public:
 
-  Employee(string name, double wage, string id)
+  Employee(std::string name, double wage, std::string id)
     : m_name(name),
       m_wage(wage),
       m_id(id)
@@ -47,15 +45,15 @@ public:
 private:
   friend class utest_UIBuilder;
   
-  string m_name;
+  std::string m_name;
   double m_wage;
-  string m_id;
+  std::string m_id;
 };
 
 //=============================================================================
 class EmployeeExporterImpl : public IEmployeeExporter {
   
-  virtual void set_name(string name) override
+  virtual void set_name(std::string name) override
     {
       m_name = name;
     }
@@ -65,25 +63,25 @@ class EmployeeExporterImpl : public IEmployeeExporter {
       m_wage = wage;
     }
 
-  virtual void set_id(string id) override
+  virtual void set_id(std::string id) override
     {
       m_id = id;
     }
 
 protected:
   
-  string m_name;
+  std::string m_name;
   double m_wage;
-  string m_id;  
+  std::string m_id;  
 };
 
 //=============================================================================
 class EmployeeHTMLExporter : public EmployeeExporterImpl {
 public:
 
-  string out() const
+  std::string out() const
     {
-      stringstream stream;
+      std::stringstream stream;
       stream
         << "<table border=\"0\">\n"
         << "  <tr><td>Name:</td><td>"
@@ -104,9 +102,9 @@ public:
 class EmployeeJSONExporter : public EmployeeExporterImpl {
 public:
 
-  string out() const
+  std::string out() const
     {
-      stringstream stream;
+      std::stringstream stream;
       stream
         << "{\n"
         << "\"name\": \""
@@ -147,7 +145,7 @@ void utest_UIBuilder::test_html_output()
   Employee fred("Fred", 40000, "01fg6");
   EmployeeHTMLExporter exporter;
   fred.output(exporter);
-  string result("<table border=\"0\">\n"
+  std::string result("<table border=\"0\">\n"
                 "  <tr><td>Name:</td><td>Fred</td></tr>\n"
                 "  <tr><td>Wage:</td><td>40000</td></tr>\n"
                 "  <tr><td>ID:</td><td>01fg6</td></tr>\n"
@@ -163,7 +161,7 @@ void utest_UIBuilder::test_json_output()
   Employee fred("Fred", 40000, "01fg6");
   EmployeeJSONExporter exporter;
   fred.output(exporter);
-  string expected_result("{\n"
+  std::string expected_result("{\n"
                 "\"name\": \"Fred\",\n"
                 "\"wage\": 40000,\n"
                 "\"id\": \"01fg6\",\n"

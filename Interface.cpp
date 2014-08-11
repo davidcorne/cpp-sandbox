@@ -5,8 +5,6 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
 //=============================================================================
 #define Interface(cls, functions) \
   struct cls {                    \
@@ -25,8 +23,8 @@ Interface(
 //=============================================================================
 Interface(
   IFileInterface,
-  virtual void write(string in) = 0;
-  virtual string read() const = 0;
+  virtual void write(std::string in) = 0;
+  virtual std::string read() const = 0;
 );
 
 //=============================================================================
@@ -38,7 +36,7 @@ public:
   
   virtual void print() const
     {
-      cout << m_file.read() << endl;
+      std::cout << m_file.read() << std::endl;
     }
 private:
   const IFileInterface& m_file;
@@ -52,18 +50,18 @@ public:
     : m_contents("")
     {}
   
-  virtual void write(string in)
+  virtual void write(std::string in)
     {
       m_contents = in;
     }
 
-  virtual string read() const
+  virtual std::string read() const
     {
       return m_contents;
     }
 
 private:
-  string m_contents;
+  std::string m_contents;
 };
 //=============================================================================
 int main() {

@@ -6,8 +6,6 @@
 
 #include "UnitTest.h"
 
-using namespace std;
-
 //=============================================================================
 class Dummy {
 public:

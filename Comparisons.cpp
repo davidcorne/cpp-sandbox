@@ -1,7 +1,5 @@
 #include <iostream>
 
-using namespace std;
-
 //=============================================================================
 template <typename T>
 class Compare {
@@ -116,11 +114,11 @@ int main() {
   IntCompare one(1);
   IntCompare two(2);
   IntCompare three(3);
-  cout << "one < two " << (one < two) << endl;
-  cout << "one == one " << (one == one) <<endl;
-  cout << "two < two " << (two < two) <<endl;
-  cout << "three < two " << (three < two) << endl;
-  cout << "one < three " << (one < three) <<endl;
-  cout << "three > two " << (three > two) << endl;
+  std::cout << "one < two " << (one < two) << std::endl;
+  std::cout << "one == one " << (one == one) <<std::endl;
+  std::cout << "two < two " << (two < two) << std::endl;
+  std::cout << "three < two " << (three < two) << std::endl;
+  std::cout << "one < three " << (one < three) << std::endl;
+  std::cout << "three > two " << (three > two) << std::endl;
   return 0;
 }

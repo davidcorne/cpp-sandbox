@@ -6,8 +6,6 @@
 
 // types: classes, enums, typedefs, namespaces
 
-using namespace std;
-
 // variables: consts, statics, exported variables (declared extern elsewhere)
 // local forward function declarations
 
@@ -107,10 +105,10 @@ int main()
 //
 {
   Singleton s(0);
-  cout << s.foo() << endl;
+  std::cout << s.foo() << std::endl;
   Singleton b(0);
   b.set_foo(12);
-  cout << s.foo() << endl;
+  std::cout << s.foo() << std::endl;
   
   return 0;
 }

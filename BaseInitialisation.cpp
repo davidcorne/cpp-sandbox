@@ -6,8 +6,6 @@
 
 #include "UnitTest.h"
 
-using namespace std;
-
 #include "compiler_guards.h"
 
 #if CPP_ELEVEN_SUPPORTED

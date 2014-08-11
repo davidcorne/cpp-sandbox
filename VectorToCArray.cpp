@@ -7,8 +7,6 @@
 
 #include "UnitTest.h"
 
-using namespace std;
-
 //=============================================================================
 int legecy_sum(const int* array, int size)
 {
@@ -48,7 +46,7 @@ private:
 void utest_VectorToCArray::test_sum()
 {
   print(DGC_CURRENT_FUNCTION);
-  vector<int> array;
+  std::vector<int> array;
   array.push_back(1);
   array.push_back(2);
   array.push_back(3);
@@ -67,7 +65,7 @@ void utest_VectorToCArray::test_fill_array()
 {
   print(DGC_CURRENT_FUNCTION);
   // fill an array of size 10 with -1
-  vector<int> array(10, -1);
+  std::vector<int> array(10, -1);
   fill_arrray(&array[0], array.size());
   test(array[0] == 0, "Array element wrong.");
   test(array[1] == 1, "Array element wrong.");

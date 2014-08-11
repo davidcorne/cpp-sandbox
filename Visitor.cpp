@@ -14,8 +14,6 @@
 
 #include "UnitTest.h"
 
-using namespace std;
-
 class ICarElement;
 class Wheel;
 class Body;
@@ -48,11 +46,11 @@ ICarElement::~ICarElement(){}
 class Wheel : public ICarElement {
 public:
 
-  Wheel(string name)
+  Wheel(std::string name)
     : m_name(name)
     {}
 
-  string name() const
+  std::string name() const
     {
       return m_name;
     }
@@ -63,7 +61,7 @@ public:
     }
 
 private:
-  string m_name;
+  std::string m_name;
 };
 
 //=============================================================================
@@ -115,17 +113,17 @@ public:
 
   virtual void visit(Wheel& wheel) override
     {
-      cout << "Wheel " << wheel.name() << endl;
+      std::cout << "Wheel " << wheel.name() << std::endl;
     }
 
   virtual void visit(Body& wheel) override
     {
-      cout << "Body" << endl;
+      std::cout << "Body" << std::endl;
     }
 
   virtual void visit(Car& wheel) override
     {
-      cout << "Car" << endl;
+      std::cout << "Car" << std::endl;
     }
 };
   
@@ -157,7 +155,7 @@ private:
 
   friend class utest_Visitor;
 
-  vector<string> m_wheels_visited;
+  std::vector<std::string> m_wheels_visited;
   bool m_car_visited;
   bool m_body_visited;
 };
@@ -188,25 +186,25 @@ void utest_Visitor::test_visit()
     visitor.m_wheels_visited.size() == 4,
     "Wrong number of wheels visited."
   );
-  auto pos = find(
+  auto pos = std::find(
     visitor.m_wheels_visited.begin(),
     visitor.m_wheels_visited.end(),
     "Front Left"
   );
   test(pos != visitor.m_wheels_visited.end(), "Did not find \"Front Left\"");
-  pos = find(
+  pos = std::find(
     visitor.m_wheels_visited.begin(),
     visitor.m_wheels_visited.end(),
     "Front Right"
   );
   test(pos != visitor.m_wheels_visited.end(), "Did not find \"Front Right\"");
-  pos = find(
+  pos = std::find(
     visitor.m_wheels_visited.begin(),
     visitor.m_wheels_visited.end(),
     "Back Left"
   );
   test(pos != visitor.m_wheels_visited.end(), "Did not find \"Back Left\"");
-  pos = find(
+  pos = std::find(
     visitor.m_wheels_visited.begin(),
     visitor.m_wheels_visited.end(),
     "Back Right"

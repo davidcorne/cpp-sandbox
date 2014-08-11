@@ -14,8 +14,6 @@
 
 #include "UnitTest.h"
 
-using namespace std;
-
 class Employee;
 
 //=============================================================================
@@ -37,12 +35,12 @@ private:
 class Employee {
 public:
   
-  Employee(string name, double wage)
+  Employee(std::string name, double wage)
     : m_name(name),
       m_wage(wage)
     {}
 
-  string name() const
+  std::string name() const
     {
       return m_name;
     }
@@ -58,7 +56,7 @@ public:
     }
 
 private:
-  string m_name;
+  std::string m_name;
   double m_wage;  
 };
 
@@ -82,7 +80,7 @@ public:
      
 private:
 
-  vector<Employee> m_db;
+  std::vector<Employee> m_db;
 };
 
 //=============================================================================
@@ -95,12 +93,12 @@ public:
   
   virtual void visit(Employee& employee) override;
 
-  string flush();
+  std::string flush();
 
   virtual ~EmployeePrinter() {}
   
 private:
-  string m_to_print;
+  std::string m_to_print;
 };
 
 //=============================================================================
@@ -161,9 +159,9 @@ int main() {
 }
 
 //=============================================================================
-string EmployeePrinter::flush()
+std::string EmployeePrinter::flush()
 {
-  string out(m_to_print);
+  std::string out(m_to_print);
   m_to_print.clear();
   return out;
 }
@@ -174,8 +172,8 @@ void EmployeePrinter::visit(Employee& employee)
   m_to_print += "| ";
   m_to_print += employee.name();
   m_to_print += " | ";
-  ostringstream ss;
-  ss << fixed << setprecision(2) << employee.wage();
+  std::ostringstream ss;
+  ss << std::fixed << std::setprecision(2) << employee.wage();
   m_to_print += ss.str();
   m_to_print += " |";
   m_to_print += "\n";

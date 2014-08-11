@@ -9,8 +9,6 @@
 
 #include <vector>
 
-using namespace std;
-
 //=============================================================================
 class utest_STLIteratorWrapper : public UnitTest {
 public:
@@ -32,10 +30,10 @@ private:
 void utest_STLIteratorWrapper::test_vector_iteration()
 {
   print(DGC_CURRENT_FUNCTION);
-  vector<int> container = {0, 1, 2, 3, 4, 5};
-  STLIteratorWrapper<vector<int>::iterator> iter(
-    begin(container),
-    end(container)
+  std::vector<int> container = {0, 1, 2, 3, 4, 5};
+  STLIteratorWrapper<std::vector<int>::iterator> iter(
+    std::begin(container),
+    std::end(container)
   );
   test(iter.m_iter == end(container), "Should start on an invalid iterator.");
   test(++iter, "++ should give true.");
@@ -65,10 +63,10 @@ void utest_STLIteratorWrapper::test_vector_iteration()
 void utest_STLIteratorWrapper::test_empty()
 {
   print(DGC_CURRENT_FUNCTION);
-  vector<int> container;
-  STLIteratorWrapper<vector<int>::iterator> iter(
-    begin(container),
-    end(container)
+  std::vector<int> container;
+  STLIteratorWrapper<std::vector<int>::iterator> iter(
+    std::begin(container),
+    std::end(container)
   );
   test(!(++iter), "Should start false.");
 }

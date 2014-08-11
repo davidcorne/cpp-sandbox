@@ -5,22 +5,20 @@
 #include <string.h>
 #include <iostream>
 
-using namespace std;
-
 class Parent
 {
     public:
-        virtual void VirtFunc1() { cout << "Parent::VirtFunc1" << endl; }
+        virtual void VirtFunc1() { std::cout << "Parent::VirtFunc1" << std::endl; }
 
-        virtual void VirtFunc2() { cout << "Parent::VirtFunc2" << endl; }
+        virtual void VirtFunc2() { std::cout << "Parent::VirtFunc2" << std::endl; }
 };
 
 class Child : public Parent
 {
     public:
 
-        void VirtFunc1() { cout << "Child::VirtFunc1" << endl; }
-        void VirtFunc2() { cout << "Child::VirtFunc2" << endl; }
+        void VirtFunc1() { std::cout << "Child::VirtFunc1" << std::endl; }
+        void VirtFunc2() { std::cout << "Child::VirtFunc2" << std::endl; }
 };
 
 typedef void (*virtual_function)();
@@ -33,12 +31,12 @@ struct FakeVirtualTable {
 
 void fake_virtual_one()
 {
-    cout << "Faked virtual call 1" << endl;
+    std::cout << "Faked virtual call 1" << std::endl;
 }
 
 void fake_virtual_two()
 {
-    cout << "Faked virtual call 2" << endl;
+    std::cout << "Faked virtual call 2" << std::endl;
 }
 
 int main()
