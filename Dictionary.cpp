@@ -54,12 +54,22 @@ int main()
   dict.set_item<std::string>("there", "THIS IS IN");
   std::cout << dict.item<std::string>("there") << std::endl;
 
+  dict.set_item("hi", 4);
+  std::cout << dict.item<int>("hi") << std::endl;
+  dict.set_item("hi", 4.5);
+  std::cout << dict.item<double>("hi") << std::endl;
   return 0;
 }
 
 //=============================================================================
-Dictionary::Dictionary() = default;
-Dictionary::~Dictionary() = default;
+Dictionary::Dictionary()
+{
+}
+
+//=============================================================================
+Dictionary::~Dictionary()
+{
+}
 
 //=============================================================================
 template <typename T>

@@ -10,35 +10,29 @@
 #include <math.h>
 #include <string>
 
-using std::cout;
-using std::endl;
-using std::function;
-using std::list;
-using std::string;
-
 //=============================================================================
 template <typename T>
-void print_list(const list<T>& to_print, const string& title)
+void print_list(const std::list<T>& to_print, const std::string& title)
 //
 //D Prints the title (if non-empty) then prints each item in the list and a
 //D blank line at the end.
 //
 {
   if (!title.empty()) {
-    cout << "Printing list: " << title << endl;
+    std::cout << "Printing list: " << title << std::endl;
   }
   for(
-    typename list<T>::const_iterator iter = to_print.cbegin();
+    typename std::list<T>::const_iterator iter = to_print.cbegin();
     iter != to_print.cend();
     ++iter
   ) {
-    cout << *iter << endl;
+    std::cout << *iter << std::endl;
   }
-  cout << endl;
+  std::cout << std::endl;
 }
 
 //=============================================================================
-int ascii_sum(const string& in)
+int ascii_sum(const std::string& in)
 //
 //D Sums the values of the elements of the string as integers, probably a
 //D little dodgy.
@@ -52,7 +46,7 @@ int ascii_sum(const string& in)
 }
 
 //=============================================================================
-bool ascii_order(const string& first, const string& second)
+bool ascii_order(const std::string& first, const std::string& second)
 //
 //D Compare strings by the sums of the values of the elements cast to ints.
 //
@@ -71,26 +65,26 @@ int main()
 //
 {
   // make a list of strings
-  list<string> strings;
+  std::list<std::string> strings;
   strings.push_back("aaaaa"); // 5 * ascci value of a is 485
   strings.push_back("zzzz"); // 4 * ascii value of z is 488
   strings.push_back("b");
 
   // print the original list
-  print_list<string>(strings, "original strings");
+  print_list<std::string>(strings, "original strings");
   
   // sort by minimum length
-  list<string> length_sorted_strings = strings;
+  std::list<std::string> length_sorted_strings = strings;
   length_sorted_strings.sort(
-    [](string x, string y){return x.length() < y.length();}
+    [](std::string x, std::string y){return x.length() < y.length();}
   );
-  print_list<string>(length_sorted_strings, "strings sorted by length");
+  print_list<std::string>(length_sorted_strings, "strings sorted by length");
 
   auto ascii_order_function = ascii_order;
   
-  list<string> ascii_sorted_strings = strings;
+  std::list<std::string> ascii_sorted_strings = strings;
   ascii_sorted_strings.sort(ascii_order_function);
-  print_list<string>(ascii_sorted_strings, "strings sorted by ascii value");
+  print_list<std::string>(ascii_sorted_strings, "strings sorted by ascii value");
 
   return 0;
 }

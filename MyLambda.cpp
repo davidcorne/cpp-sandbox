@@ -1,12 +1,8 @@
 #include <functional>
 #include <iostream>
 
-using std::cout;
-using std::endl;
-using std::function;
-
 //=============================================================================
-double eval(function<double(double)> f, double x)
+double eval(std::function<double(double)> f, double x)
 //
 //D
 //
@@ -29,7 +25,7 @@ int main()
 //D
 //
 {
-  cout << eval(return_one, 5) << endl;
-  cout << eval([] (double x){return x*x;} , 5) << endl;
+  std::cout << eval(return_one, 5) << std::endl;
+  std::cout << eval([] (double x){return x*x;} , 5) << std::endl;
   return 0;
 }

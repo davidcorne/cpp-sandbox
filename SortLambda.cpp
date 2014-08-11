@@ -10,22 +10,16 @@
 #include <math.h>
 #include <string>
 
-using std::cout;
-using std::endl;
-using std::function;
-using std::list;
-using std::string;
-
 //=============================================================================
 template <typename T>
-list<T> sort(function<bool(const T&, const T&)> order, const list<T>& in)
+std::list<T> sort(std::function<bool(const T&, const T&)> order, const std::list<T>& in)
 //
 //D Sorts a list using the function order such that if order returns true then
 //D the first value is "lower" in the order than the second, i.e it has a lower
 //D index in the sorted list.
 //
 {
-  list<T> sorted;
+  std::list<T> sorted;
   // for each element in the input list, loop over the sorted list and when you
   // get to an element it is "smaller" than place it immediately before it.
   for (auto iter = in.cbegin(); iter != in.cend(); ++iter) {
@@ -52,23 +46,23 @@ list<T> sort(function<bool(const T&, const T&)> order, const list<T>& in)
 
 //=============================================================================
 template <typename T>
-void print_list(const list<T>& to_print, const string& title)
+void print_list(const std::list<T>& to_print, const std::string& title)
 //
 //D Prints the title (if non-empty) then prints each item in the list and a
 //D blank line at the end.
 //
 {
   if (!title.empty()) {
-    cout << "Printing list: " << title << endl;
+    std::cout << "Printing list: " << title << std::endl;
   }
   for(
-    typename list<T>::const_iterator iter = to_print.cbegin();
+    typename std::list<T>::const_iterator iter = to_print.cbegin();
     iter != to_print.cend();
     ++iter
   ) {
-    cout << *iter << endl;
+    std::cout << *iter << std::endl;
   }
-  cout << endl;
+  std::cout << std::endl;
 }
 
 //=============================================================================
@@ -79,7 +73,7 @@ int main()
 // Then makes a list of strings and 
 //
 {
-  list<double> random_list;
+  std::list<double> random_list;
   random_list.push_back(5.0);
   random_list.push_back(-4.0);
   random_list.push_back(8.0);
@@ -91,21 +85,21 @@ int main()
   print_list<double>(random_list, "original doubles");
   
   // sort by minimum first
-  list<double> min_sorted = sort<double>(
+  std::list<double> min_sorted = sort<double>(
     [](double x, double y){return x < y;},
     random_list
   );
   print_list<double>(min_sorted, "doubles sorted by minimum");
 
   // sort by maximum first
-  list<double> max_sorted = sort<double>(
+  std::list<double> max_sorted = sort<double>(
     [](double x, double y){return x > y;},
     random_list
   );
   print_list<double>(max_sorted, "doubles sorted by maximum");
 
   // sort by absolue minimum
-  list<double> abs_min_sorted = sort<double>(
+  std::list<double> abs_min_sorted = sort<double>(
     [](double x, double y){return fabs(x) < fabs(y);},
     random_list
   );
@@ -115,20 +109,20 @@ int main()
   );
 
   // make a list of strings
-  list<string> strings;
+  std::list<std::string> strings;
   strings.push_back("aaaaaaaaaaaa");
   strings.push_back("see");
   strings.push_back("b");
 
   // print the original list
-  print_list<string>(strings, "original strings");
+  print_list<std::string>(strings, "original strings");
   
   // sort by minimum length
-  list<string> length_sorted_strings = sort<string>(
-    [](string x, string y){return x.length() < y.length();},
+  std::list<std::string> length_sorted_strings = sort<std::string>(
+    [](std::string x, std::string y){return x.length() < y.length();},
     strings
   );
-  print_list<string>(length_sorted_strings, "strings sorted by length");
+  print_list<std::string>(length_sorted_strings, "strings sorted by length");
 
   return 0;
 }

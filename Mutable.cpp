@@ -4,9 +4,6 @@
 #include <iostream>
 #include <math.h>
 
-using std::cout;
-using std::endl;
-
 //=============================================================================
 struct Point {
   Point(double new_x, double new_y) {
@@ -187,10 +184,10 @@ double Triangle::area() const
     m_area.set_data(0.5 * a * b * sin(acos(cos_C)));
     
     // output to demonstrate which path is being taken
-    cout << "Area calculated." << endl;
+    std::cout << "Area calculated." << std::endl;
   } else {
     // this else is only here to show the cached value is being used
-    cout << "Cached area returned." << endl;
+    std::cout << "Cached area returned." << std::endl;
   }
   return m_area;
 }
@@ -218,19 +215,19 @@ int main()
   Triangle tri(pt_1, pt_2, pt_3);
 
   // working it out
-  cout << "Area is: " << tri.area() << endl << endl;
+  std::cout << "Area is: " << tri.area() << std::endl << std::endl;
 
   // using the cached value
-  cout << "Area is: " << tri.area() << endl << endl;
+  std::cout << "Area is: " << tri.area() << std::endl << std::endl;
 
   // setting the first point so it re-calculates the area
   //
   // it should have an area of 1
 
   tri.set_first_point(Point(2, 0));
-  cout << "Area is: " << tri.area() << endl << endl;
+  std::cout << "Area is: " << tri.area() << std::endl << std::endl;
 
-  cout << "Area is: " << tri.area() << endl;
+  std::cout << "Area is: " << tri.area() << std::endl;
 
   return 0;
 }

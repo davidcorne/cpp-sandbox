@@ -7,7 +7,6 @@
 // the letter C and allocated the instances as pointers to the base class.
 
 #include <iostream>
-using namespace std;
 
 class CPolygon {
   protected:
@@ -17,7 +16,7 @@ class CPolygon {
       { width=a; height=b; }
     virtual int area (void) =0;
     void printarea (void)
-      { cout << area() << endl; }
+    { std::cout << area() << std::endl; }
   virtual ~CPolygon() = 0;
   };
 
