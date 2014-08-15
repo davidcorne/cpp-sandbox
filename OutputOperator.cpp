@@ -80,16 +80,25 @@ Shoe::Shoe(Shoe::Grading grading, double size)
 Shoe::~Shoe() = default;
 
 //=============================================================================
+namespace dgc {
+  // specialise to_string for Shoe::Grading.
+  template <>
+  std::string to_string(const Shoe::Grading& grading) {
+    static const std::map<Shoe::Grading, std::string> converter = {
+      {Shoe::EU_GRADING, "EU"},
+      {Shoe::UK_GRADING, "UK"},
+      {Shoe::US_GRADING, "US"}
+    };
+    return converter.at(grading);
+  }
+}
+
+//=============================================================================
 std::string Shoe::repr() const
 {
-  std::map<Grading, std::string> converter = {
-    {EU_GRADING, "EU"},
-    {UK_GRADING, "UK"},
-    {US_GRADING, "US"}
-  };
 
   std::string result("");
-  result += converter.at(m_grading) + ":" + to_string(m_size);
+  result += dgc::to_string(m_grading) + ":" + dgc::to_string(m_size);
   return result;
 }
   

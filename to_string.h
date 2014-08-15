@@ -7,18 +7,22 @@
 #include <sstream>
 
 //=============================================================================
-template <typename T>
-std::string to_string(const T& t);
+namespace dgc {
+  
+  //===========================================================================
+  template <typename T>
+  std::string to_string(const T& t);
 
-//----- Source
+  //----- Source
 
-//=============================================================================
-template <typename T>
-std::string to_string(const T& t)
-{
-  std::ostringstream ss;
-  ss << t;
-  return ss.str();
+  //===========================================================================
+  template <typename T>
+  std::string to_string(const T& t)
+  {
+    std::ostringstream ss;
+    ss << t;
+    return ss.str();
+  }
+
 }
-
 #endif
