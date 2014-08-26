@@ -9,7 +9,7 @@ EXT = cpp
 #==============================================================================
 ifeq ($(COMPILER_TYPE), gcc)
   COMPILER = g++
-  COMPILER_ARGS = -std=c++0x -g -Wall -Werror -pthread `pkg-config --cflags-only-I unitcpp`
+  COMPILER_ARGS = -std=c++0x -g -Wall -Werror -pthread $(shell pkg-config --cflags-only-I unitcpp)
   OUT_OBJECT_FILE = -o
   OUT_EXE_FILE = -o
   NO_LINK = -c
@@ -18,7 +18,7 @@ endif
 #==============================================================================
 ifeq ($(COMPILER_TYPE), clang)
   COMPILER = clang++
-  COMPILER_ARGS = -I.. -std=c++11 -g -Wall -Werror -pthread `pkg-config --cflags-only-I unitcpp`
+  COMPILER_ARGS = -std=c++11 -g -Wall -Werror -pthread $(shell pkg-config --cflags-only-I unitcpp)
   OUT_OBJECT_FILE = -o
   OUT_EXE_FILE = -o
   NO_LINK = -c
