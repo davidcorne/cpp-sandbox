@@ -3,7 +3,7 @@
 #==============================================================================
 
 COMPILER_TYPE = gcc
-EXE_DIRECTORY = $(COMPILER_TYPE)_exe
+EXE_DIRECTORY = exe.$(COMPILER_TYPE)
 EXT = cpp
 
 #==============================================================================
@@ -107,7 +107,7 @@ retest: FRC
 #D For deleting all temporary and made files
 #------------------------------------------------------------------------------
 clean: FRC
-	@rm -fr gcc_exe clang_exe result obj deps
+	@rm -fr exe.*/ result obj deps
 	@echo "Removed all: objects, executables, and temp files."
 
 #==============================================================================
