@@ -3,6 +3,8 @@
 #ifndef Printer_H
 #define Printer_H
 
+#include "Capabilities.h"
+#ifdef VARIADIC_TEMPLATES
 #include <iostream>
 
 //=============================================================================
@@ -28,4 +30,7 @@ template <typename... Args>
 void print(Args... arguments);
 
 #include "Printer_source.h"
+#else
+#error "Variadic templates not supported."
+#endif
 #endif

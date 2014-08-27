@@ -51,10 +51,10 @@ int main()
 
 //----- CopyIn<T>.
 template <typename T>
-CopyIn<T>::CopyIn() = default;
+CopyIn<T>::CopyIn() {}
 
 template <typename T>
-CopyIn<T>::~CopyIn() = default;
+CopyIn<T>::~CopyIn() {}
 
 //----- Point.
 

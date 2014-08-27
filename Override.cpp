@@ -3,9 +3,7 @@
 // 
 
 #include <iostream>
-#include "compiler_guards.h"
 
-#if CPP_ELEVEN_SUPPORTED
 //=============================================================================
 class Base {
 public:
@@ -21,7 +19,6 @@ public:
   virtual void thing() override;
   
 };
-#endif
 
 //=============================================================================
 int main() {

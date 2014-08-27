@@ -2,13 +2,14 @@
 //
 // This shows that you shouldn't call virtual functions in a base constructor.
 
+#include "Capabilities.h"
+
+#ifdef VARIADIC_TEMPLATES
 #include <iostream>
 
 #include "UnitTest.h"
 
-#include "compiler_guards.h"
 
-#if CPP_ELEVEN_SUPPORTED
 
 //=============================================================================
 class Base {
@@ -79,5 +80,5 @@ int main() {
   return 0;
 }
 #else
-NOT_SUPPORTED_MAIN
+UNSUPPORTED_FEATURE_MAIN
 #endif

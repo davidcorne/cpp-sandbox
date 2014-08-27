@@ -7,9 +7,6 @@
 #include <string>
 
 #include "UnitTest.h"
-#include "compiler_guards.h"
-
-#if CPP_ELEVEN_SUPPORTED
 
 //=============================================================================
 class IEmployeeExporter {
@@ -177,6 +174,3 @@ int main() {
   return 0;
 }
 
-#else
-NOT_SUPPORTED_MAIN
-#endif

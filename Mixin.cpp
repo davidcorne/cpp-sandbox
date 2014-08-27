@@ -6,10 +6,6 @@
 #include <iostream>
 #include <string>
 
-#include "compiler_guards.h"
-
-#if CPP_ELEVEN_SUPPORTED
-
 //=============================================================================
 class Printable {
 public:
@@ -156,7 +152,3 @@ int main() {
   me.print();
   return 0;
 }
-
-#else // CPP_ELEVEN_SUPPORTED
-NOT_SUPPORTED_MAIN
-#endif // CPP_ELEVEN_SUPPORTED

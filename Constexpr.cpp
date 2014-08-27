@@ -1,12 +1,11 @@
 //=============================================================================
 //
 // 
-
-#include "compiler_guards.h"
+#include "Capabilities.h"
+#ifdef CONSTEXPR
 
 #include <iostream>
 
-#if CPP_ELEVEN_SUPPORTED
 //=============================================================================
 constexpr int return_one() {
   return 1;
@@ -19,5 +18,5 @@ int main() {
 }
 
 #else
-NOT_SUPPORTED_MAIN
+UNSUPPORTED_FEATURE_MAIN
 #endif

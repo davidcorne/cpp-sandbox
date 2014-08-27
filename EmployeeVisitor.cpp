@@ -4,9 +4,6 @@
 
 #include <iostream>
 
-#include "compiler_guards.h"
-#if CPP_ELEVEN_SUPPORTED
-
 #include <iomanip>
 #include <sstream>
 #include <string>
@@ -182,6 +179,3 @@ void EmployeePrinter::visit(Employee& employee)
 IEmployeeVisitor::IEmployeeVisitor(){}
 IEmployeeVisitor::~IEmployeeVisitor(){}
 
-#else
-NOT_SUPPORTED_MAIN
-#endif

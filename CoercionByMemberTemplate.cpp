@@ -3,15 +3,14 @@
 // Inspired by:
 // http://en.wikibooks.org/wiki/More_C%2B%2B_Idioms/Coercion_by_Member_Template
 
+#include "Capabilities.h"
+#ifdef VARIADIC_TEMPLATES
+
 #include <iostream>
 #include <random>
 
 #include "UnitTest.h"
 
-
-#include "compiler_guards.h"
-
-#if CPP_ELEVEN_SUPPORTED
 
 //=============================================================================
 template <class T>
@@ -154,6 +153,7 @@ int main() {
   test.run_tests();
   return 0;
 }
+
 #else
-NOT_SUPPORTED_MAIN
+UNSUPPORTED_FEATURE_MAIN
 #endif

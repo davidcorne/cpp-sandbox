@@ -42,6 +42,10 @@ public:
   
 private:
 
+  Foo(const Foo&);
+  Foo& operator=(const Foo&);
+  // Copying prohibited.
+  
   Bar& m_bar;
 
 };
