@@ -14,12 +14,12 @@
 
 // For g++ variadic templates supported in 4.3 or later.
 #ifdef __GNUC__
+#ifndef __clang__
 #define COMPILER_TYPE COMPILER_TYPE_GCC
-#endif // ifdef __GNUC__
-
-#ifdef __clang__
+#else
 #define COMPILER_TYPE COMPILER_TYPE_CLANG
-#endif // ifdef __clang__
+#endif // __clang__
+#endif // ifdef __GNUC__
 
 #ifndef COMPILER_TYPE
 #error "Unknown compiler type."
