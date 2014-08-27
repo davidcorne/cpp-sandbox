@@ -6,10 +6,6 @@
 
 #include "UnitTest.h"
 
-#include "compiler_guards.h"
-
-#if CPP_ELEVEN_SUPPORTED
-
 //=============================================================================
 class Base {
 public:
@@ -78,6 +74,3 @@ int main() {
   test.run_tests();
   return 0;
 }
-#else
-NOT_SUPPORTED_MAIN
-#endif

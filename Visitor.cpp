@@ -3,11 +3,7 @@
 // Inspired by the Visitor pattern in
 // http://isa.unomaha.edu/wp-content/uploads/2012/08/Design-Patterns.pdf
 
-#include "compiler_guards.h"
 #include <iostream>
-
-#if CPP_ELEVEN_SUPPORTED
-
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -220,7 +216,3 @@ int main() {
   test.run_tests();
   return 0;
 }
-
-#else
-NOT_SUPPORTED_MAIN
-#endif

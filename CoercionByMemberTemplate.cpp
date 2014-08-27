@@ -9,10 +9,6 @@
 #include "UnitTest.h"
 
 
-#include "compiler_guards.h"
-
-#if CPP_ELEVEN_SUPPORTED
-
 //=============================================================================
 template <class T>
 class Ptr {
@@ -154,6 +150,3 @@ int main() {
   test.run_tests();
   return 0;
 }
-#else
-NOT_SUPPORTED_MAIN
-#endif

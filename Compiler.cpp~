@@ -1,17 +1,11 @@
 //=============================================================================
-//
-// 
+// Prints the compiler version.
 
+#include "Compiler.h"
 #include <iostream>
 
 //=============================================================================
-constexpr int return_one() {
-  return 1;
-}
-
-//=============================================================================
 int main() {
-  std::cout << return_one() << std::endl;
-  return 0;
+  std::cout << COMPILER_TYPE << std::endl;
 }
 
