@@ -94,6 +94,10 @@ $(EXE_DIRECTORY)/%.exe: $(OBJ_DIRECTORY)/%.obj
 	@mkdir -p $(EXE_DIRECTORY)
 	$(COMPILER) $(COMPILER_ARGS) $(OUT_EXE_FILE)$@ $<
 
+#==============================================================================
+.PRECIOUS: $(OBJ_DIRECTORY)/%.obj
+
+#==============================================================================
 $(OBJ_DIRECTORY)/%.obj: %.$(EXT)
 	@mkdir -p deps $(OBJ_DIRECTORY)
 	@echo ""
