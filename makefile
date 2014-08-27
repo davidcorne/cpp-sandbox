@@ -50,7 +50,7 @@ TEST_RESULTS := $(shell \
   echo $(TO_TEST) |\
   sed -e 's: : $(RESULT_DIRECTORY)/:g' \
       -e 's:^:$(RESULT_DIRECTORY)/:g' \
-      -e 's:\.exe:.test_$(RESULT_DIRECTORY):g'\
+      -e 's:\.exe:.test_result:g'\
 )
 
 #==============================================================================
@@ -112,7 +112,7 @@ $(OBJ_DIRECTORY)/%.obj: %.$(EXT)
 $(RESULT_DIRECTORY)/%.test_result: $(EXE_DIRECTORY)/%.exe
 	@mkdir -p $(RESULT_DIRECTORY)
 	@chmod +x $<
-	@printf "%-45s" $<:
+	@printf "%-50s" $<:
 	@./$< > $@
 	@echo -e "\e[0;32m Passed.\e[1;37m"
 
