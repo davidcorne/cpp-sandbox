@@ -2,6 +2,9 @@
 //
 // 
 
+#include "Capabilities.h"
+#ifdef VARIADIC_TEMPLATES
+
 #include <iostream>
 
 #include "UnitTest.h"
@@ -132,3 +135,7 @@ int main() {
   dummy_struct_test.run_tests();
   return 0;
 }
+
+#else
+UNSUPPORTED_FEATURE_MAIN
+#endif

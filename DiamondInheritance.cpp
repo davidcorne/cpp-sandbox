@@ -1,6 +1,9 @@
 //=============================================================================
 //
 
+#include "Capabilities.h"
+
+#ifdef VARIADIC_TEMPLATES
 #include "Printer.h"
 
 //=============================================================================
@@ -68,3 +71,7 @@ int main() {
   
   return 0;
 }
+
+#else
+UNSUPPORTED_FEATURE_MAIN
+#endif

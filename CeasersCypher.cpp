@@ -46,8 +46,8 @@ int main()
 }
 
 //=============================================================================
-Cyper::Cyper() = default;
-Cyper::~Cyper() = default;
+Cyper::Cyper() {}
+Cyper::~Cyper() {}
 
 //=============================================================================
 CeaserCypher::CeaserCypher()
@@ -56,7 +56,7 @@ CeaserCypher::CeaserCypher()
 }
 
 //=============================================================================
-CeaserCypher::~CeaserCypher() = default;
+CeaserCypher::~CeaserCypher() {}
 
 //=============================================================================
 std::string CeaserCypher::encrypt(std::string to_encrypt)

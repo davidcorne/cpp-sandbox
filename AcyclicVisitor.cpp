@@ -3,6 +3,8 @@
 // Motivated by this:
 // http://www.objectmentor.com/resources/articles/acv.pdf
 
+#include "Capabilities.h"
+#ifdef VARIADIC_TEMPLATES
 #include "UnitTest.h"
 
 //=============================================================================
@@ -393,3 +395,6 @@ double ortParameterDataModel::orthotic_thickness() const
   return func_pars->orthotic_thickness();
 }
   
+#else
+UNSUPPORTED_FEATURE_MAIN
+#endif

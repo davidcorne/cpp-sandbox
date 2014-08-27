@@ -2,9 +2,14 @@
 //
 // This shows that you shouldn't call virtual functions in a base constructor.
 
+#include "Capabilities.h"
+
+#ifdef VARIADIC_TEMPLATES
 #include <iostream>
 
 #include "UnitTest.h"
+
+
 
 //=============================================================================
 class Base {
@@ -74,3 +79,6 @@ int main() {
   test.run_tests();
   return 0;
 }
+#else
+UNSUPPORTED_FEATURE_MAIN
+#endif

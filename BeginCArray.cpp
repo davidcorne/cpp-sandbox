@@ -1,7 +1,8 @@
 //=============================================================================
 //
 // 
-
+#include "Capabilities.h"
+#ifdef VARIADIC_TEMPLATES
 #include "UnitTest.h"
 
 #include <vector>
@@ -75,3 +76,6 @@ int main() {
   test.run_tests();
   return 0;
 }
+#else
+UNSUPPORTED_FEATURE_MAIN
+#endif

@@ -1,5 +1,8 @@
 #include <iostream>
 
+#include "Capabilities.h"
+#ifdef DIGRAPHS
+
 //=============================================================================
 class Example {
 public:
@@ -110,3 +113,8 @@ int main() {
   std::cout.flush();
   return 0;
 }
+
+#else
+UNSUPPORTED_FEATURE_MAIN
+#endif
+

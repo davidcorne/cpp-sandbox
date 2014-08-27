@@ -1,6 +1,8 @@
 //=============================================================================
 //
 // 
+#include "Capabilities.h"
+#ifdef CONSTEXPR
 
 #include <iostream>
 
@@ -15,3 +17,6 @@ int main() {
   return 0;
 }
 
+#else
+UNSUPPORTED_FEATURE_MAIN
+#endif

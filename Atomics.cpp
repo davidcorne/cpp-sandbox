@@ -2,6 +2,8 @@
 //
 // 
 
+#include "Capabilities.h"
+#ifdef ATOMICS
 #include <atomic>
 #include <thread>
 #include <vector>
@@ -81,3 +83,7 @@ int main() {
   test.run_tests();
   return 0;
 }
+
+#else
+UNSUPPORTED_FEATURE_MAIN
+#endif
