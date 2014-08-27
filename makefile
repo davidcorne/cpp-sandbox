@@ -3,6 +3,8 @@
 #==============================================================================
 
 COMPILER_TYPE = gcc
+-include .config.mk
+
 EXE_DIRECTORY = exe.$(COMPILER_TYPE)
 OBJ_DIRECTORY = obj.$(COMPILER_TYPE)
 RESULT_DIRECTORY = result.$(COMPILER_TYPE)
@@ -31,7 +33,9 @@ endif
 #==============================================================================
 ifeq ($(COMPILER_TYPE), vs)
   COMPILER = cl
-  COMPILER_ARGS = /I.. /W4 /wd4481 /WX /EHsc
+  # a bit of a hack because I know I'm in cygwin if I'm using cl in a makefile.
+  INCLUDES = /I.. /I$(shell cygpath -w $$(pkg-config --cflags-only-I unitcpp | sed -e 's:-I::') | sed -e 's:\\:/:g')
+  COMPILER_ARGS = $(INCLUDES) /W4 /wd4481 /WX /EHsc
   OUT_EXE_FILE = /Fe
   OUT_OBJECT_FILE = /Fo
   NO_LINK = /c

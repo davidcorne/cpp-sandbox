@@ -13,3 +13,5 @@ deps/*.P
 *.pdb
 *.suo
 .git/*
+
+.config.mk
