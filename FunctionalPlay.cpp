@@ -1,6 +1,6 @@
 //=============================================================================
 //
-// An attempt to try currying in C++
+// An attempt to try currying and other such things in C++.
 //
 //
 
@@ -10,27 +10,25 @@
 #include <string>
 #include <functional>
 
+#include "Printer.h"
 
 //=============================================================================
-auto print = [](std::ostream& os, auto s)
-{
-  os << s << std::endl;
+auto fibonnacci = [](int n) {
+  std::function<int(int)> recurse;
+  recurse = [&recurse](int i) {
+    int ret_val = 1;
+    if (i > 2) {
+      ret_val = recurse(i - 1) + recurse(i - 2);
+    }
+    return ret_val;
+  };
+  return recurse(n);
 };
 
 //=============================================================================
 int main()
 {
-  print(std::cout, "hi");
-  auto curryed_print = [](auto s){print(std::cout, s);};
-  curryed_print("there");
-  curryed_print(5);
-
-  auto curry = [](auto binary, auto& x) {
-    return [&](auto y) { 
-      return binary(x, y);
-    };
-  };
-  curry(print, std::cout)("lastly.");
+  print(fibonnacci(40));
   return 0;
 }
 
