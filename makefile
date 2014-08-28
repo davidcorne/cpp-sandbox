@@ -127,7 +127,12 @@ $(RESULT_DIRECTORY)/%.test_result: $(EXE_DIRECTORY)/%.exe
 #==============================================================================
 test: $(TEST_RESULTS)
 	@echo
-	@echo "Finished."
+	@echo \
+"tests passed with" \
+"$(shell ./$(EXE_DIRECTORY)/Compiler.exe)"\
+" version "\
+"$(shell ./$(EXE_DIRECTORY)/Version.exe)"\
+"."
 
 #==============================================================================
 retest: FRC
