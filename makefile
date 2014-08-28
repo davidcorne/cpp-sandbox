@@ -23,7 +23,7 @@ endif
 #==============================================================================
 ifeq ($(COMPILER_TYPE), clang)
   COMPILER = clang++
-  COMPILER_ARGS = -std=c++11 -g -Wall -Werror -pthread $(shell pkg-config --cflags-only-I unitcpp)
+  COMPILER_ARGS = -std=c++1y -g -Wall -Werror -pthread $(shell pkg-config --cflags-only-I unitcpp)
   OUT_EXE_FILE = -o 
   OUT_OBJECT_FILE = -o 
   NO_LINK = -c
