@@ -5,28 +5,31 @@ set -e
 
 tested_compilers=""
 
-#==============================================================================
-if $(command -v clang >/dev/null 2>&1)
-then
-  echo "Has clang."
-  make test COMPILER_TYPE=clang
-  tested_compilers="$tested_compilers clang"
-fi
+declare -A commands=(["clang"]="clang" ["vs"]="cl" ["gcc"]="g++")
+broken=("vs")
 
-#==============================================================================
-if $(command -v cl >/dev/null 2>&1)
-then
-  echo "Has cl."
-  make test COMPILER_TYPE=vs
-  tested_compilers="$tested_compilers cl"
-fi
-
-#==============================================================================
-if $(command -v g++ >/dev/null 2>&1)
-then
-  echo "Has g++."
-  make test COMPILER_TYPE=gcc
-  tested_compilers="$tested_compilers g++"
-fi
-
-echo "Tested using:$tested_compilers"
+for key in "${!commands[@]}"
+do
+  program=${commands[$key]}
+  if $(command -v $program >/dev/null 2>&1)
+  then
+    echo "Has $program"
+    this_broken=0
+    for b in ${broken[@]}
+    do
+      if [ "$b" == "$key" ]
+      then
+        this_broken=1
+      fi
+    done
+    if [ $this_broken -eq 1 ] 
+    then
+      echo "$program broken."
+    else
+      make -j 4 COMPILER_TYPE=$key
+      make test COMPILER_TYPE=$key
+      tested_compilers="tested_compilers $key"
+    fi
+  fi
+done
+exit 
