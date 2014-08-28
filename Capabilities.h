@@ -30,6 +30,10 @@
 #define CONSTEXPR 1
 #endif // __has_feature(cxx_constexpr)
 
+#if __has_feature(cxx_generic_lambdas)
+#define GENERIC_LAMBDAS 1
+#endif // __has_feature(cxx_generic_lambdas)
+
 #define DIGRAPHS 1
 #endif // COMPILER_TYPE == COMPILER_TYPE_CLANG
 

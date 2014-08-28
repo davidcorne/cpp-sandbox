@@ -4,8 +4,8 @@
 //
 //
 
-#include "Compiler.h"
-#if COMPILER_TYPE == COMPILER_TYPE_CLANG
+#include "Capabilities.h"
+#ifdef GENERIC_LAMBDAS
 #include <iostream>
 #include <string>
 #include <functional>
