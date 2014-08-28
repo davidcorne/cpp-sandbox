@@ -125,7 +125,7 @@ $(RESULT_DIRECTORY)/%.test_result: $(EXE_DIRECTORY)/%.exe
 	@echo -e "\e[0;32m Passed.\e[1;37m"
 
 #==============================================================================
-test: $(TEST_RESULTS)
+test: $(EXE_FILES) $(TEST_RESULTS)
 	@echo
 	@echo \
 "tests passed with" \
