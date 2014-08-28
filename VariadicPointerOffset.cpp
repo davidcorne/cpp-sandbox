@@ -7,7 +7,8 @@
 #include <iostream>
 // #include <const char*>
 
-#pragma clang diagnostic ignored "-Wunused-private-field"
+#define UNUSED_PRIVATE_FIELD 1
+#include "IgnoreDiagnostics.h"
 
 //=============================================================================
 class Bank {

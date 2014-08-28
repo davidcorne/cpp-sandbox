@@ -11,7 +11,9 @@
 
 #include <iostream>
 
-#pragma clang diagnostic ignored "-Wunneeded-internal-declaration"
+#define UNNEEDED_INTERNAL_DECLARATION 1
+#include "IgnoreDiagnostics.h"
+
 // 2 Mb spare memory
 static char spare[1024*1024*2];
 
