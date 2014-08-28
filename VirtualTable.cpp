@@ -54,7 +54,7 @@ int main()
     /* take the address of our stack virtual table and override the real object pointer to the virtual table */
     FakeVirtualTable* table_ptr = &custom_table;
 
-    memcpy(parent_class_ptr, &table_ptr, sizeof(void*));
+    memcpy(static_cast<void*>(parent_class_ptr), &table_ptr, sizeof(void*));
 
     /* call the methods ( but we're really calling the faked functions ) */
 

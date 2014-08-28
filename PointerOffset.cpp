@@ -5,9 +5,7 @@ class Bank {
 public:
 
   Bank(int money)
-    : m_money(money),
-      m_thing(false),
-      another_thing(-5.3234)
+    : m_money(money)
     {}
   
   void show_balance() {
@@ -16,8 +14,6 @@ public:
   
 private:
   int m_money;
-  bool m_thing;
-  double another_thing;
 };
 
 void printf(const char *s)

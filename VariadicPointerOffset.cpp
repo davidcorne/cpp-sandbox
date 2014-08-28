@@ -7,6 +7,8 @@
 #include <iostream>
 // #include <const char*>
 
+#pragma clang diagnostic ignored "-Wunused-private-field"
+
 //=============================================================================
 class Bank {
 public:

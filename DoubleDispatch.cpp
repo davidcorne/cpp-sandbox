@@ -32,8 +32,8 @@ private:
 };
 
 //=============================================================================
-struct GameObject {
-
+class GameObject {
+public:
   virtual std::string name() const
     {
       return m_name;

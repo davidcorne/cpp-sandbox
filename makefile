@@ -81,9 +81,9 @@ all: $(EXE_FILES)
 	@echo ""
 	@echo \
 "make: \`all' is up to date with" \
-$(shell ./$(EXE_DIRECTORY)/Compiler.exe)\
+"$(shell ./$(EXE_DIRECTORY)/Compiler.exe)"\
 " version "\
-$(shell ./$(EXE_DIRECTORY)/Version.exe)\
+"$(shell ./$(EXE_DIRECTORY)/Version.exe)"\
 "."
 	@echo ""
 

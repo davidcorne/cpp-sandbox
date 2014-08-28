@@ -2,6 +2,9 @@
 //
 // 
 
+#include "Compiler.h"
+#if COMPILER_TYPE != COMPILER_TYPE_CLANG
+
 #include <iostream>
 #include <thread>
 #include <chrono>
@@ -67,3 +70,7 @@ void Outputter::out(int i) const
   std::cout << i << std::endl;  
   m_lock.unlock();
 }
+
+#else
+UNSUPPORTED_FEATURE_MAIN
+#endif

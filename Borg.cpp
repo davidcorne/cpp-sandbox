@@ -11,27 +11,42 @@ class Borg {
 public:
 
   Borg();
+
+  void set_i(int i);
+  int i() const;
   
 private:
-  static void fill_state(Borg* b);
-
-  int m_i;
+  static int s_i;
 };
+
+int Borg::s_i(0);
 
 //=============================================================================
 Borg::Borg()
 {
-  Borg::fill_state(this);
-}
-
-//=============================================================================
-void Borg::fill_state(Borg*)
-{
-  
 }
 
 //=============================================================================
 int main() {
-  Borg b;
+  Borg b_1;
+  b_1.set_i(5);
+  Borg b_2;
+  std::cout << b_2.i() << std::endl;
+  b_1.set_i(-5);
+  
+  std::cout << b_1.i() << " " << b_2.i() << std::endl;
+  
   return 0;
+}
+
+//=============================================================================
+void Borg::set_i(int i)
+{
+  s_i = i;
+}
+
+//=============================================================================
+int Borg::i() const
+{
+  return s_i;
 }
