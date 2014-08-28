@@ -8,34 +8,10 @@
 #ifdef GENERIC_LAMBDAS
 #include <iostream>
 #include <string>
-#include <functional>
 
+#include "Functional.h"
 #include "Printer.h"
 
-//=============================================================================
-auto if_func = [](bool ok, auto func_a, decltype(func_a) func_b)
-{
-  return ok ? func_a : func_b;
-};
-
-//=============================================================================
-auto id = [](auto x)
-{
-  return [x](){return x;};
-};
-
-//=============================================================================
-auto subtract = [](auto x, auto y)
-{
-  return id(x - y);
-};
-
-//=============================================================================
-auto less = [](auto x, auto y)
-{
-  return id(x < y);
-};
-  
 //=============================================================================
 auto fibonnacci = []() {
   return [](int n) {
@@ -43,19 +19,13 @@ auto fibonnacci = []() {
     recurse = [&recurse](int i) {
       std::function<int()> one = id(1);
       auto again = [i, &recurse]{
-        return recurse(subtract(i, 1)()) + recurse(subtract(i, 2)());
+        return recurse(sub(i, 1)()) + recurse(sub(i, 2)());
       };
-      return if_func(less(i, 3)(), one, again)();
+      auto to_call = if_func(less(i, 3), one, again)();
+      return to_call();
     };
     return recurse(n);
   };
-};
-
-//=============================================================================
-auto range = [](auto start, auto end, std::function<void(decltype(start))> func) {
-  for (auto current = start; current < end; ++current) {
-    func(current);
-  }
 };
 
 //=============================================================================

@@ -30,9 +30,11 @@
 #define CONSTEXPR 1
 #endif // __has_feature(cxx_constexpr)
 
-#if __has_feature(cxx_generic_lambdas)
+// it appears that __has_feature(cxx_generic_lambdas) is not working in my
+// version of clang, just define this if we are in clang.
+// <nnn> #if __has_feature(cxx_generic_lambdas)
 #define GENERIC_LAMBDAS 1
-#endif // __has_feature(cxx_generic_lambdas)
+// <nnn> #endif // __has_feature(cxx_generic_lambdas)
 
 #define DIGRAPHS 1
 #endif // COMPILER_TYPE == COMPILER_TYPE_CLANG
