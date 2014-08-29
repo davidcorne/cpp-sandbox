@@ -75,9 +75,13 @@ auto range = [](
   auto end,
   std::function<void(decltype(start))> func
 ) {
-  for (auto current = start; less(current, end)(); current = increment(current)()) {
+  auto current = start;
+  auto condition = [&current, end](){return less(current, end)();};
+  auto continue_func = [&current, &func](){
     func(current);
-  }
+    current = increment(current)();
+  };
+  return while_func(condition, continue_func);
 };
 
 #endif // GENERIC_LAMBDAS

@@ -31,8 +31,8 @@ auto fibonnacci = []() {
 //=============================================================================
 int main()
 {
-  range(1, 10, [](int i){print(i, "  ", fibonnacci()(i));});
-  range(11, 26, [](int i){print(i, " ", fibonnacci()(i));});
+  range(1, 10, [](int i){print(i, "  ", fibonnacci()(i));})();
+  range(11, 26, [](int i){print(i, " ", fibonnacci()(i));})();
   
   return 0;
 }
