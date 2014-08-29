@@ -70,11 +70,7 @@ auto less = [](auto x, auto y)
 };
   
 //=============================================================================
-auto range = [](
-  auto start,
-  auto end,
-  std::function<void(decltype(start))> func
-) {
+auto range = [](auto start, auto end, auto func) {
   auto current = start;
   auto condition = [&current, end](){return less(current, end)();};
   auto continue_func = [&current, &func](){
