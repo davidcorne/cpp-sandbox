@@ -14,12 +14,18 @@
 //=============================================================================
 namespace fnc {
   
-  //=============================================================================
+  //===========================================================================
   auto id = [](auto x)
   {
     return [x](){return x;};
   };
   
+  //===========================================================================
+  auto null = []()
+  {
+    return [](){};
+  };
+    
   //===========================================================================
   auto if_func = [](auto condition, auto func_a, decltype(func_a) func_b)
   {
@@ -42,7 +48,7 @@ namespace fnc {
       return if_func(
         condition,
         again,
-        [](decltype(condition), decltype(func)){return []{};}
+        [](decltype(condition), decltype(func)){return null;}
       )()(condition, func);
     };
     return recurse(condition, func);
@@ -71,7 +77,7 @@ namespace fnc {
   {
     return id(x < y);
   };
-    
+
   //===========================================================================
   auto range = [](auto start, auto end, auto func) {
     auto current = start;
