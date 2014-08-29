@@ -17,7 +17,7 @@ auto fibonnacci = [](int n) {
   return [n]() {
     std::function<int(int)> recurse;
     recurse = [&recurse](int i) {
-      std::function<int()> one = fnc::id(1);
+      std::function<int()> one = fnc::unit(1);
       auto again = [i, &recurse]{
         return recurse(fnc::sub(i, 1)()) + recurse(fnc::sub(i, 2)());
       };

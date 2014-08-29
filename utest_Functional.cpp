@@ -18,21 +18,21 @@ TEST(Functional, while_func)
 //=============================================================================
 TEST(Functional, if_func)
 {
-  auto one = fnc::id(1);
-  auto two = fnc::id(2);
-  auto true_func = fnc::id(true);
-  auto false_func = fnc::id(false);
+  auto one = fnc::unit(1);
+  auto two = fnc::unit(2);
+  auto true_func = fnc::unit(true);
+  auto false_func = fnc::unit(false);
   TEST_EQUAL(fnc::if_func(true_func, one, two)()(), 1);
   TEST_EQUAL(fnc::if_func(false_func, one, two)()(), 2);
 }
 
 //=============================================================================
-TEST(Functional, id)
+TEST(Functional, unit)
 {
-  auto ok = fnc::id(std::string("Ok"));
+  auto ok = fnc::unit(std::string("Ok"));
   TEST_EQUAL(ok(), "Ok");
 
-  auto pi = fnc::id(3.14159265359);
+  auto pi = fnc::unit(3.14159265359);
   TEST_APPROX_EQUAL(pi(), 3.14, 0.005);
 }
 
