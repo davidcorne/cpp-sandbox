@@ -17,11 +17,11 @@ auto fibonnacci = [](int n) {
   return [n]() {
     std::function<int(int)> recurse;
     recurse = [&recurse](int i) {
-      std::function<int()> one = id(1);
+      std::function<int()> one = fnc::id(1);
       auto again = [i, &recurse]{
-        return recurse(sub(i, 1)()) + recurse(sub(i, 2)());
+        return recurse(fnc::sub(i, 1)()) + recurse(fnc::sub(i, 2)());
       };
-      return if_func(less(i, 3), one, again)()();
+      return fnc::if_func(fnc::less(i, 3), one, again)()();
     };
     return recurse(n);
   };
@@ -30,8 +30,8 @@ auto fibonnacci = [](int n) {
 //=============================================================================
 int main()
 {
-  range(1, 10, [](int i){print(i, "  ", fibonnacci(i)());})();
-  range(11, 26, [](int i){print(i, " ", fibonnacci(i)());})();
+  fnc::range(1, 10, [](int i){print(i, "  ", fibonnacci(i)());})();
+  fnc::range(11, 26, [](int i){print(i, " ", fibonnacci(i)());})();
   
   return 0;
 }

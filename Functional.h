@@ -12,6 +12,9 @@
 #include <functional>
 
 //=============================================================================
+namespace fnc {
+  
+//=============================================================================
 auto id = [](auto x)
 {
   return [x](){return x;};
@@ -79,6 +82,6 @@ auto range = [](auto start, auto end, auto func) {
   };
   return while_func(condition, continue_func);
 };
-
+}
 #endif // GENERIC_LAMBDAS
 #endif
