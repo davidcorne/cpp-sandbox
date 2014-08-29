@@ -2,26 +2,15 @@
 // This is from:
 // http://matt.might.net/articles/c++-template-meta-programming-with-lambda-calculus/
 // It shows how you would implement lambda calculus in template met programming
+//
+// I have edited it, but the original author is
+// Matthew Might,  http://matt.might.net/
 
-/*
- * A simple, lambda-calculus-based functional language encoded in C++
- * templates.  The language supports simple type-level literals,
- * conditionals and higher-order functions.
- *
- * We use an Eval/Apply-style interpreter as described in SICP.
- *
- * Author: Matthew Might
- * Site:   http://matt.might.net/
- *
- */
-
-#include <stdlib.h>
 #include <iostream>
-#include <assert.h>
 
+#include <UnitCpp/Test.h>
 
-
-/* A type-level Pressburger encoding of natural numbers. */
+// A type-level Pressburger encoding of natural numbers.
 
 // A type for 0:
 struct Zero 
@@ -40,9 +29,9 @@ struct Succ
 
 
 
-/* The syntax contains five expression types: lambda terms for
- * anonymous functions, function applications, variable references,
- * conditionals and literals. */
+// The syntax contains five expression types: lambda terms for
+// anonymous functions, function applications, variable references,
+// conditionals and literals.
 
 // Core syntax:
 template <int FormalName,typename Body>
@@ -64,9 +53,9 @@ struct Lit {} ;
 
 
 
-/* Environments are structures that map (variable) names to values.
- * Environments are paired with expressions to give meanings to free
- * variables. */
+// Environments are structures that map (variable) names to values.
+// Environments are paired with expressions to give meanings to free
+// variables.
 
 // EmptyEnv is the empty environment.
 struct EmptyEnv ;
@@ -106,7 +95,7 @@ struct True {} ;
 struct False {} ;
 
 
-/* We use Eval & Apply-style interpreter [SICP]. */
+// We use Eval & Apply-style interpreter [SICP].
 
 // Eval<Exp,Env> :: result is the value of expression Exp in
 // environment Env.
@@ -146,7 +135,7 @@ template <typename Fun, typename Arg, typename Env>
 struct Eval<App<Fun, Arg> , Env> {
   typename Apply<typename Eval<Fun,Env> :: result ,
                  typename Eval<Arg,Env> :: result > :: result 
-           typedef result ;
+  typedef result ;
 } ;
 
 // Branch true:
@@ -168,7 +157,7 @@ struct Eval<If<Cond,Then,Else>,Env> {
                    Then,
                    Else>,
                 Env> :: result 
-           typedef result ;
+  typedef result ;
 } ;
 
 
@@ -176,37 +165,38 @@ struct Eval<If<Cond,Then,Else>,Env> {
 template <int Name, typename Body, typename Env, typename Value>
 struct Apply<Closure<Lambda<Name,Body>, Env>, Value> {
   typename Eval<Body, Binding<Name,Value,Env> > :: result 
-           typedef result ;
+  typedef result ;
 } ;
 
 
-
-
-
-int main (int argc, char* argv[]) {
-
+//=============================================================================
+TEST(LambdaCalculus, test)
+{
   // Testing [2 => 1, 3 => 0](3):
-  int v = EnvLookup<3, Binding<2, Succ<Zero>,
-                       Binding<3, Zero,
-                       EmptyEnv> > > :: result :: value ;
+  int v = EnvLookup<
+    3,
+    Binding<2, Succ<Zero>, Binding<3, Zero, EmptyEnv> >
+  >::result::value ;
 
-  assert(v == 0) ;
+  TEST_EQUAL(v, 0);
 
 
   // Testing ((lambda (x) x) 2):
   enum { X } ;
   
   int x = Eval<App<Lambda<X,Ref<X> >,Lit<Succ<Succ<Zero> > > >,EmptyEnv> :: result :: value ;
-
-  assert(x == 2) ;
+  TEST_EQUAL(x, 2);
 
 
   // Testing (if #f 0 1):
   int y = Eval<If<Lit<False>,Lit<Zero>,Lit<Succ<Zero> > >,EmptyEnv> :: result :: value ;
-  
-  assert(y == 1) ;
 
-  std::cout << "All tests passed!" << std::endl;
+  TEST_EQUAL(y, 1);
+}
 
-  return EXIT_SUCCESS ;
+
+//=============================================================================
+int main (int argc, char** argv)
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }
