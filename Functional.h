@@ -26,12 +26,21 @@ auto if_func = [](auto condition, auto func_a, decltype(func_a) func_b)
 //=============================================================================
 auto while_func = [](auto condition, auto func)
 {
-  std::function<void(decltype(condition), decltype(func))> recurse;
+  typedef
+    std::function<void(decltype(condition), decltype(func))>
+    RecursiveFunc;
+  RecursiveFunc recurse;
   recurse = [&recurse, condition, func](decltype(condition), decltype(func)) {
-    if (condition()) {
-      func();
-      recurse(condition, func);
-    }
+    RecursiveFunc again =
+      [&recurse, condition, func](decltype(condition), decltype(func)){
+        func();
+        recurse(condition, func);
+      };
+    if_func(
+      condition,
+      again,
+      [](decltype(condition), decltype(func)){}
+    )()(condition, func);
   };
   return recurse(condition, func);
 };
