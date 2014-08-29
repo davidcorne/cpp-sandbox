@@ -33,18 +33,21 @@ auto succ = [](auto n){return lit(n() + 1);};
 // conditionals and literals.
 
 // Core syntax:
-auto lambda = [](auto name, auto body) {};
-
-auto application = [](auto func, auto arg) {
-  return [=](auto env){return ;};
+auto lambda = [](auto name, auto body) {
+  return body(name);
 };
 
-auto ref = [](auto name) {};
+auto application = [](auto func, auto arg) {
+  return [=](auto env){return func(arg);};
+};
+
+auto ref = [](auto name) {return [=](auto env){return name;};};
 
 // Sugar:
 
-auto if_func = [](auto condition, auto func_a, decltype(func_a) func_b)
+auto if_func = [](auto condition, auto func_a, auto func_b)
 {
+  
   return lit(condition() ? func_a : func_b);
 };
 
@@ -78,14 +81,14 @@ auto env_lookup = [](auto name, auto env){return env(name);};
 // Values:
 auto closure = [](auto lambda, auto env){};
 
-auto true_func = [](){return lit(true);};
-auto false_func = [](){return lit(false);};
+auto true_func = [](){return true;};
+auto false_func = [](){return false;};
 
 // We use Eval & Apply-style interpreter [SICP].
 
 // Eval<Exp,Env> :: result is the value of expression Exp in
 // environment Env.
-auto eval = [](auto exp, auto env){}; // something like exp(env)
+auto eval = [](auto exp, auto env){return exp(env)();};
 
 auto apply = [](auto procedure, auto value){};
 
@@ -106,16 +109,17 @@ TEST(LambdaCalculus, env)
 //=============================================================================
 TEST(LambdaCalculus, lambda)
 {
+  // Testing ((lambda (x) x) 2):
+  auto func = [](auto i){return i;};
 
-  // <nnn> // Testing ((lambda (x) x) 2):
-  // <nnn> enum { X } ;
-
-  // <nnn> auto func = application(
-  // <nnn>   lambda(X, ref(X)),
-  // <nnn>   lit(succ(succ(0)))
-  // <nnn> );
-  // <nnn> int x = eval(func, empty_env);
-  // <nnn> TEST_EQUAL(x, 2);
+  auto arg = succ(succ(zero));
+  auto bound_1 = application(func, arg);
+  int x = eval(bound_1, empty_env);
+  TEST_EQUAL(x, 2);
+  
+  auto bound_2 = application(func, succ(zero));
+  x = eval(bound_2, empty_env);
+  TEST_EQUAL(x, 1);
 }
 
 //=============================================================================
@@ -123,7 +127,9 @@ TEST(LambdaCalculus, test_if)
 {
 
   // <nnn> // Testing (if #f 0 1):
-  // <nnn> int y = eval(if_func(lit(false_func), lit(zero), lit(succ(zero))), empty_env);
+  // <nnn> auto to_call = if_func(false_func, ref(zero), ref(succ(zero)));
+  
+  // <nnn> int y = eval(to_call, empty_env);
   // <nnn> TEST_EQUAL(y, 1);
 }
 
