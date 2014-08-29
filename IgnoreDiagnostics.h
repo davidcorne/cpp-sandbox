@@ -11,13 +11,22 @@
 #ifdef UNNEEDED_INTERNAL_DECLARATION
 #if COMPILER_TYPE == COMPILER_TYPE_CLANG
 #pragma clang diagnostic ignored "-Wunneeded-internal-declaration"
-#endif // COMPILER_TYPE 
+#endif // COMPILER_TYPE
+#undef UNNEEDED_INTERNAL_DECLARATION
 #endif // UNNEEDED_INTERNAL_DECLARATION
 
 #ifdef UNUSED_PRIVATE_FIELD
 #if COMPILER_TYPE == COMPILER_TYPE_CLANG
 #pragma clang diagnostic ignored "-Wunused-private-field"
 #endif // COMPILER_TYPE 
+#undef UNUSED_PRIVATE_FIELD
 #endif // UNUSED_PRIVATE_FIELD
+
+#ifdef UNUSED_VARIABLE
+#if COMPILER_TYPE == COMPILER_TYPE_CLANG
+#pragma clang diagnostic ignored "-Wunused-variable"
+#endif // COMPILER_TYPE 
+#undef UNUSED_VARIABLE
+#endif // UNUSED_VARIABLE
 
 #endif
