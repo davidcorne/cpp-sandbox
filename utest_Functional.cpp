@@ -11,7 +11,7 @@ TEST(Functional, while_func)
   int i = 0;
   auto condition = [&i](){return i < 5;};
   auto func = [&i](){++i;};
-  while_func(condition, func);
+  while_func(condition, func)();
   TEST_EQUAL(i, 5);
 }
 
