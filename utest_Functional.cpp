@@ -62,6 +62,12 @@ TEST(Functional, currying)
 }
 
 //=============================================================================
+TEST(Functional, stringify)
+{
+  TEST_EQUAL(fnc::stringify(5)(), "5");
+}
+
+//=============================================================================
 int main(int argc, char** argv)
 {
   return UnitCpp::TestRegister::test_register().run_tests_interactive(

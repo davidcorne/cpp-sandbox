@@ -10,6 +10,7 @@
 #ifdef GENERIC_LAMBDAS
 
 #include <functional>
+#include <sstream>
 
 //=============================================================================
 namespace fnc {
@@ -93,6 +94,13 @@ namespace fnc {
       current = increment(current)();
     };
     return while_func(condition, continue_func);
+  };
+
+  //===========================================================================
+  auto stringify = [](auto x) {    
+    std::stringstream ss;
+    ss << x;
+    return unit(ss.str());
   };
   
 }
