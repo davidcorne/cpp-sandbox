@@ -58,13 +58,18 @@ TEST(Functional, currying)
   TEST_EQUAL(add_three(1, 2, 3), 6);
   auto add_ten = fnc::curry(add_three, 4, 6);
   TEST_EQUAL(add_ten(4), 14);
-  
 }
 
 //=============================================================================
 TEST(Functional, stringify)
 {
   TEST_EQUAL(fnc::stringify(5)(), "5");
+}
+
+//=============================================================================
+TEST(Functional, bind)
+{
+  TEST_EQUAL(fnc::bind(fnc::unit(15))(fnc::stringify)(), "15");
 }
 
 //=============================================================================

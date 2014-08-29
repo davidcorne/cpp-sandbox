@@ -86,7 +86,8 @@ namespace fnc {
   };
 
   //===========================================================================
-  auto range = [](auto start, auto end, auto func) {
+  auto range = [](auto start, auto end, auto func)
+  {
     auto current = start;
     auto condition = [&current, end](){return less(current, end)();};
     auto continue_func = [&current, &func](){
@@ -97,10 +98,17 @@ namespace fnc {
   };
 
   //===========================================================================
-  auto stringify = [](auto x) {    
+  auto stringify = [](auto x)
+  {    
     std::stringstream ss;
     ss << x;
     return unit(ss.str());
+  };
+
+  //===========================================================================
+  auto bind = [](auto func)
+  {
+    return [func](auto callback) {return callback(func());};
   };
   
 }
