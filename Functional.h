@@ -79,6 +79,12 @@ namespace fnc {
   };
 
   //===========================================================================
+  auto curry = [](auto func, auto... vars)
+  {
+    return [func, vars...](auto y){return func(vars..., y);};
+  };
+
+  //===========================================================================
   auto range = [](auto start, auto end, auto func) {
     auto current = start;
     auto condition = [&current, end](){return less(current, end)();};

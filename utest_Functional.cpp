@@ -43,6 +43,25 @@ TEST(Functional, null)
 }
 
 //=============================================================================
+TEST(Functional, currying)
+{
+  auto increment = fnc::curry(fnc::add, 1);
+  TEST_EQUAL(increment(5)(), 6);
+
+  auto to_ten = fnc::curry(fnc::range, 0, 10);
+
+  int sum = 0;
+  to_ten([&sum](auto i){sum += i;});
+  TEST_EQUAL(sum, 45);
+  
+  auto add_three = [](auto i, auto j, auto k) {return i + j + k;};
+  TEST_EQUAL(add_three(1, 2, 3), 6);
+  auto add_ten = fnc::curry(add_three, 4, 6);
+  TEST_EQUAL(add_ten(4), 14);
+  
+}
+
+//=============================================================================
 int main(int argc, char** argv)
 {
   return UnitCpp::TestRegister::test_register().run_tests_interactive(
