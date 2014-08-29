@@ -121,7 +121,7 @@ $(RESULT_DIRECTORY)/%.test_result: $(EXE_DIRECTORY)/%.exe
 	@mkdir -p $(RESULT_DIRECTORY)
 	@chmod +x $<
 	@printf "%-50s" $<:
-	@./$< > $@
+	@./$< 0 > $@
 	@echo -e "\e[0;32m Passed.\e[1;37m"
 
 #==============================================================================
