@@ -35,7 +35,9 @@ auto succ = [](auto n){return lit(n() + 1);};
 // Core syntax:
 auto lambda = [](auto name, auto body) {};
 
-auto application = [](auto func, auto arg) {};
+auto application = [](auto func, auto arg) {
+  return [=](auto env){return ;};
+};
 
 auto ref = [](auto name) {};
 
@@ -90,7 +92,7 @@ auto apply = [](auto procedure, auto value){};
 
 
 //=============================================================================
-TEST(LambdaCalculus, test)
+TEST(LambdaCalculus, env)
 {
   auto environment = binding(2, succ(zero), binding(3, zero, empty_env));
 
@@ -98,14 +100,27 @@ TEST(LambdaCalculus, test)
 
   TEST_EQUAL(env_lookup(3, environment)(), 0);
   TEST_EQUAL(env_lookup(2, environment)(), 1);
+  TEST_THROWS(env_lookup, std::runtime_error, -1, environment);
+}
 
+//=============================================================================
+TEST(LambdaCalculus, lambda)
+{
 
   // <nnn> // Testing ((lambda (x) x) 2):
   // <nnn> enum { X } ;
-  
-  // <nnn> int x = eval(application(lambda(X, ref(X)), lit(succ(succ(0)))), empty_env);
-  // <nnn> TEST_EQUAL(x, 2);
 
+  // <nnn> auto func = application(
+  // <nnn>   lambda(X, ref(X)),
+  // <nnn>   lit(succ(succ(0)))
+  // <nnn> );
+  // <nnn> int x = eval(func, empty_env);
+  // <nnn> TEST_EQUAL(x, 2);
+}
+
+//=============================================================================
+TEST(LambdaCalculus, test_if)
+{
 
   // <nnn> // Testing (if #f 0 1):
   // <nnn> int y = eval(if_func(lit(false_func), lit(zero), lit(succ(zero))), empty_env);
