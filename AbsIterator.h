@@ -12,7 +12,7 @@ public:
 
   AbsIterator();
 
-  virtual ~AbsIterator();
+  virtual ~AbsIterator() = 0;
 
   virtual std::unique_ptr<AbsIterator<T> > clone() const = 0;
   
