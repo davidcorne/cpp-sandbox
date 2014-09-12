@@ -1,0 +1,3 @@
+TEST: CoercionByMemberTemplate
+BUILD: OOGeometry
+BUILD: UnixLambdas

@@ -42,12 +42,12 @@ ifeq ($(COMPILER_TYPE), vs)
   GENERATE_DEPENDENCIES = 
 endif
 
-SIN_BIN = CoercionByMemberTemplate.exe 
+TEST_SIN_BIN = $(shell cat sin_bin.txt | grep "^TEST: " | sed -e 's/TEST: //')
 
 
 TO_TEST =  $(shell grep -l "\(class *utest_\)\|\(<UnitCpp\)" *.cpp | \
              sed -e 's/\.cpp/\.exe/' \
-             $(foreach test, $(SIN_BIN), | grep -v $(test)) \
+             $(foreach test, $(TEST_SIN_BIN), | grep -v $(test)) \
            )
 
 TEST_RESULTS := $(shell \
@@ -62,7 +62,14 @@ TEST_RESULTS := $(shell \
 #D Requires: $(EXT), $(CC) and $(CC_OPTS) to be defined.
 #------------------------------------------------------------------------------
 
-EXE_FILES = $(shell ls *.$(EXT) | sed -e 's:^:$(EXE_DIRECTORY)/:' -e 's/\.$(EXT)/\.exe/')
+BUILD_SIN_BIN = $(shell cat sin_bin.txt | grep "^BUILD: " | sed -e 's/BUILD: //')
+
+EXE_FILES = $(shell \
+  ls *.$(EXT) | \
+  sed -e 's:^:$(EXE_DIRECTORY)/:' \
+      -e 's/\.$(EXT)/\.exe/' \
+  $(foreach test, $(BUILD_SIN_BIN), | grep -v $(test)) \
+)
 
 #==============================================================================
 #D Target depending on all .exe files made from a .hs file so that all of them 
