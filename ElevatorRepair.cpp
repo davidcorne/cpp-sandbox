@@ -25,7 +25,7 @@ public:
   
 private:
 
-  friend class ElevatorRepairMan;
+  friend class ElevatorRepairer;
 
   virtual void fix_break() = 0;
   // Fix the broken elevator.
@@ -33,21 +33,21 @@ private:
 };
 
 //=============================================================================
-class ElevatorRepairMan {
+class ElevatorRepairer {
 public:
 
-  ElevatorRepairMan();
+  ElevatorRepairer();
   
-  ~ElevatorRepairMan();
+  ~ElevatorRepairer();
 
   void fix_elevator(IElevator& elevator);
-  // Could be const, but I feel that if this was "properly" implemented he
-  // would use tools (which wears them) and use screws etc.
+  // Could be const, but I feel that if this was "properly" implemented the
+  // repairer would use tools (which wears them) and use screws etc.
   
 private:
 
-  ElevatorRepairMan(const ElevatorRepairMan&);
-  ElevatorRepairMan& operator=(const ElevatorRepairMan&);
+  ElevatorRepairer(const ElevatorRepairer&);
+  ElevatorRepairer& operator=(const ElevatorRepairer&);
   // You can't copy a person!
   
 };
@@ -96,7 +96,7 @@ int main()
   std::cout << *elevator << std::endl;
 
   // oh no! it must be broken!
-  ElevatorRepairMan repair_man;
+  ElevatorRepairer repair_man;
   repair_man.fix_elevator(*elevator);
   std::cout << *elevator << std::endl;
 
@@ -110,12 +110,12 @@ int main()
 IElevator::IElevator() {}
 IElevator::~IElevator() {}
 
-//----- ElevatorRepairMan
-ElevatorRepairMan::ElevatorRepairMan() {}
-ElevatorRepairMan::~ElevatorRepairMan() {}
+//----- ElevatorRepairer
+ElevatorRepairer::ElevatorRepairer() {}
+ElevatorRepairer::~ElevatorRepairer() {}
 
 //=============================================================================
-void ElevatorRepairMan::fix_elevator(IElevator& elevator)
+void ElevatorRepairer::fix_elevator(IElevator& elevator)
 {
   elevator.fix_break();
 }
