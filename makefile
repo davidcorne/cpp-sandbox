@@ -64,15 +64,6 @@ TEST_RESULTS := $(shell \
 
 EXE_FILES = $(shell ls *.$(EXT) | sed -e 's:^:$(EXE_DIRECTORY)/:' -e 's/\.$(EXT)/\.exe/')
 
-OS = $(shell uname -o)
-
-ifeq ($(OS), GNU/Linux)
-  CC_ESCAPE = -
-endif
-ifeq ($(OS), Cygwin)
-  CC_ESCAPE = /
-endif
-
 #==============================================================================
 #D Target depending on all .exe files made from a .hs file so that all of them 
 #D will be made.
