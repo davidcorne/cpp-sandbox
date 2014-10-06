@@ -66,6 +66,28 @@ TEST(RAII, move)
 }
 
 //=============================================================================
+TEST(RAII, move2)
+{
+  int times = 0;
+  std::function<void()> end_function = [&times](){++times;};
+  {
+    auto raii_1 = make_raii(end_function);
+    {
+      auto raii_2 = make_raii(end_function);
+      TEST_EQUAL(times, 0);
+      {
+        auto raii_3 = std::move(raii_1);
+        TEST_EQUAL(times, 0);
+        // here raii_3 will have destructed the ownership of raii_1
+      }
+      TEST_EQUAL(times, 1);
+    }
+    // here raii_2 will have destructed.
+  }
+  TEST_EQUAL(times, 2);
+}
+
+//=============================================================================
 int main(int argc, char** argv)
 {
   return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
