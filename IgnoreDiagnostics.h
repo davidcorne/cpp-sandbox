@@ -2,6 +2,11 @@
 // This is a compiler independent way of turning off compiler warnings.
 // This works by defining the warning you want to turn off, then including this
 // file.
+//   e.g.
+//   #define UNUSED_PRIVATE_FIELD
+//   #include "IgnoreDiagnostics.h"
+//   #undef UNUSED_PRIVATE_FIELD
+
 
 #ifndef IgnoreDiagnostics_H
 #define IgnoreDiagnostics_H
