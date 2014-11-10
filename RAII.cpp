@@ -2,7 +2,6 @@
 #include <UnitCpp/Test.h>
 
 //=============================================================================
-template <typename tFUNCTION>
 class RAII {
 public:
 
@@ -12,10 +11,10 @@ public:
   RAII(RAII&&);
   RAII& operator=(RAII&&);
   // Move constructor/move assignment operator.
-  
+
 private:
 
-  RAII(tFUNCTION end_function);
+  RAII(std::function<void()> end_function);
   // Constructor taking a tFUNCTION.
   // Private so this is called only in the factory.
   
@@ -24,15 +23,15 @@ private:
   // Copying is prohibited.
 
   template <typename T>
-  friend RAII<T> make_raii(T end_function);
+  friend RAII make_raii(T end_function);
 
-  tFUNCTION m_end_function;
+  std::function<void()> m_end_function;
   bool m_current;
 };
 
 //=============================================================================
 template <typename tFUNCTION>
-RAII<tFUNCTION> make_raii(tFUNCTION end_function);
+RAII make_raii(tFUNCTION end_function);
 
 //=============================================================================
 TEST(RAII, make_raii)
@@ -88,6 +87,47 @@ TEST(RAII, move2)
 }
 
 //=============================================================================
+// This stubs a class which aquires a resource and manages access to it, so it
+// keeps an RAII as a member.
+class TestResourceWrapper {
+public:
+
+  TestResourceWrapper();
+
+private:
+
+  void free_resource(int& resource) const {
+    resource = -1;
+  }
+  void aquire_resource(int& resource) const {
+    resource = 5;
+  }
+
+  RAII m_raii;
+};
+
+static int RESOURCE = -1;
+
+//=============================================================================
+TestResourceWrapper::TestResourceWrapper()
+  : m_raii(make_raii([](){}))
+{
+  aquire_resource(RESOURCE);
+  m_raii = make_raii([this](){free_resource(RESOURCE);});
+}
+
+//=============================================================================
+TEST(RAII, ClassManager)
+{
+  TEST_EQUAL(RESOURCE, -1);
+  {
+    TestResourceWrapper wrapper;
+    TEST_EQUAL(RESOURCE, 5);
+  }
+  TEST_EQUAL(RESOURCE, -1);
+}
+
+//=============================================================================
 int main(int argc, char** argv)
 {
   return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
@@ -97,22 +137,20 @@ int main(int argc, char** argv)
 
 //=============================================================================
 template <typename tFUNCTION>
-RAII<tFUNCTION> make_raii(tFUNCTION end_function)
+RAII make_raii(tFUNCTION end_function)
 {
-  return RAII<tFUNCTION>(end_function);
+  return RAII(end_function);
 }
 
 //=============================================================================
-template <typename tFUNCTION>
-RAII<tFUNCTION>::RAII(tFUNCTION end_function)
+RAII::RAII(std::function<void()> end_function)
   : m_end_function(end_function),
     m_current(true)
 {
 }
 
 //=============================================================================
-template <typename tFUNCTION>
-RAII<tFUNCTION>::~RAII()
+RAII::~RAII()
 {
   if (m_current) {
     m_end_function();
@@ -120,8 +158,7 @@ RAII<tFUNCTION>::~RAII()
 }
 
 //=============================================================================
-template <typename tFUNCTION>
-RAII<tFUNCTION>::RAII(RAII<tFUNCTION>&& raii)
+RAII::RAII(RAII&& raii)
   : m_end_function(raii.m_end_function),
     m_current(raii.m_current)
 {
@@ -129,10 +166,9 @@ RAII<tFUNCTION>::RAII(RAII<tFUNCTION>&& raii)
 }
 
 //=============================================================================
-template <typename tFUNCTION>
-RAII<tFUNCTION>& RAII<tFUNCTION>::operator=(RAII<tFUNCTION>&& raii)
+RAII& RAII::operator=(RAII&& raii)
 {
-  if (*raii != this) {
+  if (&raii != this) {
     m_end_function = raii.m_end_function;
     m_current = raii.m_current;
     raii.m_current = false;
