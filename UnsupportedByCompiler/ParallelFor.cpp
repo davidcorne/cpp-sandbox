@@ -6,28 +6,25 @@
 #include <iostream>
 #include <vector>
 
-using namespace Concurrency;
-using namespace std;
-
 //=============================================================================
-void print(vector<int>& v) {
+void print(std::vector<int>& v) {
   for (auto i = begin(v); i != end(v); ++i) {
-    cout << *i << " ";
+    std::cout << *i << " ";
   }
-  cout << endl;
+  std::cout << std::endl;
 }
 
 //=============================================================================
 int main()
 {
    // Print each value from 1 to 5 in parallel.
-  vector<int> points(5, 0);
+  std::vector<int> points(5, 0);
   print(points);
-  parallel_for(0, 5, [&points](int i) {
+  Concurrency::parallel_for(0, 5, [&points](int i) {
       points[i] = i;
-      cout << i << " ";
+      std::cout << i << " ";
     });
-  cout << endl;
+  std::cout << std::endl;
   print(points);
   
 }
