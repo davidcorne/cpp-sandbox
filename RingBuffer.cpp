@@ -3,10 +3,11 @@
 //D Inspired by
 // http://gameprogrammingpatterns.com/event-queue.html
 
+#include <assert.h>
 #include <iostream>
 #include <string>
 
-#include "UnitTest.h"
+#include <UnitCpp/Test.h>
 
 //=============================================================================
 template <typename T>
@@ -67,73 +68,50 @@ struct Request {
 typedef Ring<Request> RequestRing;
 
 //=============================================================================
-class utest_RingBuffer : public UnitTest {
-public:
-
-  void run_tests() {
-    print(__FILE__);
-    test_add();
-    test_count();
-    test_max_size();
-  }
-
-private:
-
-  void test_add();
-  void test_count();
-  void test_max_size();
-
-};
-
-//=============================================================================
-void utest_RingBuffer::test_add()
+TEST(RingBuffer, add)
 {
-  print(DGC_CURRENT_FUNCTION);
   RequestRing ring;
   ring.add({0, "Hey"});
   Request request = ring.update();
-  test(request.Num == 0, "Correct Num.");
-  test(request.Descriptiton == "Hey", "Correct Descriptiton.");
+  TEST_EQUAL(request.Num, 0, "Correct Num.");
+  TEST_EQUAL(request.Descriptiton, "Hey", "Correct Descriptiton.");
 }
 
 //=============================================================================
-void utest_RingBuffer::test_max_size()
+TEST(RingBuffer, max_size)
 {
-  print(DGC_CURRENT_FUNCTION);
-  test(RequestRing().max_size() == 5, "Wrong max size");
+  TEST_EQUAL(RequestRing().max_size(), 5, "Wrong max size");
 }
 
 //=============================================================================
-void utest_RingBuffer::test_count()
+TEST(RingBuffer, count)
 {
-  print(DGC_CURRENT_FUNCTION);
   RequestRing ring;
-  test(ring.size() == 0, "Wrong size");
+  TEST_EQUAL(ring.size(), 0, "Wrong size");
 
   ring.add({0, "Hey"});
-  test(ring.size() == 1, "Wrong size");
+  TEST_EQUAL(ring.size(), 1, "Wrong size");
 
   ring.add({1, "Hey"});
-  test(ring.size() == 2, "Wrong size");
+  TEST_EQUAL(ring.size(), 2, "Wrong size");
 
   ring.add({2, "Hey"});
-  test(ring.size() == 3, "Wrong size");
+  TEST_EQUAL(ring.size(), 3, "Wrong size");
 
   ring.add({3, "Hey"});
-  test(ring.size() == 4, "Wrong size");
+  TEST_EQUAL(ring.size(), 4, "Wrong size");
 
   ring.update();
   ring.update();
-  test(ring.size() == 2, "Wrong size");
+  TEST_EQUAL(ring.size(), 2, "Wrong size");
 
   ring.add({3, "Hey"});
   ring.add({3, "Hey"});
-  test(ring.size() == 4, "Wrong size");
+  TEST_EQUAL(ring.size(), 4, "Wrong size");
 }
 
 //=============================================================================
-int main() {
-  utest_RingBuffer test;
-  test.run_tests();
-  return 0;
+int main(int argc, char** argv) 
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }

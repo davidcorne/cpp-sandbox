@@ -7,7 +7,7 @@
 #include <iostream>
 #include <memory>
 
-#include "UnitTest.h"
+#include <UnitCpp/Test.h>
 
 //=============================================================================
 class Impl {
@@ -24,35 +24,18 @@ private:
 };
 
 //=============================================================================
-class utest_PIMPL : public UnitTest {
-public:
-
-  void run_tests() {
-    print(__FILE__);
-    test_handle();
-  }
-
-private:
-
-  void test_handle();
-
-};
-
-//=============================================================================
-void utest_PIMPL::test_handle()
+TEST(PIMPL, handle)
 {
-  print(DGC_CURRENT_FUNCTION);
   Impl impl;
-  test(impl.file_handle() == 77, "Wrong file handle.");
-
+  TEST_EQUAL(impl.file_handle(), 77, "Wrong file handle.");
 }
 
 //=============================================================================
-int main() {
-  utest_PIMPL test;
-  test.run_tests();
-  return 0;
+int main(int argc, char** argv) 
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }
+
 
 //=============================================================================
 // Source file

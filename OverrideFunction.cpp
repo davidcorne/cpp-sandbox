@@ -5,7 +5,7 @@
 
 #include <iostream>
 
-#include "UnitTest.h"
+#include <UnitCpp/Test.h>
 
 //=============================================================================
 class OverrideBase {
@@ -18,7 +18,6 @@ public:
   virtual void override() = 0;
   
 private:
-  friend class utest_OverrideFunction;
 };
 
 //=============================================================================
@@ -37,24 +36,8 @@ private:
 };
 
 //=============================================================================
-class utest_OverrideFunction : public UnitTest {
-public:
-
-  void run_tests() {
-    print(__FILE__);
-    test_use_override();
-  }
-
-private:
-
-  void test_use_override();
-
-};
-
-//=============================================================================
-void utest_OverrideFunction::test_use_override()
+TEST(Overrider, use)
 {
-  print(DGC_CURRENT_FUNCTION);
   // override is context sensitive, calling a variable this is fine.
   OverrideCls override;
   override.do_something();
@@ -62,10 +45,9 @@ void utest_OverrideFunction::test_use_override()
 }
 
 //=============================================================================
-int main() {
-  utest_OverrideFunction test;
-  test.run_tests();
-  return 0;
+int main(int argc, char** argv) 
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }
 
 OverrideBase::OverrideBase(){}

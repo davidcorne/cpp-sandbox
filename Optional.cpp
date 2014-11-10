@@ -1,6 +1,8 @@
 //=============================================================================
 
-#include "UnitTest.h"
+#include <assert.h>
+
+#include <UnitCpp/Test.h>
 
 //=============================================================================
 template <typename T>
@@ -34,99 +36,75 @@ private:
 
 
 //=============================================================================
-class utest_Optional : public UnitTest {
+class NoDefaultConstructor {
 public:
-
-  void run_tests() {
-    print(__FILE__);
-    test_int();
-    test_no_default_construction();
-    test_no_default_or_copy_construction();
-  }
-
-private:
-
-  void test_int();
-
-  void test_no_default_construction();
-
-  void test_no_default_or_copy_construction();
-
-
-  //===========================================================================
-  class NoDefaultConstructor {
-  public:
-    explicit NoDefaultConstructor(double d)
-      : m_d(d)
-      {
-      }
-    double m_d;
-  };
+  explicit NoDefaultConstructor(double d)
+    : m_d(d)
+    {
+    }
+  double m_d;
+};
     
-  //===========================================================================
-  class NoDefaultOrCopyConstructor {
-  public:
-    explicit NoDefaultOrCopyConstructor(double d)
-      : m_d(d)
-      {
-      }
-    NoDefaultOrCopyConstructor(NoDefaultOrCopyConstructor&& other)
-      : m_d(other.m_d)
-      {
-      }
+//=============================================================================
+class NoDefaultOrCopyConstructor {
+public:
+  explicit NoDefaultOrCopyConstructor(double d)
+    : m_d(d)
+    {
+    }
+  NoDefaultOrCopyConstructor(NoDefaultOrCopyConstructor&& other)
+    : m_d(other.m_d)
+    {
+    }
       
-    NoDefaultOrCopyConstructor& operator=(NoDefaultOrCopyConstructor&& other)
-      {
-        m_d = other.m_d;
-        return *this;
-      }
-    double m_d;
-  private:
-    NoDefaultOrCopyConstructor(const NoDefaultOrCopyConstructor&);
-    NoDefaultOrCopyConstructor& operator=(const NoDefaultOrCopyConstructor&);
-  };
-    
+  NoDefaultOrCopyConstructor& operator=(NoDefaultOrCopyConstructor&& other)
+    {
+      m_d = other.m_d;
+      return *this;
+    }
+  double m_d;
+  
+private:
+  
+  NoDefaultOrCopyConstructor(const NoDefaultOrCopyConstructor&);
+  NoDefaultOrCopyConstructor& operator=(const NoDefaultOrCopyConstructor&);
 };
 
 //=============================================================================
-void utest_Optional::test_int()
+TEST(Optional, int)
 {
-  print(DGC_CURRENT_FUNCTION);
   Optional<int> bad;
-  test(!bad, "bad should be bad.");
+  TEST_FALSE(bad, "bad should be bad.");
   Optional<int> good(5);
-  test(good, "good should be good.");
-  test(good.value() == 5, "value should be 5.");
+  TEST_TRUE(good, "good should be good.");
+  TEST_EQUAL(good.value(), 5, "value should be 5.");
 }
 
 //=============================================================================
-void utest_Optional::test_no_default_construction()
+TEST(Optional, no_default_construction)
 {
-  print(DGC_CURRENT_FUNCTION);
   Optional<NoDefaultConstructor> bad;
-  test(!bad, "bad should be bad.");
+  TEST_FALSE(bad, "bad should be bad.");
 
   Optional<NoDefaultConstructor> good(NoDefaultConstructor(-2.5));
-  test(good, "good should be good.");
+  TEST_TRUE(good, "good should be good.");
 }
 
 //=============================================================================
-void utest_Optional::test_no_default_or_copy_construction()
+TEST(Optional, no_default_or_copy_construction)
 {
-  print(DGC_CURRENT_FUNCTION);
   Optional<NoDefaultOrCopyConstructor> bad;
-  test(!bad, "bad should be bad.");
+  TEST_FALSE(bad, "bad should be bad.");
 
   NoDefaultOrCopyConstructor instance(-2.5);
   Optional<NoDefaultOrCopyConstructor> good(std::move(instance));
-  test(good, "good should be good.");
+  TEST_TRUE(good, "good should be good.");
 }
 
 //=============================================================================
-int main() {
-  utest_Optional test;
-  test.run_tests();
-  return 0;
+int main(int argc, char** argv) 
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }
 
 //=============================================================================

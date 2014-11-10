@@ -2,12 +2,13 @@
 //
 // Inspired by item 31 in Scott Meyers "More Effective C++".
 
+#include <assert.h>
 #include <functional>
 #include <iostream>
 #include <string>
 #include <map>
 
-#include "UnitTest.h"
+#include <UnitCpp/Test.h>
 
 class GameObject;
 
@@ -90,24 +91,8 @@ public:
 };
 
 //=============================================================================
-class utest_DoubleDispatch : public UnitTest {
-public:
-
-  void run_tests() {
-    print(__FILE__);
-    test_collision();
-  }
-
-private:
-
-  void test_collision();
-
-};
-
-//=============================================================================
-void utest_DoubleDispatch::test_collision()
+TEST(DoubleDispatch, collision)
 {
-  print(DGC_CURRENT_FUNCTION);
   Asteroid asteroid("MX-1");
   MilitarySpaceShip enterprise("Enterprise");
   enterprise.collide(asteroid);
@@ -118,10 +103,9 @@ void utest_DoubleDispatch::test_collision()
 }
 
 //=============================================================================
-int main() {
-  utest_DoubleDispatch test;
-  test.run_tests();
-  return 0;
+int main(int argc, char** argv) 
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }
 
 //=============================================================================

@@ -6,7 +6,7 @@
 #include <functional>
 #include <map>
 
-#include "UnitTest.h"
+#include <UnitCpp/Test.h>
 
 //=============================================================================
 class Reason {
@@ -66,24 +66,6 @@ public:
 private:
 };
 
-//=============================================================================
-class utest_Sender : public UnitTest {
-public:
-
-  void run_tests() {
-    print(__FILE__);
-    test_listening_1();
-    test_listening_2();
-    test_listening_3();
-  }
-
-private:
-
-  void test_listening_1();
-  void test_listening_2();
-  void test_listening_3();
-
-};
 
 Reason TestSender_message_1;
 Reason TestSender_message_2;
@@ -196,43 +178,39 @@ void TestReceiver::callback(void* data)
 }
 
 //=============================================================================
-void utest_Sender::test_listening_1()
+TEST(Sender, listening_1)
 {
-  print(DGC_CURRENT_FUNCTION);
   TestSender sender;
   TestReceiver receiver(sender);
-  assert(!receiver.received() && "receiver has not received anything.");
+  TEST_FALSE(receiver.received(), "receiver has not received anything.");
   sender.call_1();
-  test(receiver.received(), "Message received.");
+  TEST_TRUE(receiver.received(), "Message received.");
 }
 
 //=============================================================================
-void utest_Sender::test_listening_2()
+TEST(Sender, listening_2)
 {
-  print(DGC_CURRENT_FUNCTION);
   TestSender sender;
   TestReceiver receiver(sender);
-  assert(!receiver.received());
+  TEST_FALSE(receiver.received());
   sender.call_2();
-  test(receiver.received(), "Message received.");
+  TEST_TRUE(receiver.received(), "Message received.");
 }
 
 //=============================================================================
-void utest_Sender::test_listening_3()
+TEST(Sender, listening_3)
 {
-  print(DGC_CURRENT_FUNCTION);
   TestSender sender;
   TestReceiver receiver(sender);
-  assert(!GLOBAL_CALLBACK_CALLED);
+  TEST_FALSE(GLOBAL_CALLBACK_CALLED);
   sender.call_3();
-  test(GLOBAL_CALLBACK_CALLED, "global callback called.");
+  TEST_TRUE(GLOBAL_CALLBACK_CALLED, "global callback called.");
 }
 
 //=============================================================================
-int main() {
-  utest_Sender test;
-  test.run_tests();
-  return 0;
+int main(int argc, char** argv) 
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }
 
 int Reason::s_next_id(0);

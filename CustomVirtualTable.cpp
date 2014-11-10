@@ -5,12 +5,13 @@
 #include "Capabilities.h"
 #ifdef VARIADIC_TEMPLATES
 
+#include <assert.h>
 #include <iostream>
 #include <functional>
 #include <map>
 #include <string>
 
-#include "UnitTest.h"
+#include <UnitCpp/Test.h>
 
 //=============================================================================
 enum SwitchThing {
@@ -33,39 +34,21 @@ private:
   std::string two() const;
   std::string three() const;
   
-  friend class utest_CustomVirtualTable;
 };
 
 //=============================================================================
-class utest_CustomVirtualTable : public UnitTest {
-public:
-
-  void run_tests() {
-    print(__FILE__);
-    test_switch();
-  }
-
-private:
-
-  void test_switch();
-
-};
-
-//=============================================================================
-void utest_CustomVirtualTable::test_switch()
+TEST(CustomVirtualTable, switch)
 {
-  print(DGC_CURRENT_FUNCTION);
   CustomVirtualTable table;
-  test(table.on(One) == "One", "Wrong value from table.");
-  test(table.on(Two) == "Two", "Wrong value from table.");
-  test(table.on(Three) == "Three", "Wrong value from table.");
+  TEST_EQUAL(table.on(One), "One", "Wrong value from table.");
+  TEST_EQUAL(table.on(Two), "Two", "Wrong value from table.");
+  TEST_EQUAL(table.on(Three), "Three", "Wrong value from table.");
 }
 
 //=============================================================================
-int main() {
-  utest_CustomVirtualTable test;
-  test.run_tests();
-  return 0;
+int main(int argc, char** argv) 
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }
 
 //=============================================================================

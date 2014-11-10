@@ -6,7 +6,8 @@
 #include <vector>
 #include <math.h>
 
-#include "UnitTest.h"
+#include <UnitCpp/Test.h>
+
 #include "Iterator.h"
 
 //=============================================================================
@@ -53,24 +54,8 @@ private:
 };
 
 //=============================================================================
-class utest_PrimeGenerator : public UnitTest {
-public:
-
-  void run_tests() {
-    print(__FILE__);
-    test_100();
-  }
-
-private:
-
-  void test_100();
-
-};
-
-//=============================================================================
-void utest_PrimeGenerator::test_100()
+TEST(PrimeGenerator, 100)
 {
-  print(DGC_CURRENT_FUNCTION);
   PrimeGenerator generator(100);
   Iterator<PrimeGenerator::BigNum> prime_iter = generator.primes();
   int count = 0;
@@ -79,20 +64,19 @@ void utest_PrimeGenerator::test_100()
     ++count;
     primes.push_back(prime_iter());
   }
-  test(count == 25, "Should be 25 primes under 100.");
+  TEST_EQUAL(count, 25, "Should be 25 primes under 100.");
   std::vector<PrimeGenerator::BigNum> reference_primes =
     {
       2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67,
       71,73, 79, 83, 89, 97
     };
-  test(primes == reference_primes, "Incorrect primes under 100.");
+  TEST_EQUAL(primes, reference_primes, "Incorrect primes under 100.");
 }
 
 //=============================================================================
-int main() {
-  utest_PrimeGenerator test;
-  test.run_tests();
-  return 0;
+int main(int argc, char** argv) 
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }
 
 //=============================================================================

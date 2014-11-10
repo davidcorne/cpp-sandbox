@@ -6,11 +6,11 @@
 #include "Capabilities.h"
 #ifdef VARIADIC_TEMPLATES
 
+#include <assert.h>
 #include <iostream>
 #include <random>
 
-#include "UnitTest.h"
-
+#include <UnitCpp/Test.h>
 
 //=============================================================================
 template <class T>
@@ -54,7 +54,8 @@ public:
   
 protected:
 
-  friend class utest_CoercionByMemberTemplate;
+  UNITCPP_FRIEND_TEST(CoercionByMemberTemplate, non_null);
+  UNITCPP_FRIEND_TEST(CoercionByMemberTemplate, convert);
 
   template <class U>
   U* convert(const Ptr<U>& p)
@@ -105,53 +106,33 @@ public:
 };
 
 //=============================================================================
-class utest_CoercionByMemberTemplate : public UnitTest {
-public:
-
-  void run_tests() {
-    print(__FILE__);
-    test_non_null();
-    test_convert();
-  }
-
-private:
-
-  void test_non_null();
-  void test_convert();
-
-};
-
-//=============================================================================
-void utest_CoercionByMemberTemplate::test_non_null()
+TEST(CoercionByMemberTemplate, non_null)
 {
-  print(DGC_CURRENT_FUNCTION);
   Base base;
   Ptr<Base> p_base(base);
   Derived derived;
   Ptr<Derived> p_derived(derived);
 
   Ptr<Base> new_p_base = p_derived;
-  test(new_p_base.m_ptr, "Non-null pointer.");
+  TEST_TRUE(new_p_base.m_ptr, "Non-null pointer.");
 }
 
 //=============================================================================
-void utest_CoercionByMemberTemplate::test_convert()
+TEST(CoercionByMemberTemplate, convert)
 {
-  print(DGC_CURRENT_FUNCTION);
   Derived derived;
   Ptr<Derived> p_derived(derived);
 
   Derived* raw_derived_ptr = p_derived.convert(p_derived);
-  test(raw_derived_ptr, "Null pointer from convert.");
+  TEST_TRUE(raw_derived_ptr, "Null pointer from convert.");
 
-  test(raw_derived_ptr->m_rand == derived.m_rand, "Convert failed.");
+  TEST_EQUAL(raw_derived_ptr->m_rand, derived.m_rand, "Convert failed.");
 }
 
 //=============================================================================
-int main() {
-  utest_CoercionByMemberTemplate test;
-  test.run_tests();
-  return 0;
+int main(int argc, char** argv) 
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }
 
 #else

@@ -3,9 +3,9 @@
 // Motivated by this:
 // http://www.objectmentor.com/resources/articles/acv.pdf
 
-#include "Capabilities.h"
-#ifdef VARIADIC_TEMPLATES
-#include "UnitTest.h"
+#include <assert.h>
+
+#include <UnitCpp/Test.h>
 
 //=============================================================================
 // Degenerate class, only used for passing around. Anyone who wants to use
@@ -150,56 +150,39 @@ private:
 
 //=============================================================================
 // Basically what an IC class would do
-class utest_Orthotic : public UnitTest {
-public:
-
-  void run_tests() {
-    print(__FILE__);
-    test_accom();
-    test_func();
-  }
-
-private:
-
-  void test_accom();
-  void test_func();
-
-};
-
-//=============================================================================
-void utest_Orthotic::test_accom()
+TEST(AccommodativeIC, functional)
 {
-  print(DGC_CURRENT_FUNCTION);
   odiOrthotic* orthotic = new ordLooseAccomOrthotic();
   ortParameterDataModel dm(*orthotic);
   dm.set_heel_back_eval_height(10.0);
-  test(
-    dm.heel_back_eval_height() == 10.0,
+  TEST_EQUAL(
+    dm.heel_back_eval_height(),
+    10.0,
     "Correctly set/got heel_back_eval_height"
   );
   delete orthotic;
 }
 
 //=============================================================================
-void utest_Orthotic::test_func()
+TEST(FunctionalIC, functional)
 {
-  print(DGC_CURRENT_FUNCTION);
   odiOrthotic* orthotic = new ordFuncOrthotic();
   ortParameterDataModel dm(*orthotic);
   dm.set_orthotic_thickness(4.0);
-  test(
-    dm.orthotic_thickness() == 4.0,
+  TEST_EQUAL(
+    dm.orthotic_thickness(),
+    4.0,
     "Correctly set/got orthotic thickness"
   );
   delete orthotic;
 }
 
 //=============================================================================
-int main() {
-  utest_Orthotic test;
-  test.run_tests();
-  return 0;
+int main(int argc, char** argv) 
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }
+
 
 //=============================================================================
 // Virtual Classes
@@ -395,6 +378,3 @@ double ortParameterDataModel::orthotic_thickness() const
   return func_pars->orthotic_thickness();
 }
   
-#else
-UNSUPPORTED_FEATURE_MAIN
-#endif

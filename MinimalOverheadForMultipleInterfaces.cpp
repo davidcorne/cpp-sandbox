@@ -6,7 +6,8 @@
 #include <iostream>
 #include <string>
 
-#include "UnitTest.h"
+#include <UnitCpp/Test.h>
+
 #include "Path.h"
 
 //=============================================================================
@@ -118,68 +119,43 @@ public:
 };
 
 //=============================================================================
-class utest_MinimalOverheadForMultipleInterfaces : public UnitTest {
-public:
-
-  void run_tests() {
-    print(__FILE__);
-    test_reading();
-    test_writing();
-    test_removing();
-  }
-
-private:
-  void write(Writer& writer);
-  void read(Reader& reader);
-  
-  void test_writing();
-  void test_reading();
-  void test_removing();
-
-};
-
-//=============================================================================
-void utest_MinimalOverheadForMultipleInterfaces::write(Writer& writer)
+void write(Writer& writer)
 {
   writer.write("Hello");
   writer.close();
 }
 
 //=============================================================================
-void utest_MinimalOverheadForMultipleInterfaces::read(Reader& reader)
+void read(Reader& reader)
 {
   reader.read();
   reader.close();
 }
 
 //=============================================================================
-void utest_MinimalOverheadForMultipleInterfaces::test_reading()
+TEST(MinimalOverheadForMultipleInterfaces, reading)
 {
-  print(DGC_CURRENT_FUNCTION);
   FileSystem file_system;
   read(file_system.reader(Path("dummy")));
 }
 
 //=============================================================================
-void utest_MinimalOverheadForMultipleInterfaces::test_writing()
+TEST(MinimalOverheadForMultipleInterfaces, writing)
 {
-  print(DGC_CURRENT_FUNCTION);
   FileSystem file_system;
   write(file_system.writer(Path("dummy")));
 }
 
 //=============================================================================
-void utest_MinimalOverheadForMultipleInterfaces::test_removing()
+TEST(MinimalOverheadForMultipleInterfaces, removing)
 {
-  print(DGC_CURRENT_FUNCTION);
   FileSystem file_system;
   PathRemover& remover = file_system.path_remover();
   remover.remove(Path("to-delete"));
 }
 
 //=============================================================================
-int main() {
-  utest_MinimalOverheadForMultipleInterfaces test;
-  test.run_tests();
-  return 0;
+int main(int argc, char** argv) 
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }

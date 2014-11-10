@@ -7,7 +7,7 @@
 #include <string>
 #include <sstream>
 
-#include "UnitTest.h"
+#include <UnitCpp/Test.h>
 
 //=============================================================================
 std::vector<std::string> split(std::string in, char delimiter=' ')
@@ -22,50 +22,30 @@ std::vector<std::string> split(std::string in, char delimiter=' ')
 }
 
 //=============================================================================
-class utest_Split : public UnitTest {
-public:
-
-  void run_tests() {
-    print(__FILE__);
-    test_space_split();
-    test_other_delimiters();
-  }
-
-private:
-
-  void test_space_split();
-  void test_other_delimiters();
-
-};
-
-//=============================================================================
-void utest_Split::test_other_delimiters()
+TEST(Split, other_delimiters)
 {
-  print(DGC_CURRENT_FUNCTION);
   std::vector<std::string> out(split("Name,Address,Phone Number", ','));
-  test(out.size() == 3, "Wrong size for out.");
-  test(out[0] == "Name", "Wrong element 0 in out.");
-  test(out[1] == "Address", "Wrong element 1 in out.");
-  test(out[2] == "Phone Number", "Wrong element 2 in out.");
+  TEST_EQUAL(out.size(), 3, "Wrong size for out.");
+  TEST_EQUAL(out[0], "Name", "Wrong element 0 in out.");
+  TEST_EQUAL(out[1], "Address", "Wrong element 1 in out.");
+  TEST_EQUAL(out[2], "Phone Number", "Wrong element 2 in out.");
   
 }
 
 //=============================================================================
-void utest_Split::test_space_split()
+TEST(Split, space)
 {
-  print(DGC_CURRENT_FUNCTION);
   std::vector<std::string> out(split("This is a sentence."));
-  test(out.size() == 4, "Wrong size for out.");
-  test(out[0] == "This", "Wrong element 0 in out.");
-  test(out[1] == "is", "Wrong element 1 in out.");
-  test(out[2] == "a", "Wrong element 2 in out.");
-  test(out[3] == "sentence.", "Wrong element 3 in out.");
+  TEST_EQUAL(out.size(), 4, "Wrong size for out.");
+  TEST_EQUAL(out[0], "This", "Wrong element 0 in out.");
+  TEST_EQUAL(out[1], "is", "Wrong element 1 in out.");
+  TEST_EQUAL(out[2], "a", "Wrong element 2 in out.");
+  TEST_EQUAL(out[3], "sentence.", "Wrong element 3 in out.");
 
 }
 
 //=============================================================================
-int main() {
-  utest_Split test;
-  test.run_tests();
-  return 0;
+int main(int argc, char** argv) 
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }

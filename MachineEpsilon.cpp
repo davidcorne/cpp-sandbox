@@ -9,7 +9,7 @@
 #include <iomanip>
 #include <limits>
 
-#include "UnitTest.h"
+#include <UnitCpp/Test.h>
 
 //=============================================================================
 template<typename float_t, typename int_t>
@@ -43,42 +43,22 @@ float_t machine_eps()
 }
 
 //=============================================================================
-class utest_MachineEpsilon : public UnitTest {
-public:
-
-  void run_tests() {
-    print(__FILE__);
-    test_float_eps();
-    test_double_eps();
-  }
-
-private:
-
-  void test_float_eps();
-  void test_double_eps();
-
-};
-
-//=============================================================================
-void utest_MachineEpsilon::test_float_eps()
+TEST(MachineEpsilon, float)
 {
-  print(DGC_CURRENT_FUNCTION);
   float eps = machine_eps<float, uint32_t>();
-  test(std::numeric_limits<float>::epsilon() == eps, "Wrong calculated eps.");
+  TEST_EQUAL(std::numeric_limits<float>::epsilon(), eps, "Wrong calculated eps.");
 
 }
 
 //=============================================================================
-void utest_MachineEpsilon::test_double_eps()
+TEST(MachineEpsilon, double)
 {
-  print(DGC_CURRENT_FUNCTION);
   float eps = machine_eps<double, uint64_t>();
-  test(std::numeric_limits<double>::epsilon() == eps, "Wrong calculated eps.");
+  TEST_EQUAL(std::numeric_limits<double>::epsilon(), eps, "Wrong calculated eps.");
 }
 
 //=============================================================================
-int main() {
-  utest_MachineEpsilon test;
-  test.run_tests();
-  return 0;
+int main(int argc, char** argv) 
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }

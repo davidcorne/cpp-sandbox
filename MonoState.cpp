@@ -3,9 +3,10 @@
 // Monostate design pattern. A bit better singleton (possibly?)
 // See http://c2.com/cgi/wiki?MonostatePattern for a little more detail.
 
+#include <assert.h>
 #include <iostream>
 
-#include "UnitTest.h"
+#include <UnitCpp/Test.h>
 
 //=============================================================================
 template <class T>
@@ -68,40 +69,23 @@ private:
 
 
 //=============================================================================
-class utest_MonoState : public UnitTest {
-public:
-
-  void run_tests() {
-    print(__FILE__);
-    test_();
-  }
-
-private:
-
-  void test_();
-
-};
-
-//=============================================================================
-void utest_MonoState::test_()
+TEST(MonoState, state)
 {
-  print(DGC_CURRENT_FUNCTION);
   MonoState m1;
-  test(m1.value() == 1, "Incorrect starting value.");
+  TEST_EQUAL(m1.value(), 1, "Incorrect starting value.");
   MonoState m2;
-  test(m2.value() == 1, "Incorrect starting value.");
+  TEST_EQUAL(m2.value(), 1, "Incorrect starting value.");
   m1.triple();
-  test(m1.value() == 3, "Does not share state.");
-  test(m2.value() == 3, "Does not share state.");
-  test(&m1 != &m2, "Should not share memory.");
+  TEST_EQUAL(m1.value(), 3, "Does not share state.");
+  TEST_EQUAL(m2.value(), 3, "Does not share state.");
+  TEST_NOT_EQUAL(&m1, &m2, "Should not share memory.");
   
 }
 
 //=============================================================================
-int main() {
-  utest_MonoState test;
-  test.run_tests();
-  return 0;
+int main(int argc, char** argv) 
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }
 
 // initialise static

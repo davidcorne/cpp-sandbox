@@ -8,7 +8,7 @@
 #include <thread>
 #include <vector>
 
-#include "UnitTest.h"
+#include <UnitCpp/Test.h>
 
 //=============================================================================
 class Counter {
@@ -37,24 +37,8 @@ private:
 };
 
 //=============================================================================
-class utest_Atomics : public UnitTest {
-public:
-
-  void run_tests() {
-    print(__FILE__);
-    test_counter();
-  }
-
-private:
-
-  void test_counter();
-
-};
-
-//=============================================================================
-void utest_Atomics::test_counter()
+TEST(Atomics, counter)
 {
-  print(DGC_CURRENT_FUNCTION);
   Counter counter(0);
   std::vector<std::thread> thread_pool;
   std::function<void(int)> add = [&counter](int number){
@@ -69,8 +53,9 @@ void utest_Atomics::test_counter()
     thread.join();
   }
   int count = counter.count();
-  test(
-    count == 210,
+  TEST_EQUAL(
+    count,
+    210,
     "Should have been incremented 210 times, not ",
     count,
     " times."
@@ -78,10 +63,9 @@ void utest_Atomics::test_counter()
 }
 
 //=============================================================================
-int main() {
-  utest_Atomics test;
-  test.run_tests();
-  return 0;
+int main(int argc, char** argv) 
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }
 
 #else

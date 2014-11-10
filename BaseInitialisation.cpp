@@ -2,14 +2,9 @@
 //
 // This shows that you shouldn't call virtual functions in a base constructor.
 
-#include "Capabilities.h"
-
-#ifdef VARIADIC_TEMPLATES
 #include <iostream>
 
-#include "UnitTest.h"
-
-
+#include <UnitCpp/Test.h>
 
 //=============================================================================
 class Base {
@@ -43,42 +38,21 @@ public:
     }
 
 private:
-  friend class utest_BaseInitialisation;
+  UNITCPP_FRIEND_TEST(BaseInitialisation, constructor);
   int m_a;
   bool m_a_set;
 };
 
-//=============================================================================
-class utest_BaseInitialisation : public UnitTest {
-public:
-
-  void run_tests() {
-    print(__FILE__);
-    test_ctor();
-  }
-
-private:
-
-  void test_ctor();
-
-};
 
 //=============================================================================
-void utest_BaseInitialisation::test_ctor()
+TEST(BaseInitialisation, constructor)
 {
-  print(DGC_CURRENT_FUNCTION);
   Derived d;
-  test(!d.m_a_set, "a has not been set");
-  
-
+  TEST_FALSE(d.m_a_set, "a has not been set");
 }
 
 //=============================================================================
-int main() {
-  utest_BaseInitialisation test;
-  test.run_tests();
-  return 0;
+int main(int argc, char** argv) 
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }
-#else
-UNSUPPORTED_FEATURE_MAIN
-#endif

@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-#include "UnitTest.h"
+#include <UnitCpp/Test.h>
 
 class Employee;
 
@@ -99,60 +99,40 @@ private:
 };
 
 //=============================================================================
-class utest_EmployeeVisitor : public UnitTest {
-public:
-
-  void run_tests() {
-    print(__FILE__);
-    test_employee_printer();
-    test_employee_database_printer();
-  }
-
-private:
-
-  void test_employee_printer();
-  void test_employee_database_printer();
-
-};
-
-//=============================================================================
-void utest_EmployeeVisitor::test_employee_printer()
+TEST(EmployeeVisitor, employee_printer)
 {
-  print(DGC_CURRENT_FUNCTION);
   Employee dave("Dave", 250.00);
   EmployeePrinter printer;
   dave.accept_visitor(printer);
-  test(
-    printer.flush() == "| Dave | 250.00 |\n",
+  TEST_EQUAL(
+    printer.flush(), "| Dave | 250.00 |\n",
     "Wrong string from printer."
   );
 }
 
 //=============================================================================
-void utest_EmployeeVisitor::test_employee_database_printer()
+TEST(EmployeeVisitor, employee_database_printer)
 {
-  print(DGC_CURRENT_FUNCTION);
   EmployeeDatabase db;
   db.add(Employee("Dave", 250.00));
   EmployeePrinter printer;
   db.accept_visitor(printer);
-  test(
-    printer.flush() == "| Dave | 250.00 |\n",
+  TEST_EQUAL(
+    printer.flush(), "| Dave | 250.00 |\n",
     "Wrong string from printer."
   );
   db.add(Employee("David", 350.00));
   db.accept_visitor(printer);
-  test(
-    printer.flush() == "| Dave | 250.00 |\n| David | 350.00 |\n",
+  TEST_EQUAL(
+    printer.flush(), "| Dave | 250.00 |\n| David | 350.00 |\n",
     "Wrong string from printer."
   );
 }
 
 //=============================================================================
-int main() {
-  utest_EmployeeVisitor test;
-  test.run_tests();
-  return 0;
+int main(int argc, char** argv) 
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }
 
 //=============================================================================

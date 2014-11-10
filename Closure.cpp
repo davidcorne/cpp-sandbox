@@ -2,13 +2,10 @@
 //
 // 
 
-#include "Capabilities.h"
-#ifdef VARIADIC_TEMPLATES
-
 #include <iostream>
 #include <functional>
 
-#include "UnitTest.h"
+#include <UnitCpp/Test.h>
 
 //=============================================================================
 template <class T>
@@ -46,64 +43,39 @@ std::function<int(void)> class_in_counter()
 }
 
 //=============================================================================
-class utest_Closure : public UnitTest {
-public:
-
-  void run_tests() {
-    test_counter();
-    test_class_counter();
-    test_class_in_counter();
-  }
-
-private:
-
-  void test_counter();
-  void test_class_counter();
-  void test_class_in_counter();
-
-};
-
-//=============================================================================
-void utest_Closure::test_counter()
+TEST(Closure, counter)
 {
-  print(DGC_CURRENT_FUNCTION);
   std::function<int(void)> func = counter();
-  test(func() == 1, "First call should be 1");
-  test(func() == 2, "Second call should be 2");
-  test(func() == 3, "Third call should be 3");
-  test(func() == 4, "Fourth call should be 4");
+  TEST_EQUAL(func(), 1, "First call should be 1");
+  TEST_EQUAL(func(), 2, "Second call should be 2");
+  TEST_EQUAL(func(), 3, "Third call should be 3");
+  TEST_EQUAL(func(), 4, "Fourth call should be 4");
 }
 
 //=============================================================================
-void utest_Closure::test_class_counter()
+TEST(Closure, class_counter)
 {
-  print(DGC_CURRENT_FUNCTION);
   ClassCounter<int> counter(0);
   std::function<int(void)> func = counter;
-  test(func() == 1, "First call should be 1");
-  test(func() == 2, "Second call should be 2");
-  test(func() == 3, "Third call should be 3");
-  test(func() == 4, "Fourth call should be 4");
+  TEST_EQUAL(func(), 1, "First call should be 1");
+  TEST_EQUAL(func(), 2, "Second call should be 2");
+  TEST_EQUAL(func(), 3, "Third call should be 3");
+  TEST_EQUAL(func(), 4, "Fourth call should be 4");
 }
 
 //=============================================================================
-void utest_Closure::test_class_in_counter()
+TEST(Closure, class_in_counter)
 {
-  print(DGC_CURRENT_FUNCTION);
   std::function<int(void)> func = class_in_counter();
-  test(func() == 1, "First call should be 1");
-  test(func() == 2, "Second call should be 2");
-  test(func() == 3, "Third call should be 3");
-  test(func() == 4, "Fourth call should be 4");
+  TEST_EQUAL(func(), 1, "First call should be 1");
+  TEST_EQUAL(func(), 2, "Second call should be 2");
+  TEST_EQUAL(func(), 3, "Third call should be 3");
+  TEST_EQUAL(func(), 4, "Fourth call should be 4");
 }
 
 //=============================================================================
-int main() {
-  utest_Closure test;
-  test.run_tests();
-  return 0;
+int main(int argc, char** argv) 
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }
 
-#else
-UNSUPPORTED_FEATURE_MAIN
-#endif

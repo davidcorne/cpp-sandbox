@@ -2,13 +2,10 @@
 //
 // 
 
-#include "Capabilities.h"
-#ifdef VARIADIC_TEMPLATES
-
 #include <iostream>
 #include <string>
 
-#include "UnitTest.h"
+#include <UnitCpp/Test.h>
 
 //=============================================================================
 class Keeper {
@@ -24,43 +21,21 @@ public:
     }
 
 private:
-  friend class utest_ChangeReference;
   const std::string& m_name;
 };
 
 //=============================================================================
-class utest_ChangeReference : public UnitTest {
-public:
-
-  void run_tests() {
-    print(__FILE__);
-    test_change_ref();
-  }
-
-private:
-
-  void test_change_ref();
-
-};
-
-//=============================================================================
-void utest_ChangeReference::test_change_ref()
+TEST(ChangeReference, change_ref)
 {
-  print(DGC_CURRENT_FUNCTION);
   std::string name("Fred");
   Keeper keeper(name);
-  test(keeper.name() == "Fred", "Wrong name");
+  TEST_EQUAL(keeper.name(), "Fred", "Wrong name");
   name.assign("George");
-  test(keeper.name() == "George", "Wrong name");
+  TEST_EQUAL(keeper.name(), "George", "Wrong name");
 }
 
 //=============================================================================
-int main() {
-  utest_ChangeReference test;
-  test.run_tests();
-  return 0;
+int main(int argc, char** argv) 
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }
-
-#else
-UNSUPPORTED_FEATURE_MAIN
-#endif
