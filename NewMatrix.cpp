@@ -353,6 +353,10 @@ TEST(Matrix, equality)
   Matrix<double, 3, 2> a(ones);
   Matrix<double, 3, 3> b(ones);
   Matrix<double, 3, 2> c(ones);
+  //     1 1     1 1 1     1 1
+  // a = 1 1 b = 1 1 1 c = 1 1 
+  //     1 1     1 1 1     1 1
+  
   TEST_TRUE(a == a);
   TEST_FALSE(a == b);
   TEST_TRUE(a == c);
@@ -366,6 +370,9 @@ TEST(Matrix, equality)
   TEST_TRUE(c == c);
 
   c[2][1] = 2;
+  //     1 1     1 1 1     1 1
+  // a = 1 1 b = 1 1 1 c = 1 1 
+  //     1 1     1 1 1     1 2
   TEST_TRUE(a == a);
   TEST_FALSE(a == b);
   TEST_FALSE(a == c);
@@ -379,6 +386,7 @@ TEST(Matrix, equality)
   TEST_TRUE(c == c);
 }
 
+//=============================================================================
 TEST(Matrix, transpose)
 {
   Matrix<int, 2, 3> matrix(
@@ -494,8 +502,9 @@ Matrix<T, N, M>& Matrix<T, N, M>::operator=(Matrix<T, N, M>&& other)
 template <typename T, unsigned int N, unsigned int M>
 Matrix<T, M, N> Matrix<T, N, M>::transpose() const
 {
-  auto transpose_function = [this](unsigned int i, unsigned int j){
-    return this->operator[](j)[i];
+  auto& self = *this;
+  auto transpose_function = [&self](unsigned int i, unsigned int j){
+    return self[j][i];
   };
   return Matrix<T, M, N>(transpose_function);
 }
@@ -558,6 +567,8 @@ template <typename T, unsigned int N, unsigned int M, unsigned int P>
 Matrix<T, N, P> operator*(const Matrix<T, N, M>& a, const Matrix<T, M, P>& b)
 {
   auto summation = [&](unsigned int x, unsigned int y) {
+    // don't want to default construct this e.g. default int is not 0,
+    // dont want to initialise with 
     T sum = a[x][0] * b[0][y];
     for (unsigned int i = 1; i < M; ++i) {
       sum = sum + (a[x][i] * b[i][y]);
