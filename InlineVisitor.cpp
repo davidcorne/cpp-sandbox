@@ -2,6 +2,11 @@
 // Idea from:
 // http://accu.org/index.php/journals/2021?utm_content=buffer2980b&utm_medium=social&utm_source=plus.google.com&utm_campaign=buffer
 
+
+//not 100% sure why, but this only works on clang.
+#include "Compiler.h"
+
+#if COMPILER_TYPE == COMPILER_TYPE_CLANG
 #include <iostream>
 
 //----- Visitor stuff
@@ -141,3 +146,6 @@ int main()
   return 0;
 }
 
+#else
+UNSUPPORTED_FEATURE_MAIN;
+#endif

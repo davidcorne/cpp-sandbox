@@ -30,6 +30,8 @@
 #ifdef UNUSED_VARIABLE
 #if COMPILER_TYPE == COMPILER_TYPE_CLANG
 #pragma clang diagnostic ignored "-Wunused-variable"
+#elif COMPILER_TYPE == COMPILER_TYPE_GCC
+#pragma GCC diagnostic ignored "-Wunused-variable"
 #endif // COMPILER_TYPE 
 #undef UNUSED_VARIABLE
 #endif // UNUSED_VARIABLE
