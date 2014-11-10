@@ -8,7 +8,7 @@
 #include <vector>
 #include <algorithm>
 
-#include "UnitTest.h"
+#include <UnitCpp/Test.h>
 
 class ICarElement;
 class Wheel;
@@ -24,7 +24,7 @@ public:
   
   virtual ~IVisitor() = 0;
 private:
-  friend class utest_Visitor;
+  UNITCPP_FRIEND_TEST(Visitor, visit);
 };
 
 IVisitor::~IVisitor(){}
@@ -149,37 +149,22 @@ public:
     }
 private:
 
-  friend class utest_Visitor;
-
+  UNITCPP_FRIEND_TEST(Visitor, visit);
+  
   std::vector<std::string> m_wheels_visited;
   bool m_car_visited;
   bool m_body_visited;
 };
   
 //=============================================================================
-class utest_Visitor : public UnitTest {
-public:
-
-  void run_tests() {
-    print(__FILE__);
-    test_visit();
-  }
-
-private:
-
-  void test_visit();
-
-};
-
-//=============================================================================
-void utest_Visitor::test_visit()
+TEST(Visitor, visit)
 {
-  print(DGC_CURRENT_FUNCTION);
   Car car;
   Visitor visitor;
   car.accept(visitor);
-  test(
-    visitor.m_wheels_visited.size() == 4,
+  TEST_EQUAL(
+    visitor.m_wheels_visited.size(),
+    4,
     "Wrong number of wheels visited."
   );
   auto pos = std::find(
@@ -187,32 +172,47 @@ void utest_Visitor::test_visit()
     visitor.m_wheels_visited.end(),
     "Front Left"
   );
-  test(pos != visitor.m_wheels_visited.end(), "Did not find \"Front Left\"");
+  TEST_NOT_EQUAL(
+    pos,
+    visitor.m_wheels_visited.end(),
+    "Did not find \"Front Left\""
+  );
   pos = std::find(
     visitor.m_wheels_visited.begin(),
     visitor.m_wheels_visited.end(),
     "Front Right"
   );
-  test(pos != visitor.m_wheels_visited.end(), "Did not find \"Front Right\"");
+  TEST_NOT_EQUAL(
+    pos,
+    visitor.m_wheels_visited.end(),
+    "Did not find \"Front Right\""
+  );
   pos = std::find(
     visitor.m_wheels_visited.begin(),
     visitor.m_wheels_visited.end(),
     "Back Left"
   );
-  test(pos != visitor.m_wheels_visited.end(), "Did not find \"Back Left\"");
+  TEST_NOT_EQUAL(
+    pos,
+    visitor.m_wheels_visited.end(),
+    "Did not find \"Back Left\""
+  );
   pos = std::find(
     visitor.m_wheels_visited.begin(),
     visitor.m_wheels_visited.end(),
     "Back Right"
   );
-  test(pos != visitor.m_wheels_visited.end(), "Did not find \"Back Right\"");
-  test(visitor.m_body_visited, "Did not visit body.");
-  test(visitor.m_car_visited, "Did not visit car.");
+  TEST_NOT_EQUAL(
+    pos,
+    visitor.m_wheels_visited.end(),
+    "Did not find \"Back Right\""
+  );
+  TEST_TRUE(visitor.m_body_visited, "Did not visit body.");
+  TEST_TRUE(visitor.m_car_visited, "Did not visit car.");
 }
 
 //=============================================================================
-int main() {
-  utest_Visitor test;
-  test.run_tests();
-  return 0;
+int main(int argc, char** argv)
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }
