@@ -5,7 +5,7 @@
 #include <iostream>
 #include <vector>
 
-#include "UnitTest.h"
+#include <UnitCpp/Test.h>
 
 //=============================================================================
 int legecy_sum(const int* array, int size)
@@ -26,26 +26,8 @@ void fill_arrray(int* array, int size)
 }
 
 //=============================================================================
-class utest_VectorToCArray : public UnitTest {
-public:
-
-  void run_tests() {
-    print(__FILE__);
-    test_sum();
-    test_fill_array();
-  }
-
-private:
-
-  void test_sum();
-  void test_fill_array();
-
-};
-
-//=============================================================================
-void utest_VectorToCArray::test_sum()
+TEST(VectorToCArray, sum)
 {
-  print(DGC_CURRENT_FUNCTION);
   std::vector<int> array;
   array.push_back(1);
   array.push_back(2);
@@ -57,31 +39,29 @@ void utest_VectorToCArray::test_sum()
   array.push_back(8);
   array.push_back(9);
   array.push_back(10);
-  test(legecy_sum(&array[0], array.size()) == 55, "Wrong sum");
+  TEST_EQUAL(legecy_sum(&array[0], array.size()), 55, "Wrong sum");
 }
 
 //=============================================================================
-void utest_VectorToCArray::test_fill_array()
+TEST(VectorToCArray, fill_array)
 {
-  print(DGC_CURRENT_FUNCTION);
   // fill an array of size 10 with -1
   std::vector<int> array(10, -1);
   fill_arrray(&array[0], array.size());
-  test(array[0] == 0, "Array element wrong.");
-  test(array[1] == 1, "Array element wrong.");
-  test(array[2] == 4, "Array element wrong.");
-  test(array[3] == 9, "Array element wrong.");
-  test(array[4] == 16, "Array element wrong.");
-  test(array[5] == 25, "Array element wrong.");
-  test(array[6] == 36, "Array element wrong.");
-  test(array[7] == 49, "Array element wrong.");
-  test(array[8] == 64, "Array element wrong.");
-  test(array[9] == 81, "Array element wrong.");
+  TEST_EQUAL(array[0], 0, "Array element wrong.");
+  TEST_EQUAL(array[1], 1, "Array element wrong.");
+  TEST_EQUAL(array[2], 4, "Array element wrong.");
+  TEST_EQUAL(array[3], 9, "Array element wrong.");
+  TEST_EQUAL(array[4], 16, "Array element wrong.");
+  TEST_EQUAL(array[5], 25, "Array element wrong.");
+  TEST_EQUAL(array[6], 36, "Array element wrong.");
+  TEST_EQUAL(array[7], 49, "Array element wrong.");
+  TEST_EQUAL(array[8], 64, "Array element wrong.");
+  TEST_EQUAL(array[9], 81, "Array element wrong.");
 }
 
 //=============================================================================
-int main() {
-  utest_VectorToCArray test;
-  test.run_tests();
-  return 0;
+int main(int argc, char** argv)
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }

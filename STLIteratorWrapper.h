@@ -4,6 +4,7 @@
 #define STLIteratorWrapper_H
 
 #include "AbsIterator.h"
+#include <UnitCpp/Test.h>
 
 //=============================================================================
 template <typename ITER>
@@ -25,8 +26,8 @@ public:
   virtual const CONTAINED& operator()() const override;
 
 private:
-
-  friend class utest_STLIteratorWrapper;
+  
+  UNITCPP_FRIEND_TEST(STLIteratorWrapper, vector_iteration);
 
   const ITER m_begin;
   const ITER m_end;

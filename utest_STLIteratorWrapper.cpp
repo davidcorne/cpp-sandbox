@@ -3,77 +3,57 @@
 // 
 
 #include <iostream>
-
-#include "UnitTest.h"
-#include "STLIteratorWrapper.h"
-
 #include <vector>
 
-//=============================================================================
-class utest_STLIteratorWrapper : public UnitTest {
-public:
+#include <UnitCpp/Test.h>
 
-  void run_tests() {
-    print(__FILE__);
-    test_vector_iteration();
-    test_empty();
-  }
+#include "STLIteratorWrapper.h"
 
-private:
-
-  void test_vector_iteration();
-  void test_empty();
-
-};
 
 //=============================================================================
-void utest_STLIteratorWrapper::test_vector_iteration()
+TEST(STLIteratorWrapper, vector_iteration)
 {
-  print(DGC_CURRENT_FUNCTION);
   std::vector<int> container = {0, 1, 2, 3, 4, 5};
   STLIteratorWrapper<std::vector<int>::iterator> iter(
     std::begin(container),
     std::end(container)
   );
-  test(iter.m_iter == end(container), "Should start on an invalid iterator.");
-  test(++iter, "++ should give true.");
-  test(iter.m_iter == begin(container), "Should be at the beginning.");
+  TEST_EQUAL(iter.m_iter, end(container), "Should start on an invalid iterator.");
+  TEST_TRUE(++iter, "++ should give true.");
+  TEST_EQUAL(iter.m_iter, begin(container), "Should be at the beginning.");
 
-  test(iter() == 0, "Wrong element");
-  test(++iter, "++ should give true.");
+  TEST_EQUAL(iter(), 0, "Wrong element");
+  TEST_TRUE(++iter, "++ should give true.");
 
-  test(iter() == 1, "Wrong element");
-  test(++iter, "++ should give true.");
+  TEST_EQUAL(iter(), 1, "Wrong element");
+  TEST_TRUE(++iter, "++ should give true.");
 
-  test(iter() == 2, "Wrong element");
-  test(++iter, "++ should give true.");
+  TEST_EQUAL(iter(), 2, "Wrong element");
+  TEST_TRUE(++iter, "++ should give true.");
 
-  test(iter() == 3, "Wrong element");
-  test(++iter, "++ should give true.");
+  TEST_EQUAL(iter(), 3, "Wrong element");
+  TEST_TRUE(++iter, "++ should give true.");
 
-  test(iter() == 4, "Wrong element");
-  test(++iter, "++ should give true.");
+  TEST_EQUAL(iter(), 4, "Wrong element");
+  TEST_TRUE(++iter, "++ should give true.");
 
-  test(iter() == 5, "Wrong element");
-  test(!(++iter), "++ should give false.");
-
+  TEST_EQUAL(iter(), 5, "Wrong element");
+  TEST_FALSE(++iter, "++ should give false.");
 }
 
 //=============================================================================
-void utest_STLIteratorWrapper::test_empty()
+TEST(STLIteratorWrapper, empty)
 {
-  print(DGC_CURRENT_FUNCTION);
   std::vector<int> container;
   STLIteratorWrapper<std::vector<int>::iterator> iter(
     std::begin(container),
     std::end(container)
   );
-  test(!(++iter), "Should start false.");
+  TEST_FALSE(++iter, "Should start false.");
 }
 
 //=============================================================================
-int main() {
-  utest_STLIteratorWrapper test;
-  test.run_tests();
-  return 0;
+int main(int argc, char** argv) 
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }
