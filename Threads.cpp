@@ -11,8 +11,6 @@
 #include <vector>
 #include <mutex>
 
-#include "UnitTest.h"
-
 //=============================================================================
 class Outputter {
 public:

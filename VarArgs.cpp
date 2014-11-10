@@ -5,7 +5,7 @@
 #include <iostream>
 #include <stdarg.h>
 
-#include "UnitTest.h"
+#include <UnitCpp/Test.h>
 
 //=============================================================================
 class VarArgs {
@@ -27,30 +27,13 @@ private:
 };
 
 //=============================================================================
-class utest_VarArgs : public UnitTest {
-public:
-
-  void run_tests() {
-    print(__FILE__);
-    test_ctor();
-  }
-
-private:
-
-  void test_ctor();
-
-};
-
-//=============================================================================
-void utest_VarArgs::test_ctor()
+TEST(VarArgs, constructor)
 {
-  print(DGC_CURRENT_FUNCTION);
   VarArgs args(3, "Hi", "0.5", "anything");
 }
 
 //=============================================================================
-int main() {
-  utest_VarArgs test;
-  test.run_tests();
-  return 0;
+int main(int argc, char** argv) 
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }

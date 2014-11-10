@@ -6,7 +6,7 @@
 #include <sstream>
 #include <string>
 
-#include "UnitTest.h"
+#include <UnitCpp/Test.h>
 
 //=============================================================================
 class IEmployeeExporter {
@@ -40,7 +40,6 @@ public:
     }
       
 private:
-  friend class utest_UIBuilder;
   
   std::string m_name;
   double m_wage;
@@ -119,26 +118,8 @@ public:
 };
 
 //=============================================================================
-class utest_UIBuilder : public UnitTest {
-public:
-
-  void run_tests() {
-    print(__FILE__);
-    test_html_output();
-    test_json_output();
-  }
-
-private:
-
-  void test_html_output();
-  void test_json_output();
-
-};
-
-//=============================================================================
-void utest_UIBuilder::test_html_output()
+TEST(UIBuilder, html)
 {
-  print(DGC_CURRENT_FUNCTION);
   Employee fred("Fred", 40000, "01fg6");
   EmployeeHTMLExporter exporter;
   fred.output(exporter);
@@ -148,13 +129,12 @@ void utest_UIBuilder::test_html_output()
                 "  <tr><td>ID:</td><td>01fg6</td></tr>\n"
                 "</table>"
   );
-  test(result == exporter.out(), "Wrong html output.");  
+  TEST_EQUAL(result, exporter.out(), "Wrong html output.");  
 }
 
 //=============================================================================
-void utest_UIBuilder::test_json_output()
+TEST(UIBuilder, json)
 {
-  print(DGC_CURRENT_FUNCTION);
   Employee fred("Fred", 40000, "01fg6");
   EmployeeJSONExporter exporter;
   fred.output(exporter);
@@ -164,13 +144,12 @@ void utest_UIBuilder::test_json_output()
                 "\"id\": \"01fg6\",\n"
                 "}"
   );
-  test(expected_result == exporter.out(), "Wrong json output.");  
+  TEST_EQUAL(expected_result, exporter.out(), "Wrong json output.");  
 }
 
 //=============================================================================
-int main() {
-  utest_UIBuilder test;
-  test.run_tests();
-  return 0;
+int main(int argc, char** argv) 
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }
 
