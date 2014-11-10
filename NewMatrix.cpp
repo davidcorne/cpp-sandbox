@@ -94,6 +94,9 @@ Matrix<T, N, M> operator*(const Matrix<T, N, M>& matrix, const T& scalar);
 template <typename T, unsigned int N, unsigned int M, unsigned int P, unsigned int Q>
 bool operator==(const Matrix<T, N, M>& a, const Matrix<T, P, Q>& b);
 
+template <typename T, unsigned int N, unsigned int M, unsigned int P, unsigned int Q>
+bool operator!=(const Matrix<T, N, M>& a, const Matrix<T, P, Q>& b);
+
 
 //----- Tests
 
@@ -387,6 +390,46 @@ TEST(Matrix, equality)
 }
 
 //=============================================================================
+TEST(Matrix, inequality)
+{
+  auto ones = [](unsigned int i, unsigned int j) {return 1.0;};
+  Matrix<double, 3, 2> a(ones);
+  Matrix<double, 3, 3> b(ones);
+  Matrix<double, 3, 2> c(ones);
+  //     1 1     1 1 1     1 1
+  // a = 1 1 b = 1 1 1 c = 1 1 
+  //     1 1     1 1 1     1 1
+  
+  TEST_FALSE(a != a);
+  TEST_TRUE(a != b);
+  TEST_FALSE(a != c);
+
+  TEST_TRUE(b != a);
+  TEST_FALSE(b != b);
+  TEST_TRUE(b != c);
+
+  TEST_FALSE(c != a);
+  TEST_TRUE(c != b);
+  TEST_FALSE(c != c);
+
+  c[2][1] = 2;
+  //     1 1     1 1 1     1 1
+  // a = 1 1 b = 1 1 1 c = 1 1 
+  //     1 1     1 1 1     1 2
+  TEST_FALSE(a != a);
+  TEST_TRUE(a != b);
+  TEST_TRUE(a != c);
+
+  TEST_TRUE(b != a);
+  TEST_FALSE(b != b);
+  TEST_TRUE(b != c);
+
+  TEST_TRUE(c != a);
+  TEST_TRUE(c != b);
+  TEST_FALSE(c != c);
+}
+
+//=============================================================================
 TEST(Matrix, transpose)
 {
   Matrix<int, 2, 3> matrix(
@@ -578,6 +621,7 @@ Matrix<T, N, P> operator*(const Matrix<T, N, M>& a, const Matrix<T, M, P>& b)
   return Matrix<T, N, P>(summation);
 }
 
+//=============================================================================
 template <typename T, unsigned int N, unsigned int M, unsigned int P, unsigned int Q>
 bool operator==(const Matrix<T, N, M>& a, const Matrix<T, P, Q>& b)
 {
@@ -592,4 +636,11 @@ bool operator==(const Matrix<T, N, M>& a, const Matrix<T, P, Q>& b)
     return true;
   }
   return false;
+}
+
+//=============================================================================
+template <typename T, unsigned int N, unsigned int M, unsigned int P, unsigned int Q>
+bool operator!=(const Matrix<T, N, M>& a, const Matrix<T, P, Q>& b)
+{
+  return !(a == b);
 }
