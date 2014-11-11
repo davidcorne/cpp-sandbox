@@ -1,6 +1,7 @@
 //to see if dividing by zero compiles
 
-#pragma GCC diagnostic ignored "-Wunused-variable"
+#define UNUSED_VARIABLE
+#include "IgnoreDiagnostics.h"
 
 int main()
 // main function

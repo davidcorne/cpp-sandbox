@@ -1,6 +1,8 @@
 //=============================================================================
 // A C++ 11 style matrix
 
+#include "Capabilities.h"
+#if CAPABILITY_CONSTEXPR
 #include <array>
 #include <iostream>
 #include <UnitCpp/Test.h>
@@ -644,3 +646,7 @@ bool operator!=(const Matrix<T, N, M>& a, const Matrix<T, P, Q>& b)
 {
   return !(a == b);
 }
+
+#else
+UNSUPPORTED_FEATURE_MAIN;
+#endif

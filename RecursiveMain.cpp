@@ -1,6 +1,9 @@
 //
 // 
 
+#define RECURSIVE_ON_ALL_PATHS 1
+#include "IgnoreDiagnostics.h"
+
 #include <iostream>
 
 static int COUNT = 0;

@@ -1,7 +1,9 @@
 //=============================================================================
 //
 // Idea from http://www.drdobbs.com/cpp/mixin-based-programming-in-c/184404445
- 
+
+#include "Capabilities.h"
+#if CAPABILITY_VARIADIC_TEMPLATES
 
 #include <iostream>
 #include <string>
@@ -152,3 +154,7 @@ int main() {
   me.print();
   return 0;
 }
+
+#else
+UNSUPPORTED_FEATURE_MAIN;
+#endif

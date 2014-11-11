@@ -3,6 +3,8 @@
 #ifndef Range_H
 #define Range_H
 
+#include "Capabilities.h"
+#if CAPABILITY_DELEGATING_CONSTRUCTOR
 #include "RangeIter.h"
 
 //=============================================================================
@@ -106,4 +108,7 @@ RangeIter<T> Range<T>::end()
   return RangeIter<T>(nullptr);
 }
 
+#else
+#error "CAPABILITY_DELEGATING_CONSTRUCTOR"
+#endif
 #endif

@@ -3,15 +3,13 @@
 
 #include <thread>
 #include <chrono>
-
-#include "Printer.h"
+#include <iostream>
 
 //=============================================================================
 int main()
 {
-  Printer printer(std::cout);
-  printer.print("Starting program, will sleep for 1 second.");
+  std::cout << "Starting program, will sleep for 1 second." << std::endl;
   std::this_thread::sleep_for(std::chrono::seconds(1));
-  printer.print("End.");
+  std::cout << "End." << std::endl;
   return 0;
 }

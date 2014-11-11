@@ -48,7 +48,7 @@ bool Path::operator!=(Path other) const
 bool Path::exists() const
 {
   std::ifstream ifile(m_path);
-  return ifile;
+  return !!ifile;
 }
 
 //=============================================================================

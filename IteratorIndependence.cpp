@@ -3,6 +3,8 @@
 // Very much inspired by this:
 // http://www.drdobbs.com/typedefs-and-iterators-if-youve-got-em-u/184401853
 
+#include "Capabilities.h"
+#if CAPABILITY_INITIALISER_LISTS
 #include <iostream>
 #include <vector>
 #include <list>
@@ -86,3 +88,8 @@ typename ITER::value_type GeneralSummer::sum(ITER first, ITER last) const
   }
   return total;
 }
+
+#else
+UNSUPPORTED_FEATURE_MAIN
+#endif
+

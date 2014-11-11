@@ -2,6 +2,8 @@
 //
 // 
 
+#include "Capabilities.h"
+#if CAPABILITY_INITIALISER_LISTS
 #include <iostream>
 #include <vector>
 #include <math.h>
@@ -159,4 +161,8 @@ bool PrimeGenerator::PrimeIterator::prime(BigNum number) const
   }
   return true;
 }
+
+#else
+UNSUPPORTED_FEATURE_MAIN;
+#endif
 

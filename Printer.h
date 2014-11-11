@@ -32,5 +32,5 @@ void print(Args... arguments);
 #include "Printer_source.h"
 #else
 #error "Variadic templates not supported."
-#endif
-#endif
+#endif // CAPABILITY_VARIADIC_TEMPLATES
+#endif // Printer_H

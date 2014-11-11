@@ -9,6 +9,9 @@
 // can then be used where only compile time constant expressions are allowed.
 // constexpr implies const.
 
+#include "Capabilities.h"
+#if CAPABILITY_USER_DEFINED_LITERALS
+
 #include <iostream>
 
 // cooked literal
@@ -108,4 +111,8 @@ Length operator"" _inches(unsigned long long mil)
   return Length::InInches(static_cast<double>(mil));
 }
 
+
+#else
+UNSUPPORTED_FEATURE_MAIN;
+#endif
 

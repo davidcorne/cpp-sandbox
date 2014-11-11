@@ -1,5 +1,7 @@
 //=============================================================================
 
+#include "Capabilities.h"
+#if CAPABILITY_INITIALISER_LISTS
 #include <iostream>
 
 
@@ -20,3 +22,6 @@ int main()
     std::cout << num << ": " << is_prime(num) << "\n";
   }
 }
+#else
+UNSUPPORTED_FEATURE_MAIN;
+#endif

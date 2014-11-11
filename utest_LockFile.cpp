@@ -3,6 +3,7 @@
 //D An RAII file locker. On creation, this will lock the file given.
 //
 
+#include "Compiler.h"
 #include <assert.h>
 
 #include <UnitCpp/Test.h>
@@ -62,6 +63,7 @@ TEST(LockedFile, overwrite)
 //=============================================================================
 TEST(LockedFile, multiple_read)
 {
+#if COMPILER_TYPE != COMPILER_TYPE_VS
   // write a file
   Path path("lock_file.txt");
   std::string contents("File contents\n\nOn multiple lines");
@@ -78,11 +80,13 @@ TEST(LockedFile, multiple_read)
   // Clean up
   int result = remove(path.path().c_str());
   TEST_EQUAL(result, 0);
+#endif
 }
 
 //=============================================================================
 TEST(LockedFile, read)
 {
+#if COMPILER_TYPE != COMPILER_TYPE_VS
   // write a file
   Path path("lock_file.txt");
   std::string contents("File contents\n\nOn multiple lines");
@@ -96,6 +100,7 @@ TEST(LockedFile, read)
   // Clean up
   int result = remove(path.path().c_str());
   TEST_EQUAL(result, 0);
+#endif
 }
 
 //=============================================================================

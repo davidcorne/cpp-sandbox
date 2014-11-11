@@ -7,10 +7,6 @@
 //   #include "IgnoreDiagnostics.h"
 //   #undef UNUSED_PRIVATE_FIELD
 
-
-#ifndef IgnoreDiagnostics_H
-#define IgnoreDiagnostics_H
-
 #include "Compiler.h"
 
 #ifdef UNNEEDED_INTERNAL_DECLARATION
@@ -32,8 +28,15 @@
 #pragma clang diagnostic ignored "-Wunused-variable"
 #elif COMPILER_TYPE == COMPILER_TYPE_GCC
 #pragma GCC diagnostic ignored "-Wunused-variable"
+#elif COMPILER_TYPE == COMPILER_TYPE_VS
+#pragma warning(disable : 4101)
 #endif // COMPILER_TYPE 
 #undef UNUSED_VARIABLE
 #endif // UNUSED_VARIABLE
 
-#endif
+#ifdef RECURSIVE_ON_ALL_PATHS
+#if COMPILER_TYPE == COMPILER_TYPE_VS
+#pragma warning(disable : 4717)
+#endif // COMPILER_TYPE 
+#undef UNUSED_VARIABLE
+#endif // UNUSED_VARIABLE

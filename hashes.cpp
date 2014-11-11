@@ -1,8 +1,17 @@
+//=============================================================================
+#include "Compiler.h"
+
+#if COMPILER_TYPE != COMPILER_TYPE_VS
+
 #include <iostream>
 
-#define UT_JOIN(a, args...) a ## args
-#pragma GCC diagnostic ignored "-Wunused-variable"
 
+#define UNUSED_VARIABLE 1
+#include "IgnoreDiagnostics.h"
+
+#define UT_JOIN(a, args...) a ## args
+
+//=============================================================================
 int main() {
   int ab = 2;
   int abc = 53;
@@ -10,3 +19,7 @@ int main() {
   std::cout << cd << std::endl;
   return 0;
 }
+
+#else
+UNSUPPORTED_FEATURE_MAIN;
+#endif

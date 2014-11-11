@@ -2,6 +2,8 @@
 #include "Path.h"
 #include <sstream>
 
+#include "Compiler.h"
+
 #include <UnitCpp/Test.h>
 
 //=============================================================================
@@ -37,9 +39,11 @@ TEST(Path, exists)
   Path test_file("data/test.txt");
   TEST_TRUE(test_file.exists());
 
+#if COMPILER_TYPE != COMPILER_TYPE_VS
   Path test_directory("data");
   TEST_TRUE(test_directory.exists());
-
+#endif
+  
   Path test_nonexistant_directory("data2");
   TEST_FALSE(test_nonexistant_directory.exists());
 

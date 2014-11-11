@@ -5,7 +5,9 @@
 // encapsulation and is extremely fragile) but an interesting idea to try, 
 
 #include <iostream>
-// #include <const char*>
+
+#include "Capabilities.h"
+#if CAPABILITY_VARIADIC_TEMPLATES
 
 #define UNUSED_PRIVATE_FIELD 1
 #include "IgnoreDiagnostics.h"
@@ -140,3 +142,7 @@ int main() {
   std::cout << *int_ptr << std::endl;
   return 0;
 }
+
+#else
+UNSUPPORTED_FEATURE_MAIN;
+#endif

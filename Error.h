@@ -20,7 +20,14 @@ public:
 typedef std::shared_ptr<Error> ErrorPtr;
 
 //----- Source
-Error::Error() = default;
-Error::~Error() = default;
+//=============================================================================
+Error::Error()
+{
+}
+
+//=============================================================================
+Error::~Error()
+{
+}
 
 #endif

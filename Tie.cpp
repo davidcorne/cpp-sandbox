@@ -3,14 +3,13 @@
 // 
 
 #include <UnitCpp/Test.h>
+#include <tuple>
 
 //=============================================================================
 class Point {
 public:
 
   Point(double a, double b);
-  Point(const Point& point);
-  Point& operator=(const Point& point);
   ~Point();
 
   double a() const;
@@ -39,9 +38,9 @@ Point::Point(double a, double b)
 }
 
 //=============================================================================
-Point::~Point() = default;
-Point::Point(const Point& point) = default;
-Point& Point::operator=(const Point& point) = default;
+Point::~Point()
+{
+}
 
 //=============================================================================
 double Point::a() const

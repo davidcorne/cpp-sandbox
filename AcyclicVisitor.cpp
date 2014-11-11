@@ -126,6 +126,9 @@ public:
 
 private:
 
+  ortParamaterTranslator(const ortParamaterTranslator&);
+  ortParamaterTranslator& operator=(const ortParamaterTranslator&);
+  
   odiParameters& m_parameters;
   
 };
@@ -145,6 +148,10 @@ public:
   double orthotic_thickness() const;
   
 private:
+
+  ortParameterDataModel(const ortParameterDataModel&);
+  ortParameterDataModel& operator=(const ortParameterDataModel&);
+  
   ortParamaterTranslator m_translator;
 };
 

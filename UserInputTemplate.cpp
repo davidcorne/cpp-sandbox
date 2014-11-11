@@ -2,6 +2,9 @@
 //
 // This is a conditional templatised input function.
 
+#include "Capabilities.h"
+#if CAPABILITY_GENERIC_LAMBDAS
+
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -53,3 +56,7 @@ int main()
   
   return 0;
 }
+
+#else
+UNSUPPORTED_FEATURE_MAIN;
+#endif

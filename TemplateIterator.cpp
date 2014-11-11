@@ -2,6 +2,9 @@
 // Trying out a little type deduction, algorithms independent of iterator type
 // and trailing return type function syntax.
 
+#include "Capabilities.h"
+#if CAPABILITY_INITIALISER_LISTS
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -34,3 +37,7 @@ auto summation(ITER begin, ITER end, typename ITER::value_type start) -> typenam
   }
   return result;
 }
+
+#else
+UNSUPPORTED_FEATURE_MAIN;
+#endif

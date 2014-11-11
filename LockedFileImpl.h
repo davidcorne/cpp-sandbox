@@ -28,8 +28,13 @@ std::unique_ptr<LockedFileImpl> lock_file(Path path, ErrorPtr& error);
 #include "WindowsLockedFileImpl.h"
 #include "LinuxLockedFileImpl.h"
 
-LockedFileImpl::LockedFileImpl() = default;
-LockedFileImpl::~LockedFileImpl() = default;
+LockedFileImpl::LockedFileImpl()
+{
+}
+
+LockedFileImpl::~LockedFileImpl()
+{
+}
 
 //=============================================================================
 std::unique_ptr<LockedFileImpl> lock_file(Path path, ErrorPtr& error)

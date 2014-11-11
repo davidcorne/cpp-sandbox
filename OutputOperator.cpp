@@ -1,5 +1,8 @@
 //=============================================================================
 
+#include "Capabilities.h"
+#if CAPABILITY_DEFAULTED_FUNCTIONS
+
 #include <iostream>
 #include <string>
 #include <map>
@@ -102,3 +105,6 @@ std::string Shoe::repr() const
   return result;
 }
   
+#else
+UNSUPPORTED_FEATURE_MAIN;
+#endif

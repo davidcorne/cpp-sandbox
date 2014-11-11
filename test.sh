@@ -6,7 +6,7 @@ set -e
 tested_compilers=""
 
 declare -A commands=(["clang"]="clang" ["vs"]="cl" ["gcc"]="g++")
-broken=("vs")
+broken=()
 
 for key in "${!commands[@]}"
 do

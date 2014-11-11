@@ -3,6 +3,8 @@
 //D Inspired by
 // http://gameprogrammingpatterns.com/event-queue.html
 
+#include "Capabilities.h"
+#if CAPABILITY_INITIALISER_LISTS
 #include <assert.h>
 #include <iostream>
 #include <string>
@@ -115,3 +117,7 @@ int main(int argc, char** argv)
 {
   return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }
+#else
+UNSUPPORTED_FEATURE_MAIN;
+#endif
+

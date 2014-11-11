@@ -115,7 +115,10 @@ void WindowsLockedFileImpl::write(std::string contents)
   );
   assert(ok);
   // If the file is longer you want to overwrite it all.
-  DWORD to_write = std::max<DWORD>(file_size.LowPart, contents.size());
+  DWORD to_write = std::max<DWORD>(
+    file_size.LowPart,
+    static_cast<DWORD>(contents.size())
+  );
   DWORD bytes_written;
   WriteFile(
     m_file_handle->handle, // HANDLE hFile,

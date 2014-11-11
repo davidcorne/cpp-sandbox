@@ -1,3 +1,8 @@
+//=============================================================================
+
+#include "Capabilities.h"
+#if CAPABILITY_VARIADIC_TEMPLATES
+
 #include <iostream>
 #include <string>
 
@@ -35,3 +40,7 @@ int main()
   Mixin<Base2, int, int> m2("hi", 0, 1);
   return 0;
 }
+
+#else
+UNSUPPORTED_FEATURE_MAIN;
+#endif

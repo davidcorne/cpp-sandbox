@@ -8,19 +8,19 @@
 #include <UnitCpp/Test.h>
 
 //=============================================================================
-int legecy_sum(const int* array, int size)
+int legecy_sum(const int* array, size_t size)
 {
   int sum = 0;
-  for (int i = 0; i < size; ++i) {
+  for (size_t i = 0; i < size; ++i) {
     sum += array[i];
   }
   return sum;
 }
 
 //=============================================================================
-void fill_arrray(int* array, int size)
+void fill_arrray(int* array, size_t size)
 {
-  for (int i = 0; i < size; ++i) {
+  for (int i = 0; i < static_cast<int>(size); ++i) {
     array[i] = i * i;
   }
 }

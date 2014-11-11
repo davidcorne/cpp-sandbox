@@ -1,3 +1,8 @@
+
+#define UNUSED_VARIABLE 1
+#include "IgnoreDiagnostics.h"
+
+
 #include <iostream>
 #include <string>
 

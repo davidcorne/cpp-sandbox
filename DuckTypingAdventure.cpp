@@ -2,6 +2,8 @@
 //
 // 
 
+#include "Capabilities.h"
+#if CAPABILITY_VARIADIC_TEMPLATES
 #include "DuckTyping.h"
 #include <random>
 #include <chrono>
@@ -210,3 +212,6 @@ int main() {
   }
   return 0;
 }
+#else
+UNSUPPORTED_FEATURE_MAIN;
+#endif

@@ -53,7 +53,7 @@ TEST(MachineEpsilon, float)
 //=============================================================================
 TEST(MachineEpsilon, double)
 {
-  float eps = machine_eps<double, uint64_t>();
+  double eps = machine_eps<double, uint64_t>();
   TEST_EQUAL(std::numeric_limits<double>::epsilon(), eps, "Wrong calculated eps.");
 }
 

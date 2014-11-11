@@ -11,9 +11,13 @@
 
 #define CAPABILITY_ATOMICS 1
 #define CAPABILITY_CONSTEXPR 1
+#define CAPABILITY_DELEGATING_CONSTRUCTOR 1
+#define CAPABILITY_DEFAULTED_FUNCTIONS 1
 #define CAPABILITY_DIGRAPHS 1
 #define CAPABILITY_GENERIC_LAMBDAS 1
+#define CAPABILITY_INITIALISER_LISTS 1
 #define CAPABILITY_THREAD_LOCAL_VARIABLES 1
+#define CAPABILITY_USER_DEFINED_LITERALS 1
 #define CAPABILITY_VARIADIC_TEMPLATES 1
 
 #if COMPILER_TYPE == COMPILER_TYPE_GCC
@@ -36,10 +40,30 @@
 #define CAPABILITY_CONSTEXPR 0
 #endif // __has_feature(cxx_constexpr)
 
+#if !__has_feature(cxx_delegating_constructors)
+#undef CAPABILITY_DELEGATING_CONSTRUCTOR
+#define CAPABILITY_DELEGATING_CONSTRUCTOR 0
+#endif // __has_feature(cxx_delegating_constructors)
+
+#if !__has_feature(cxx_defaulted_functions)
+#undef CAPABILITY_DEFAULTED_FUNCTIONS
+#define CAPABILITY_DEFAULTED_FUNCTIONS 0
+#endif // __has_feature(cxx_defaulted_functions)
+
+#if !__has_feature(cxx_generalized_initializers)
+#undef CAPABILITY_INITIALISER_LISTS
+#define CAPABILITY_INITIALISER_LISTS 1
+#endif // !__has_feature(cxx_generalized_initializers)
+
 #if !__has_feature(cxx_thread_local)
 #undef CAPABILITY_THREAD_LOCAL_VARIABLES
 #define CAPABILITY_THREAD_LOCAL_VARIABLES 0
 #endif // __has_feature(cxx_thread_local)
+
+#if !__has_feature(cxx_user_literals)
+#undef CAPABILITY_USER_DEFINED_LITERALS
+#define CAPABILITY_USER_DEFINED_LITERALS 0
+#endif //!__has_feature(cxx_user_literals)
 
 #if !__has_feature(cxx_variadic_templates)
 #undef CAPABILITY_VARIADIC_TEMPLATES
@@ -56,8 +80,6 @@
 #endif // COMPILER_TYPE == COMPILER_TYPE_CLANG
 
 #if COMPILER_TYPE == COMPILER_TYPE_VS
-#undef CAPABILITY_DIGRAPHS
-#define CAPABILITY_DIGRAPHS 0
 // MSVC++ 12.0 VERSION == 1800 (Visual Studio 2013)
 // MSVC++ 11.0 VERSION == 1700 (Visual Studio 2012)
 // MSVC++ 10.0 VERSION == 1600 (Visual Studio 2010)
@@ -68,15 +90,35 @@
 // MSVC++ 6.0  VERSION == 1200
 // MSVC++ 5.0  VERSION == 1100
 
+#undef CAPABILITY_DIGRAPHS
+#define CAPABILITY_DIGRAPHS 0
+
+#undef CAPABILITY_CONSTEXPR
+#define CAPABILITY_CONSTEXPR 0
+
+// VS14 CTP1
+#if VERSION < 1900
+#undef CAPABILITY_USER_DEFINED_LITERALS
+#define CAPABILITY_USER_DEFINED_LITERALS 0
+#endif // VERSION < 1900
+
 #if VERSION < 1800
+#undef CAPABILITY_DELEGATING_CONSTRUCTOR
+#define CAPABILITY_DELEGATING_CONSTRUCTOR 0
+#undef CAPABILITY_DEFAULTED_FUNCTIONS
+#define CAPABILITY_DEFAULTED_FUNCTIONS 0
+#undef CAPABILITY_GENERIC_LAMBDAS
+#define CAPABILITY_GENERIC_LAMBDAS 0
+#undef CAPABILITY_INITIALISER_LISTS
+#define CAPABILITY_INITIALISER_LISTS 0
 #undef CAPABILITY_VARIADIC_TEMPLATES
 #define CAPABILITY_VARIADIC_TEMPLATES 0
-#endif // VERSION >= 1800
+#endif // VERSION < 1800
 
 #if VERSION < 1700
 #undef CAPABILITY_ATOMICS
 #define CAPABILITY_ATOMICS 0
-#endif // VERSION >= 1700
+#endif // VERSION < 1700
 
 #endif // COMPILER_TYPE == COMPILER_TYPE_VS
 #endif

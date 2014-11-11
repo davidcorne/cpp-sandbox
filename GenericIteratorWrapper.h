@@ -52,7 +52,8 @@ template <typename CONTAINER>
 GenericIteratorWrapper<CONTAINER>::GenericIteratorWrapper(
   CONTAINER& container
 )
-  : GenericIteratorWrapper(container, -1)
+  : m_container(container),
+    m_pos(-1)
 {
 }
 

@@ -3,6 +3,9 @@
 //D To show some inline assembly.
 //
 
+#include "Compiler.h"
+#if COMPILER_TYPE != COMPILER_TYPE_VS
+
 #include <iostream>
 #include <assert.h>
 
@@ -20,3 +23,7 @@ int main(void)
   assert(result == 25);
   return 0;
 }
+
+#else
+UNSUPPORTED_FEATURE_MAIN;
+#endif

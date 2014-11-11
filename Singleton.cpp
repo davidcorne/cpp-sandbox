@@ -2,6 +2,8 @@
 //
 //D
 
+#include "Capabilities.h"
+#if CAPABILITY_VARIADIC_TEMPLATES
 #include <iostream>
 
 // types: classes, enums, typedefs, namespaces
@@ -112,3 +114,8 @@ int main()
   
   return 0;
 }
+
+#else
+UNSUPPORTED_FEATURE_MAIN;
+#endif
+

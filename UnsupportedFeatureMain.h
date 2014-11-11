@@ -7,14 +7,14 @@
 
 #include <iostream>
 
-#define UNSUPPORTED_FEATURE_MAIN \
-  int main() \
-  { \
-    std::cout \
+#define UNSUPPORTED_FEATURE_MAIN                              \
+  int main()                                                  \
+  {                                                           \
+    std::cout                                                 \
       << "This program uses a compiler feature which is not " \
-      << "supported by the compiler used in it's creation."\
-      << std::endl; \
-    return 0; \
-  } \
+      << "supported by the compiler used in it's creation."   \
+      << std::endl;                                           \
+    return 0;                                                 \
+  }                                                           \
 
 #endif
