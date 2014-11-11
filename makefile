@@ -45,7 +45,7 @@ endif
 TEST_SIN_BIN = $(shell cat sin_bin.txt | grep "^TEST: " | sed -e 's/TEST: //')
 
 
-TO_TEST =  $(shell grep -l "\(class *utest_\)\|\(<UnitCpp\)" *.cpp | \
+TO_TEST =  $(shell grep -l "<UnitCpp" *.cpp | \
              sed -e 's/\.cpp/\.exe/' \
              $(foreach test, $(TEST_SIN_BIN), | grep -v $(test)) \
            )
@@ -94,7 +94,8 @@ all: $(EXE_FILES)
 #------------------------------------------------------------------------------
 $(EXE_DIRECTORY)/%.exe: $(OBJ_DIRECTORY)/%.obj
 	@mkdir -p $(EXE_DIRECTORY)
-	$(COMPILER) $(COMPILER_ARGS) $(OUT_EXE_FILE)$@ $<
+	$(COMPILER) $(COMPILER_ARGS) $< \
+        $(OUT_EXE_FILE)$@
 
 #==============================================================================
 .PRECIOUS: $(OBJ_DIRECTORY)/%.obj
@@ -103,7 +104,8 @@ $(EXE_DIRECTORY)/%.exe: $(OBJ_DIRECTORY)/%.obj
 $(OBJ_DIRECTORY)/%.obj: %.$(EXT)
 	@mkdir -p deps $(OBJ_DIRECTORY)
 	@echo ""
-	$(COMPILER) $(COMPILER_ARGS) $(NO_LINK) $(GENERATE_DEPENDENCIES) $(OUT_OBJECT_FILE)$@ $<
+	$(COMPILER) $(COMPILER_ARGS) $(NO_LINK) $(GENERATE_DEPENDENCIES) \$< \
+        $(OUT_OBJECT_FILE)$@
 # vs type compilers don't make the .P files, so 2>/dev/null; true hides the 
 # error output and tells make these commands succeeded.
 	@cp $(OBJ_DIRECTORY)/$*.d deps/$*.P 2>/dev/null; true
