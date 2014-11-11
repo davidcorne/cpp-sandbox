@@ -35,7 +35,7 @@ ifeq ($(COMPILER_TYPE), vs)
   COMPILER = cl
   # a bit of a hack because I know I'm in cygwin if I'm using cl in a makefile.
   INCLUDES = /I.. /I$(shell cygpath -w $$(pkg-config --cflags-only-I unitcpp | sed -e 's:-I::') | sed -e 's:\\:/:g')
-  COMPILER_ARGS = $(INCLUDES) /W4 /wd4481 /WX /EHsc
+  COMPILER_ARGS = $(INCLUDES) /nologo /W4 /wd4481 /WX /EHsc
   OUT_EXE_FILE = /Fe
   OUT_OBJECT_FILE = /Fo
   NO_LINK = /c
@@ -104,14 +104,15 @@ $(EXE_DIRECTORY)/%.exe: $(OBJ_DIRECTORY)/%.obj
 $(OBJ_DIRECTORY)/%.obj: %.$(EXT)
 	@mkdir -p deps $(OBJ_DIRECTORY)
 	@echo ""
-	$(COMPILER) $(COMPILER_ARGS) $(NO_LINK) $(GENERATE_DEPENDENCIES) \$< \
+	$(COMPILER) $(COMPILER_ARGS) $(NO_LINK) $(GENERATE_DEPENDENCIES) $< \
         $(OUT_OBJECT_FILE)$@
-# vs type compilers don't make the .P files, so 2>/dev/null; true hides the 
-# error output and tells make these commands succeeded.
-	@cp $(OBJ_DIRECTORY)/$*.d deps/$*.P 2>/dev/null; true
+# vs type compilers don't make the .P files, so make this part conditional
+ifneq ($(COMPILER_TYPE), vs)
+	@cp $(OBJ_DIRECTORY)/$*.d deps/$*.P
 	@sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
-        -e '/^$$/ d' -e 's/$$/ :/' < $(OBJ_DIRECTORY)/$*.d >> deps/$*.P 2>/dev/null; true
-	@rm -f $(OBJ_DIRECTORY)/$*.d 2>/dev/null; true
+         -e '/^$$/ d' -e 's/$$/ :/' < $(OBJ_DIRECTORY)/$*.d >> deps/$*.P
+	@rm -f $(OBJ_DIRECTORY)/$*.d
+endif
 
 #==============================================================================
 .DELETE_ON_ERROR: $(RESULT_DIRECTORY)/%.test_result
