@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "Capabilities.h"
-#ifdef DIGRAPHS
+#if CAPABILITY_DIGRAPHS
 
 //=============================================================================
 class Example {

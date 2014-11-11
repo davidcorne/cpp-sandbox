@@ -3,7 +3,7 @@
 
 #include "Capabilities.h"
 
-#ifdef VARIADIC_TEMPLATES
+#if CAPABILITY_VARIADIC_TEMPLATES
 #include "Printer.h"
 
 //=============================================================================

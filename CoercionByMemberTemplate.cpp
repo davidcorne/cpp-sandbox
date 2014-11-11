@@ -4,7 +4,7 @@
 // http://en.wikibooks.org/wiki/More_C%2B%2B_Idioms/Coercion_by_Member_Template
 
 #include "Capabilities.h"
-#ifdef VARIADIC_TEMPLATES
+#if CAPABILITY_VARIADIC_TEMPLATES
 
 #include <assert.h>
 #include <iostream>

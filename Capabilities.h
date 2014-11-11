@@ -6,41 +6,57 @@
 #include "Version.h"
 #include "UnsupportedFeatureMain.h"
 
-#if COMPILER_TYPE == COMPILER_TYPE_GCC
-#if VERSION > 40300
-#define VARIADIC_TEMPLATES 1
-#define ATOMICS 1
-#define CONSTEXPR 1
-#endif // VERSION > 40300
+#ifndef Capabilities_H
+#define Capabilities_H
 
-#define DIGRAPHS 1
+#define CAPABILITY_ATOMICS 1
+#define CAPABILITY_CONSTEXPR 1
+#define CAPABILITY_DIGRAPHS 1
+#define CAPABILITY_GENERIC_LAMBDAS 1
+#define CAPABILITY_THREAD_LOCAL_VARIABLES 1
+#define CAPABILITY_VARIADIC_TEMPLATES 1
+
+#if COMPILER_TYPE == COMPILER_TYPE_GCC
+#if VERSION < 40900
+#undef CAPABILITY_GENERIC_LAMBDAS
+#define CAPABILITY_GENERIC_LAMBDAS 0
+#endif // VERSION > 40900
+
 
 #endif // COMPILER_TYPE == COMPILER_TYPE_GCC
 
 #if COMPILER_TYPE == COMPILER_TYPE_CLANG
-#if __has_feature(cxx_variadic_templates)
-#define VARIADIC_TEMPLATES 1
-#endif // __has_feature(cxx_variadic_templates)#
-
-#if __has_feature(c_atomic)
-#define ATOMICS 1
+#if !__has_feature(c_atomic)
+#undef CAPABILITY_ATOMICS
+#define CAPABILITY_ATOMICS 0
 #endif // __has_feature(c_atomic)
 
-#if __has_feature(cxx_constexpr)
-#define CONSTEXPR 1
+#if !__has_feature(cxx_constexpr)
+#undef CAPABILITY_CONSTEXPR
+#define CAPABILITY_CONSTEXPR 0
 #endif // __has_feature(cxx_constexpr)
 
+#if !__has_feature(cxx_thread_local)
+#undef CAPABILITY_THREAD_LOCAL_VARIABLES
+#define CAPABILITY_THREAD_LOCAL_VARIABLES 0
+#endif // __has_feature(cxx_thread_local)
+
+#if !__has_feature(cxx_variadic_templates)
+#undef CAPABILITY_VARIADIC_TEMPLATES
+#define CAPABILITY_VARIADIC_TEMPLATES 0
+#endif // __has_feature(cxx_variadic_templates)
+
 // it appears that __has_feature(cxx_generic_lambdas) is not working in my
-// version of clang, just define this if we are in clang.
-// <nnn> #if __has_feature(cxx_generic_lambdas)
-#define GENERIC_LAMBDAS 1
+// version of clang.
+// <nnn> #if ! __has_feature(cxx_generic_lambdas)
+// <nnn> #undef CAPABILITY_GENERIC_LAMBDAS
+// <nnn> #define CAPABILITY_GENERIC_LAMBDAS 0
 // <nnn> #endif // __has_feature(cxx_generic_lambdas)
 
-#define DIGRAPHS 1
 #endif // COMPILER_TYPE == COMPILER_TYPE_CLANG
 
 #if COMPILER_TYPE == COMPILER_TYPE_VS
-
+#undef CAPABILITY_DIGRAPHS
 // MSVC++ 12.0 VERSION == 1800 (Visual Studio 2013)
 // MSVC++ 11.0 VERSION == 1700 (Visual Studio 2012)
 // MSVC++ 10.0 VERSION == 1600 (Visual Studio 2010)
@@ -51,12 +67,15 @@
 // MSVC++ 6.0  VERSION == 1200
 // MSVC++ 5.0  VERSION == 1100
 
-#if VERSION >= 1800
-#define VARIADIC_TEMPLATES 1
+#if VERSION < 1800
+#undef CAPABILITY_VARIADIC_TEMPLATES
+#define CAPABILITY_VARIADIC_TEMPLATES 0
 #endif // VERSION >= 1800
 
-#if VERSION >= 1700
-#define ATOMICS 1
+#if VERSION < 1700
+#undef CAPABILITY_ATOMICS
+#define CAPABILITY_ATOMICS 0
 #endif // VERSION >= 1700
 
 #endif // COMPILER_TYPE == COMPILER_TYPE_VS
+#endif

@@ -1,7 +1,7 @@
 #include <UnitCpp/Test.h>
 
 #include "Capabilities.h"
-#ifdef GENERIC_LAMBDAS
+#if CAPABILITY_GENERIC_LAMBDAS
 
 #include "Functional.h"
 

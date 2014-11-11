@@ -4,7 +4,7 @@
 
 #include "Capabilities.h"
 
-#ifdef GENERIC_LAMBDAS
+#if CAPABILITY_GENERIC_LAMBDAS
 
 #include <iostream>
 #include <string>

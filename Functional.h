@@ -7,7 +7,7 @@
 
 #include "Capabilities.h"
 
-#ifdef GENERIC_LAMBDAS
+#if CAPABILITY_GENERIC_LAMBDAS
 
 #include <functional>
 #include <sstream>
@@ -112,5 +112,5 @@ namespace fnc {
   };
   
 }
-#endif // GENERIC_LAMBDAS
+#endif // CAPABILITY_GENERIC_LAMBDAS
 #endif

@@ -3,7 +3,7 @@
 // 
 
 #include "Capabilities.h"
-#ifdef ATOMICS
+#if CAPABILITY_ATOMICS
 #include <atomic>
 #include <thread>
 #include <vector>

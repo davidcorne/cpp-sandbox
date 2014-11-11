@@ -2,8 +2,8 @@
 //
 // 
 
-#include "Compiler.h"
-#if COMPILER_TYPE != COMPILER_TYPE_CLANG
+#include "Capabilities.h"
+#if CAPABILITY_THREAD_LOCAL_VARIABLES
 
 #include <iostream>
 #include <thread>
@@ -69,6 +69,6 @@ void Outputter::out(int i) const
   m_lock.unlock();
 }
 
-#else
+#else // CAPABILITY_THREAD_LOCAL_VARIABLES
 UNSUPPORTED_FEATURE_MAIN
 #endif

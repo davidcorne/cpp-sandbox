@@ -2,7 +2,7 @@
 //
 // 
 #include "Capabilities.h"
-#ifdef CONSTEXPR
+#if CAPABILITY_CONSTEXPR
 
 #include <iostream>
 

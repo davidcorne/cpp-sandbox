@@ -6,7 +6,7 @@
 #include <UnitCpp/Test.h>
 
 #include "Capabilities.h"
-#ifdef GENERIC_LAMBDAS
+#if CAPABILITY_GENERIC_LAMBDAS
 
 #define UNUSED_VARIABLE 1
 #include "IgnoreDiagnostics.h"
