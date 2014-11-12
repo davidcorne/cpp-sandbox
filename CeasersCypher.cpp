@@ -40,12 +40,6 @@ TEST(Cyper, encrypt)
 }
 
 //=============================================================================
-int main()
-{
-  return UnitCpp::TestRegister::test_register().run_tests();
-}
-
-//=============================================================================
 Cyper::Cyper() {}
 Cyper::~Cyper() {}
 
@@ -76,3 +70,8 @@ std::string CeaserCypher::decrypt(std::string to_decrypt)
   return to_decrypt;
 }
 
+//=============================================================================
+int main(int argc, char** argv) 
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
+}

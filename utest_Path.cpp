@@ -115,6 +115,7 @@ TEST(Path, stream)
 }
 
 //=============================================================================
-int main() {
-  return UnitCpp::TestRegister::test_register().run_tests();
+int main(int argc, char** argv) 
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }
