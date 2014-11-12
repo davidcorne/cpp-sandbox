@@ -21,5 +21,6 @@ int main() {
 }
 
 #else
-UNSUPPORTED_FEATURE_MAIN(CAPABILITY_GENERIC_LAMBDAS)
+#include "UnsupportedFeatureMain.h"
+UNSUPPORTED_FEATURE_MAIN(COMPILER_TYPE_VS)
 #endif

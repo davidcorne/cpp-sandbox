@@ -6,14 +6,6 @@
 
 //=============================================================================
 int main() {
-  std::cout
-#if COMPILER_TYPE == COMPILER_TYPE_GCC
-    << "gcc"
-#elif COMPILER_TYPE == COMPILER_TYPE_VS
-    << "vs"
-#elif COMPILER_TYPE == COMPILER_TYPE_CLANG
-    << "clang"
-#endif
-    << std::endl;
+  std::cout << COMPILER_NAME << std::endl;
 }
 

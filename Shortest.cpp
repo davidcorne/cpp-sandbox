@@ -9,5 +9,6 @@
 int main;
 
 #else
+#include "UnsupportedFeatureMain.h"
 UNSUPPORTED_FEATURE_MAIN(COMPILER_TYPE_VS)
 #endif
