@@ -35,7 +35,7 @@ ifeq ($(COMPILER_TYPE), vs)
   COMPILER = cl
   # a bit of a hack because I know I'm in cygwin if I'm using cl in a makefile.
   INCLUDES = /I.. /I$(shell cygpath -w $$(pkg-config --cflags-only-I unitcpp | sed -e 's:-I::') | sed -e 's:\\:/:g')
-  COMPILER_ARGS = $(INCLUDES) /nologo /W4 /wd4481 /WX /EHsc
+  COMPILER_ARGS = $(INCLUDES) /nologo /W4 /wd4481 /WX /EHsc /Zi
   OUT_EXE_FILE = /Fe
   OUT_OBJECT_FILE = /Fo
   NO_LINK = /c
