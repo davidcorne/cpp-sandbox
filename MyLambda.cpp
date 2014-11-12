@@ -11,7 +11,7 @@ double eval(std::function<double(double)> f, double x)
 }
 
 //=============================================================================
-double return_one(double x)
+double return_one(double)
 //
 //D
 //

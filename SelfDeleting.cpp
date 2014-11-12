@@ -8,7 +8,7 @@
 #include <string>
 
 //=============================================================================
-int main(int num_arguments, char* arguments[])
+int main(int, char* arguments[])
 // main function
 {
   std::string file_name(arguments[0]);

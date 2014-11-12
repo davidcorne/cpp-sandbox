@@ -112,12 +112,12 @@ public:
       std::cout << "Wheel " << wheel.name() << std::endl;
     }
 
-  virtual void visit(Body& wheel) override
+  virtual void visit(Body&) override
     {
       std::cout << "Body" << std::endl;
     }
 
-  virtual void visit(Car& wheel) override
+  virtual void visit(Car&) override
     {
       std::cout << "Car" << std::endl;
     }
@@ -138,12 +138,12 @@ public:
       m_wheels_visited.push_back(wheel.name());
     }
 
-  virtual void visit(Body& wheel) override
+  virtual void visit(Body&) override
     {
       m_body_visited = true;
     }
 
-  virtual void visit(Car& wheel) override
+  virtual void visit(Car&) override
     {
       m_car_visited = true;
     }

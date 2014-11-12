@@ -29,7 +29,7 @@
 #elif COMPILER_TYPE == COMPILER_TYPE_GCC
 #pragma GCC diagnostic ignored "-Wunused-variable"
 #elif COMPILER_TYPE == COMPILER_TYPE_VS
-#pragma warning(disable : 4101)
+#pragma warning(disable : 4101 4189)
 #endif // COMPILER_TYPE 
 #undef UNUSED_VARIABLE
 #endif // UNUSED_VARIABLE
@@ -38,5 +38,12 @@
 #if COMPILER_TYPE == COMPILER_TYPE_VS
 #pragma warning(disable : 4717)
 #endif // COMPILER_TYPE 
-#undef UNUSED_VARIABLE
+#undef RECURSIVE_ON_ALL_PATHS
+#endif // UNUSED_VARIABLE
+
+#ifdef CONSTANT_CONDITIONAL
+#if COMPILER_TYPE == COMPILER_TYPE_VS
+#pragma warning(disable : 4127)
+#endif // COMPILER_TYPE 
+#undef RECURSIVE_ON_ALL_PATHS
 #endif // UNUSED_VARIABLE

@@ -19,8 +19,6 @@ static char spare[1024*1024*2];
 
 int main() {
   std::cout << sizeof(spare) << std::endl;
-  while (true) {
-
-  }
+  std::cin.get();
   return 0;
 }

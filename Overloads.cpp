@@ -7,7 +7,7 @@
 //=============================================================================
 class Base_1 {
 public:
-  bool operator==(const Base_1& other)
+  bool operator==(const Base_1&)
     {
       return true;
     }
@@ -16,7 +16,7 @@ public:
 //=============================================================================
 class Base_2 {
 public:
-  bool operator==(const Base_2& other)
+  bool operator==(const Base_2&)
     {
       return false;
     }

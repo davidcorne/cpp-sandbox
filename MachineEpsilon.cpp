@@ -15,31 +15,26 @@
 template<typename float_t, typename int_t>
 float_t machine_eps()
 {
-  union
-  {
+  union {
     float_t f;
     int_t   i;
   } one, one_plus, little, last_little;
  
-  one.f    = 1.0;
+  one.f = 1.0;
+  one_plus.i = 2;
   little.f = 1.0;
   last_little.f = little.f;
  
-  while(true)
-  {
+  while(one.i != one_plus.i) {
     one_plus.f = one.f;
     one_plus.f += little.f;
  
-    if( one.i != one_plus.i )
-    {
+    if( one.i != one_plus.i ) {
       last_little.f = little.f;
       little.f /= 2.0;
     }
-    else
-    {
-      return last_little.f;
-    }
   }
+  return last_little.f;
 }
 
 //=============================================================================

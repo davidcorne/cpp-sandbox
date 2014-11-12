@@ -3,6 +3,9 @@
 // This code is from http://www.cplusplus.com/forum/articles/6046/ but modified
 // to not use namespace std.
 
+#define CONSTANT_CONDITIONAL
+#include "IgnoreDiagnostics.h"
+
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -26,8 +29,9 @@ int main()
 
     // This code converts from string to number safely.
     std::stringstream myStream(input);
-    if (myStream >> myNumber)
+    if (myStream >> myNumber) {
       break;
+    }
     std::cout << "Invalid number, please try again" << std::endl;
   }
   std::cout << "You entered: " << myNumber << std::endl << std::endl;

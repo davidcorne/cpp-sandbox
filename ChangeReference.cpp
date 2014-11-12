@@ -21,6 +21,10 @@ public:
     }
 
 private:
+
+  Keeper(const Keeper&);
+  Keeper& operator=(const Keeper&);
+  
   const std::string& m_name;
 };
 

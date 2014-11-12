@@ -39,6 +39,10 @@ public:
       std::cout << m_file.read() << std::endl;
     }
 private:
+  
+  Printer(const Printer&);
+  Printer& operator=(const Printer&);
+
   const IFileInterface& m_file;
 };
 

@@ -133,7 +133,7 @@ private:
 static bool GLOBAL_CALLBACK_CALLED = false;
 
 //=============================================================================
-void global_callback(void* data)
+void global_callback(void*)
 {
   GLOBAL_CALLBACK_CALLED = true;
 }
@@ -172,7 +172,7 @@ bool TestReceiver::received() const
 }
 
 //=============================================================================
-void TestReceiver::callback(void* data)
+void TestReceiver::callback(void*)
 {
   m_received = true;
 }

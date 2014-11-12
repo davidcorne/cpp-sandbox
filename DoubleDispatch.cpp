@@ -162,7 +162,13 @@ void space_ship_collide_space_ship(
   GameObject& ship_2
 )
 {
-  std::cout << "Space ship collision." << std::endl;
+  std::cout
+    << "Space ship collision between "
+    << ship_1.name()
+    << " and "
+    << ship_2.name()
+    <<"."
+    << std::endl;
 }
 
 //=============================================================================

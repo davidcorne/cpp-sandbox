@@ -95,11 +95,11 @@ Exception::Exception()
 
 Exception::~Exception() {}
 
-Exception::Exception(const Exception& e)
+Exception::Exception(const Exception&)
 {
 }
 
-Exception& Exception::operator=(const Exception& e)
+Exception& Exception::operator=(const Exception&)
 {
   return *this;
 }

@@ -44,14 +44,14 @@ void work(T t)
 
 //=============================================================================
 template <typename T>
-void other_work_dispatch(const T& t, std::false_type)
+void other_work_dispatch(const T&, std::false_type)
 {
   std::cout << "Not copied." << std::endl;
 }
 
 //=============================================================================
 template <typename T>
-void other_work_dispatch(T t, std::true_type)
+void other_work_dispatch(T, std::true_type)
 {
   std::cout << "Copied." << std::endl;
 }

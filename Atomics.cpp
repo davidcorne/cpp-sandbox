@@ -15,7 +15,7 @@ class Counter {
 public:
 
   Counter(int i)
-    : m_count(0)
+    : m_count(i)
     {}
   
   void operator++() {
@@ -30,8 +30,8 @@ public:
   
 private:
 
-  Counter(const Counter&) = delete;
-  Counter& operator=(const Counter&) = delete;
+  Counter(const Counter&);
+  Counter& operator=(const Counter&);
   
   int m_count;
 };
