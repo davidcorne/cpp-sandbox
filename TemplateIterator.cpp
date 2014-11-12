@@ -39,5 +39,5 @@ auto summation(ITER begin, ITER end, typename ITER::value_type start) -> typenam
 }
 
 #else
-UNSUPPORTED_FEATURE_MAIN;
+UNSUPPORTED_FEATURE_MAIN(CAPABILITY_INITIALISER_LISTS)
 #endif

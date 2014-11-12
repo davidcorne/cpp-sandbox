@@ -65,6 +65,6 @@ int main(int argc, char** argv)
   return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }
 #else
-UNSUPPORTED_FEATURE_MAIN;
+UNSUPPORTED_FEATURE_MAIN(CAPABILITY_VARIADIC_TEMPLATES)
 #endif
 

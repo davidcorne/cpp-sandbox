@@ -113,6 +113,6 @@ Length operator"" _inches(unsigned long long mil)
 
 
 #else
-UNSUPPORTED_FEATURE_MAIN;
+UNSUPPORTED_FEATURE_MAIN(CAPABILITY_USER_DEFINED_LITERALS)
 #endif
 

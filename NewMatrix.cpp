@@ -648,5 +648,5 @@ bool operator!=(const Matrix<T, N, M>& a, const Matrix<T, P, Q>& b)
 }
 
 #else
-UNSUPPORTED_FEATURE_MAIN;
+UNSUPPORTED_FEATURE_MAIN(CAPABILITY_CONSTEXPR)
 #endif

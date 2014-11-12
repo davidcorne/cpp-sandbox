@@ -1,3 +1,5 @@
 #include "UnsupportedFeatureMain.h"
 
-UNSUPPORTED_FEATURE_MAIN;
+#define TEST 1
+
+UNSUPPORTED_FEATURE_MAIN(TEST)

@@ -90,6 +90,6 @@ typename ITER::value_type GeneralSummer::sum(ITER first, ITER last) const
 }
 
 #else
-UNSUPPORTED_FEATURE_MAIN
+UNSUPPORTED_FEATURE_MAIN(CAPABILITY_INITIALISER_LISTS)
 #endif
 

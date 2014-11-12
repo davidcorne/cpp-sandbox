@@ -87,5 +87,5 @@ std::string CustomVirtualTable::three() const
 }
 
 #else
-UNSUPPORTED_FEATURE_MAIN
+UNSUPPORTED_FEATURE_MAIN(CAPABILITY_VARIADIC_TEMPLATES)
 #endif

@@ -7,11 +7,13 @@
 
 #include <iostream>
 
-#define UNSUPPORTED_FEATURE_MAIN                              \
+#define UNSUPPORTED_FEATURE_MAIN(FEATURE)                     \
   int main()                                                  \
   {                                                           \
     std::cout                                                 \
-      << "This program uses a compiler feature which is not " \
+      << "This program uses the compiler feature "            \
+      << #FEATURE                                             \
+      << " which is not "                                     \
       << "supported by the compiler used in it's creation."   \
       << std::endl;                                           \
     return 0;                                                 \

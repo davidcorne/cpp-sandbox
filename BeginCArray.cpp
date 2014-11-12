@@ -58,5 +58,5 @@ int main(int argc, char** argv)
 }
 
 #else
-UNSUPPORTED_FEATURE_MAIN;
+UNSUPPORTED_FEATURE_MAIN(CAPABILITY_INITIALISER_LISTS)
 #endif
