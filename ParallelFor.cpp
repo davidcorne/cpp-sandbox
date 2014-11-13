@@ -1,5 +1,8 @@
 // parallel-for-structure.cpp 
-// compile with: /EHsc
+
+#include "Compiler.h"
+#if COMPILER_TYPE == COMPILER_TYPE_VS
+
 #include <ppl.h>
 #include <array>
 #include <sstream>
@@ -28,3 +31,8 @@ int main()
   print(points);
   
 }
+#else
+#include "UnsupportedFeatureMain.h"
+UNSUPPORTED_FEATURE_MAIN(COMPILER_TYPE_VS)
+#endif
+    

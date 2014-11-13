@@ -1,9 +1,17 @@
 //=============================================================================
 //
-// An RAII class which detects memory leaks.
+// An RAII class which detects memory leaks. (Needs to be compiled with a debug
+// crt e.g. by /MTd - see http://support2.microsoft.com/kb/140584/en)
 
 #ifndef MemoryLeakDetector_H
 #define MemoryLeakDetector_H
+
+#include "Compiler.h"
+#if COMPILER_TYPE == COMPILER_TYPE_VS
+
+#ifndef _DEBUG
+#error "_DEBUG should be defined."
+#endif
 
 #include <crtdbg.h>
 
@@ -19,13 +27,13 @@ public:
 
 private:
 
-  _CrtMemState m_memory;
+  _CrtMemState m_memstate1;
 };
 
 //=============================================================================
 MemoryLeakDetector::MemoryLeakDetector()
 {
-  _CrtMemCheckpoint(&m_memory);
+  _CrtMemCheckpoint(&m_memstate1) ; //take the memory snapshot
 }
 
 //=============================================================================
@@ -34,7 +42,7 @@ MemoryLeakDetector::~MemoryLeakDetector()
   _CrtMemState memstate2, memstate3 ; // holds the memory states
   _CrtMemCheckpoint(&memstate2) ; //take the memory snapshot
 
-  bool diff = _CrtMemDifference(&memstate3, &m_memory, &memstate2);
+  int diff = _CrtMemDifference(&memstate3, &m_memstate1, &memstate2);
   if (diff)  {
     _CrtMemDumpAllObjectsSince(&m_memstate1);
     int old_warn_mode= 0;
@@ -56,8 +64,15 @@ MemoryLeakDetector::~MemoryLeakDetector()
     _CrtSetReportFile(_CRT_ERROR, old_error_file);
     _CrtSetReportMode(_CRT_ASSERT, old_assert_mode);
     _CrtSetReportFile(_CRT_ASSERT, old_assert_file);
+  }
+  if (diff) {
+    // there were memory leaks.
     throw MemoryLeakDetected();
   }
 }
 
+
+#else
+#error "No <crtdbg> outside of COMPILER_TYPE_VS"
+#endif
 #endif
