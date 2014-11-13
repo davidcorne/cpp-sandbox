@@ -2,7 +2,6 @@ syntax: glob
 
 *~
 *.exe
-*.stackdump
 *.test_result
 deps/*.P
 
