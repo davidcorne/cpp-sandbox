@@ -4,6 +4,8 @@
 #include <iostream>
 #include <math.h>
 
+#include <UnitCpp/Test.h>
+
 //=============================================================================
 struct Point {
   Point(double new_x, double new_y) {
@@ -204,30 +206,47 @@ void Triangle::set_first_point(const Point& point)
 }
 
 //=============================================================================
-int main()
-//
-//D Runs the program, makes a triangle and finds the area.
-//
+TEST(Triangle, caching)
 {
-  Point pt_1(1, 0);
-  Point pt_2(0, 1);
-  Point pt_3(0, 0);
-  Triangle tri(pt_1, pt_2, pt_3);
+  std::stringstream ss;
+  // Save old buffer
+  auto cout_buffer = std::cout.rdbuf();
+  // Redirect std::cout to ss.
+  std::cout.rdbuf(ss.rdbuf());
 
-  // working it out
-  std::cout << "Area is: " << tri.area() << std::endl << std::endl;
+  Point one(0, 0);
+  Point two(5, 0);
+  Point three(5, 1);
+  Triangle tri(one, two, three);
+  tri.area();
+  TEST_EQUAL(ss.str(), "Area calculated.\n");
+  ss.str("");
 
-  // using the cached value
-  std::cout << "Area is: " << tri.area() << std::endl << std::endl;
+  tri.area();
+  TEST_EQUAL(ss.str(), "Cached area returned.\n");
+  ss.str("");
+  
+  tri.set_first_point(Point(1, 0));
+  tri.area();
+  TEST_EQUAL(ss.str(), "Area calculated.\n");
 
-  // setting the first point so it re-calculates the area
-  //
-  // it should have an area of 1
+  // Direct std::cout back to it's original buffer.
+  std::cout.rdbuf(cout_buffer);
+}
 
-  tri.set_first_point(Point(2, 0));
-  std::cout << "Area is: " << tri.area() << std::endl << std::endl;
+//=============================================================================
+TEST(Triangle, area)
+{
+  Point one(1, 0);
+  Point two(0, 1);
+  Point three(0, 0);
+  Triangle tri(one, two, three);
+  double area = tri.area();
+  TEST_APPROX_EQUAL(area, 0.5, 0.0000001);
+}
 
-  std::cout << "Area is: " << tri.area() << std::endl;
-
-  return 0;
+//=============================================================================
+int main(int argc, char** argv) 
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }
