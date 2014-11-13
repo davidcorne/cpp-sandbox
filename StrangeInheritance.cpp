@@ -52,6 +52,9 @@ public:
 
 private:
 
+  Baz(const Baz&);
+  Baz& operator=(const Baz&);
+  
   std::ostream& m_os;
 };
 
