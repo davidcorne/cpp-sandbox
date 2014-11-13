@@ -3,9 +3,15 @@
 // http://www.codeproject.com/Articles/803411/Data-Structures-in-Object-Oriented-Programming
 // but in C++.
 
+#include "Capabilities.h"
+#if CAPABILITY_INITIALISER_LISTS
+#include <cassert>
+
 #include <iostream>
 #include <map>
 #include <memory>
+#include <functional>
+#include <vector>
 
 //=============================================================================
 // Would probably have a class and encapsulation here, but never mind.
@@ -21,14 +27,17 @@ public:
   ShapeType();
 
   bool operator==(const ShapeType& other) const;
+  bool operator<(const ShapeType& other) const;
   
+  ShapeType(const ShapeType& type);
+  ShapeType& operator=(const ShapeType& type);
+
   ~ShapeType();
   
 private:
 
-  ShapeType(const ShapeType& type);
-  ShapeType& operator=(const ShapeType& type);
-
+  int m_id;
+  static int s_id_creator;
 };
 
 //=============================================================================
@@ -37,7 +46,7 @@ public:
 
   IShape();
 
-  virtual const ShapeType& type() const = 0;
+  virtual ShapeType type() const = 0;
   
   virtual ~IShape() = 0;
 };
@@ -58,9 +67,9 @@ public:
   
   Point three() const;
   
-  virtual const ShapeType& type() const override;
+  virtual ShapeType type() const override;
 
-  static const ShapeType& shape_type();
+  static ShapeType shape_type();
   
   virtual ~Triangle();
   
@@ -84,7 +93,9 @@ public:
 
   Point bottom_right() const;
 
-  virtual const ShapeType& type() const override;
+  virtual ShapeType type() const override;
+
+  static ShapeType shape_type();
   
   virtual ~Rectangle();
   
@@ -129,27 +140,53 @@ private:
 };
 
 //=============================================================================
-class DrawableRegistrar {
+typedef
+  std::function<std::unique_ptr<IDrawableShape>(const IShape&)>
+  DrawableCreator;
+
+//=============================================================================
+class DrawableCreatorRegister {
 public:
-
-  typedef
-    std::function<std::unique_ptr<IDrawableShape>(const IShape&)>
-    DrawableCreator;
   
-  DrawableRegistrar(const ShapeType& type, DrawableCreator creator);
+  DrawableCreatorRegister();
+  // Constructor
 
-  static DrawableCreator drawable_creator(const ShapeType& type);
+  void register_creator(ShapeType type, DrawableCreator creator);
+  // Register a creator for a shape type.
   
-  ~DrawableRegistrar();
+  DrawableCreator creator(ShapeType type) const;
+  // Return a creator for a shape type.
+  
+  ~DrawableCreatorRegister();
+  // Destructor
 
 private:
 
-  static std::map<const ShapeType*, DrawableCreator> s_creation_map;
-  
+  std::map<ShapeType, DrawableCreator> m_creation_map;
 };
 
 //=============================================================================
-class DrawableTriangle : IDrawableShape {
+class DrawableShapeFactory {
+public:
+
+  DrawableShapeFactory(const DrawableCreatorRegister& creator_register);
+
+  std::unique_ptr<IDrawableShape> create_drawable_shape(
+    const IShape& shape
+  ) const;
+  
+  ~DrawableShapeFactory();
+
+private:
+
+  DrawableShapeFactory(const DrawableShapeFactory&);
+  DrawableShapeFactory& operator=(const DrawableShapeFactory&);
+
+  const DrawableCreatorRegister& m_creator_register;
+};
+
+//=============================================================================
+class DrawableTriangle : public IDrawableShape {
 public:
 
   DrawableTriangle(Triangle tri);
@@ -159,18 +196,12 @@ public:
   virtual ~DrawableTriangle();
 
 private:
-  static const DrawableRegistrar s_registra(
-    Triangle::shape_type(),
-    [](const IShape& shape){return std::unique_ptr<IDrawableShape>(
-        new DrawableTriangle(dynamic_cast<const Triangle&>(shape))
-      );
-    }
-  );
+
   Triangle m_triangle;
 };
 
 //=============================================================================
-class DrawableRectangle : IDrawableShape {
+class DrawableRectangle : public IDrawableShape {
 public:
 
   DrawableRectangle(Rectangle rectangle);
@@ -203,18 +234,37 @@ private:
 };
 
 //=============================================================================
-std::unique_ptr<IDrawableShape> create_drawable_shape(const IShape& shape);
+template <typename tSHAPE, typename tDRAWABLE_SHAPE>
+std::unique_ptr<IDrawableShape> create_drawable(const IShape& shape);
 
 //=============================================================================
 int main()
 {
-  Triangle tri({0,0}, {0,1}, {1,0});
-  Rectangle rect({0, 5}, {5, 0});
+  DrawableCreatorRegister drawable_register;
+  drawable_register.register_creator(
+    Triangle::shape_type(),
+    create_drawable<Triangle, DrawableTriangle>
+  );
+  drawable_register.register_creator(
+    Rectangle::shape_type(),
+    create_drawable<Rectangle, DrawableRectangle>
+  );
+  DrawableShapeFactory factory(drawable_register);
   
+  std::vector<std::unique_ptr<IShape> > database;
+  database.emplace_back(new Triangle({0,0}, {0,1}, {1,0}));
+  database.emplace_back(new Rectangle({0,5}, {5,1}));
+
+  std::vector<std::unique_ptr<IDrawableShape> > drawables;
+  for (const auto& shape: database) {
+    drawables.push_back(factory.create_drawable_shape(*shape));
+  }
+
   ConsoleCanvas canvas(std::cout);
-  create_drawable_shape(tri)->draw(canvas);
-  std::cout << "\n";
-  DrawableRectangle(rect).draw(canvas);
+  for (auto& drawable_shape: drawables) {
+    drawable_shape->draw(canvas);
+    std::cout << "\n";
+  }
   return 0;
 }
 
@@ -224,14 +274,39 @@ IShape::IShape() {}
 IShape::~IShape() {}
 
 //----- ShapeType
+int ShapeType::s_id_creator(0);
+
+//=============================================================================
 ShapeType::ShapeType()
+  : m_id(++s_id_creator)
 {
+}
+
+//=============================================================================
+ShapeType::ShapeType(const ShapeType& other)
+  : m_id(other.m_id)
+{
+}
+
+//=============================================================================
+ShapeType& ShapeType::operator=(const ShapeType& other)
+{
+  if (&other != this) {
+    m_id = other.m_id;
+  }
+  return *this;
 }
 
 //=============================================================================
 bool ShapeType::operator==(const ShapeType& other) const
 {
-  return &other == this;
+  return other.m_id == m_id;
+}
+
+//=============================================================================
+bool ShapeType::operator<(const ShapeType& other) const
+{
+  return other.m_id < m_id;
 }
 
 //=============================================================================
@@ -288,7 +363,13 @@ Point Triangle::three() const
 }
 
 //=============================================================================
-const ShapeType& Triangle::type() const
+ShapeType Triangle::type() const
+{
+  return shape_type();
+}
+
+//=============================================================================
+ShapeType Triangle::shape_type()
 {
   static ShapeType triangle_type;
   return triangle_type;
@@ -338,7 +419,13 @@ Point Rectangle::bottom_right() const
 }
 
 //=============================================================================
-const ShapeType& Rectangle::type() const
+ShapeType Rectangle::type() const
+{
+  return shape_type();
+}
+
+//=============================================================================
+ShapeType Rectangle::shape_type()
 {
   static ShapeType rectangle_type;
   return rectangle_type;
@@ -354,15 +441,6 @@ IDrawableShape::IDrawableShape() {}
 IDrawableShape::~IDrawableShape() {}
 
 //----- DrawableRegistrar
-
-//=============================================================================
-DrawableRegistrar::DrawableRegistrar(
-  const ShapeType& type,
-  DrawableRegistrar::DrawableCreator creator
-)
-{
-  s_creation_map[&type] = creator;
-}
 
 //----- DrawableTriangle
 
@@ -408,7 +486,54 @@ void DrawableRectangle::draw(ICanvas& canvas)
 DrawableRectangle::~DrawableRectangle()
 {
 }
-   
+
+//----- DrawableCreatorRegister
+//=============================================================================
+DrawableCreatorRegister::DrawableCreatorRegister()
+{
+}
+
+//=============================================================================
+DrawableCreatorRegister::~DrawableCreatorRegister()
+{
+}
+
+//=============================================================================
+DrawableCreator DrawableCreatorRegister::creator(ShapeType shape_type) const
+{
+  return m_creation_map.at(shape_type);
+}
+
+void DrawableCreatorRegister::register_creator(
+  ShapeType shape_type,
+  DrawableCreator creator
+)
+{
+  m_creation_map.insert(std::make_pair(shape_type, creator));
+}
+
+//----- DrawableShapeFactory
+//=============================================================================
+DrawableShapeFactory::DrawableShapeFactory(
+  const DrawableCreatorRegister& creator_register
+)
+  : m_creator_register(creator_register)
+{
+}
+
+//=============================================================================
+std::unique_ptr<IDrawableShape> DrawableShapeFactory::create_drawable_shape(
+  const IShape& shape
+) const
+{
+  return m_creator_register.creator(shape.type())(shape);
+}
+  
+//=============================================================================
+DrawableShapeFactory::~DrawableShapeFactory()
+{
+}
+
 //----- ICanvas
 
 ICanvas::ICanvas() {}
@@ -442,10 +567,16 @@ ConsoleCanvas::~ConsoleCanvas()
 {
 }
 
-//----- create_drawable_shape()
-
 //=============================================================================
-std::unique_ptr<IDrawableShape> create_drawable_shape(const IShape& shape)
+template <typename tSHAPE, typename tDRAWABLE_SHAPE>
+std::unique_ptr<IDrawableShape> create_drawable(const IShape& shape)
 {
-  return DrawableRegistrar::drawable_creator(shape.type())(shape);
+  const tSHAPE& derived_shape = dynamic_cast<const tSHAPE&>(shape);
+  assert(&derived_shape && "dynamic_cast should be valid.");
+  return std::unique_ptr<IDrawableShape>(new tDRAWABLE_SHAPE(derived_shape));
 }
+
+#else
+#include "UnsupportedFeatureMain.h"
+UNSUPPORTED_FEATURE_MAIN(CAPABILITY_INITIALISER_LISTS)
+#endif
