@@ -1,35 +1,26 @@
-#!/bin/sh
+#!/bin/bash
 # Written by: DGC
 
 set -e
 
-tested_compilers=""
-
-declare -A commands=(["clang"]="clang" ["vs"]="cl" ["gcc"]="g++")
-broken=()
-
-for key in "${!commands[@]}"
-do
-  program=${commands[$key]}
+#==============================================================================
+test_compiler()
+{
+  compiler=$1
+  compiler_type=$2
   if $(command -v $program >/dev/null 2>&1)
   then
-    echo "Has $program"
-    this_broken=0
-    for b in ${broken[@]}
-    do
-      if [ "$b" == "$key" ]
-      then
-        this_broken=1
-      fi
-    done
-    if [ $this_broken -eq 1 ] 
-    then
-      echo "$program broken."
-    else
-      make -j 4 COMPILER_TYPE=$key
-      make test COMPILER_TYPE=$key
-      tested_compilers="tested_compilers $key"
-    fi
+    echo "Has $compiler"
+    make -j 4 COMPILER_TYPE=$compiler_type
+    make test COMPILER_TYPE=$compiler_type
+    tested_compilers="$tested_compilers $compiler_type"
   fi
-done
-exit 
+}
+
+tested_compilers=""
+
+#==============================================================================
+test_compiler clang clang
+test_compiler gcc gcc
+test_compiler cl vs
+echo "Tested with:$tested_compilers"
