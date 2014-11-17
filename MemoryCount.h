@@ -61,10 +61,10 @@ void operator delete(void* pointer)
 //=============================================================================
 void memory_dump()
 {
-  printf("Dump\nMEMORY_USED: %u\n", MEMORY_USED);
+  printf("Dump\nMEMORY_USED: %u\n", (unsigned int)MEMORY_USED);
   for (std::size_t i = 0; i < MEMORY_MAP_CAPACITY; ++i) {
     if (MEMORY_MAP[i].pointer) {
-      printf("%u: ptr=%p size=%u\n", i, MEMORY_MAP[i].pointer, MEMORY_MAP[i].size);
+      printf("%u: ptr=%p size=%u\n", (unsigned int)i, MEMORY_MAP[i].pointer, (unsigned int)MEMORY_MAP[i].size);
     }
   }
 }
