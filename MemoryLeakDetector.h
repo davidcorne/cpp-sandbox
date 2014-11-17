@@ -13,8 +13,6 @@ typedef void (*MemoryLeakHandler)();
 class MemoryLeakDetector {
 public:
 
-  class MemoryLeakDetected{};
-  
   MemoryLeakDetector();
   // Uses the default_handler
   
@@ -34,7 +32,7 @@ private:
 //=============================================================================
 void MemoryLeakDetector::default_handler()
 {
-  throw MemoryLeakDetected();
+  assert(false && "Memory leak detected.");
 }
 
 //=============================================================================
