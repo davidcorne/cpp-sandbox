@@ -111,11 +111,12 @@ ifneq ($(COMPILER_TYPE), vs)
 	@cp $(OBJ_DIRECTORY)/$*.d deps/$*.P
 	@sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
          -e '/^$$/ d' -e 's/$$/ :/' < $(OBJ_DIRECTORY)/$*.d >> deps/$*.P
+	@sed -i -e "s/$(OBJ_DIRECTORY)/\$$(OBJ_DIRECTORY)/" deps/$*.P
 	@rm -f $(OBJ_DIRECTORY)/$*.d
 endif
 
 #==============================================================================
-.DELETE_ON_ERROR: $(RESULT_DIRECTORY)/%.test_result
+.DELETE_ON_ERROR: $(RESULT_DIRECTORY)/%.test_result $(OBJ_DIRECTORY)/$*.d
 
 #==============================================================================
 $(RESULT_DIRECTORY)/%.test_result: $(EXE_DIRECTORY)/%.exe
