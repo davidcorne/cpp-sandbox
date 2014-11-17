@@ -141,6 +141,13 @@ retest: FRC
 #D For deleting all temporary and made files
 #------------------------------------------------------------------------------
 clean: FRC
+	@rm -fr $(EXE_DIRECTORY) $(OBJ_DIRECTORY)
+	@echo "Removed all: objects, executables, and temp files."
+
+#==============================================================================
+#D For deleting all temporary and made files
+#------------------------------------------------------------------------------
+uberclean: FRC
 	@rm -fr exe.*/ result.* obj.* deps
 	@echo "Removed all: objects, executables, and temp files."
 
