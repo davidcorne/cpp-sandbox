@@ -1,4 +1,8 @@
+#include "Capabilities.h"
+#if CAPABILITY_TYPE_TRAITS
+
 #include <iostream>
+#include <type_traits>
 
 template <int>
 struct ThreadSafety {
@@ -90,3 +94,6 @@ int main () {
   other_work(non_copyable);
   return 0;
 }
+#else
+UNSUPPORTED_FEATURE_MAIN(CAPABILITY_TYPE_TRAITS)
+#endif

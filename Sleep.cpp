@@ -1,6 +1,8 @@
 //=============================================================================
 // This shows how you sleep a C++ program in a platform independent way
 
+#include "Capabilities.h"
+#if CAPABILITY_THREAD
 #include <thread>
 #include <chrono>
 #include <iostream>
@@ -13,3 +15,7 @@ int main()
   std::cout << "End." << std::endl;
   return 0;
 }
+
+#else
+UNSUPPORTED_FEATURE_MAIN(CAPABILITY_THREAD)
+#endif

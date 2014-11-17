@@ -1,3 +1,7 @@
+
+#include "Capabilities.h"
+
+#if CAPABILITY_RANGE_BASE_FOR
 #include <algorithm>
 #include <iostream>
 #include <string>
@@ -133,3 +137,6 @@ namespace hak {
     }
   }
 }
+#else
+UNSUPPORTED_FEATURE_MAIN(CAPABILITY_RANGE_BASE_FOR)
+#endif

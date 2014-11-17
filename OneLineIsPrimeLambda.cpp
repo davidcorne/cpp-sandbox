@@ -13,7 +13,7 @@
 
 //=============================================================================
 std::function<bool(int, int)> loop_factors = [](int n, int f) -> bool {
-  return f > std::sqrt(n) ? true: n % f == 0 ? false: loop_factors(n, f += 2);
+  return f > std::sqrt(static_cast<double>(n)) ? true: n % f == 0 ? false: loop_factors(n, f += 2);
 };
 
 //=============================================================================
