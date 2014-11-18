@@ -14,6 +14,7 @@ ifeq ($(COMPILER_TYPE), gcc)
   OUT_OBJECT_FILE := -o 
   NO_LINK := -c
   GENERATE_DEPENDENCIES := -MMD
+  DEPENDENCY_DIRECTORY := dependency.$(COMPILER_TYPE).$(VERSION)
 endif
 
 #==============================================================================
@@ -25,6 +26,7 @@ ifeq ($(COMPILER_TYPE), clang)
   OUT_OBJECT_FILE := -o 
   NO_LINK := -c
   GENERATE_DEPENDENCIES := -MMD
+  DEPENDENCY_DIRECTORY := dependency.$(COMPILER_TYPE).$(VERSION)
 endif
 
 #==============================================================================
@@ -38,6 +40,8 @@ ifeq ($(COMPILER_TYPE), vs)
   OUT_OBJECT_FILE := /Fo
   NO_LINK := /c
   GENERATE_DEPENDENCIES := 
+  # use the gcc dependencies.
+  DEPENDENCY_DIRECTORY := dependency.gcc.*
 endif
 
 EXE_DIRECTORY := exe.$(COMPILER_TYPE).$(VERSION)
@@ -105,16 +109,16 @@ $(EXE_DIRECTORY)/%.exe: $(OBJ_DIRECTORY)/%.obj
 
 #==============================================================================
 $(OBJ_DIRECTORY)/%.obj: %.$(EXT)
-	@mkdir -p deps $(OBJ_DIRECTORY)
+	@mkdir -p $(OBJ_DIRECTORY) $(DEPENDENCY_DIRECTORY)
 	@echo ""
 	$(COMPILER) $(COMPILER_ARGS) $(NO_LINK) $(GENERATE_DEPENDENCIES) $< \
         $(OUT_OBJECT_FILE)$@
 # vs type compilers don't make the .P files, so make this part conditional
 ifneq ($(COMPILER_TYPE), vs)
-	@cp $(OBJ_DIRECTORY)/$*.d deps/$*.P
+	@cp $(OBJ_DIRECTORY)/$*.d $(DEPENDENCY_DIRECTORY)/$*.P
 	@sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
-         -e '/^$$/ d' -e 's/$$/ :/' < $(OBJ_DIRECTORY)/$*.d >> deps/$*.P
-	@sed -i -e "s/$(OBJ_DIRECTORY)/\$$(OBJ_DIRECTORY)/" deps/$*.P
+         -e '/^$$/ d' -e 's/$$/ :/' < $(OBJ_DIRECTORY)/$*.d >> $(DEPENDENCY_DIRECTORY)/$*.P
+	@sed -i -e "s/$(OBJ_DIRECTORY)/\$$(OBJ_DIRECTORY)/" $(DEPENDENCY_DIRECTORY)/$*.P
 	@rm -f $(OBJ_DIRECTORY)/$*.d
 endif
 
@@ -145,14 +149,14 @@ retest: FRC
 #D For deleting all temporary and made files
 #------------------------------------------------------------------------------
 clean: FRC
-	@rm -fr $(EXE_DIRECTORY) $(OBJ_DIRECTORY) $(RESULT_DIRECTORY)
-	@echo "Removed: $(EXE_DIRECTORY) $(OBJ_DIRECTORY) $(RESULT_DIRECTORY)"
+	@rm -fr $(EXE_DIRECTORY) $(OBJ_DIRECTORY) $(RESULT_DIRECTORY) $(DEPENDENCY_DIRECTORY)
+	@echo "Removed: $(EXE_DIRECTORY) $(OBJ_DIRECTORY) $(RESULT_DIRECTORY) $(DEPENDENCY_DIRECTORY)"
 
 #==============================================================================
 #D For deleting all temporary and made files
 #------------------------------------------------------------------------------
 uberclean: FRC
-	@rm -fr exe.* results.* obj.* deps
+	@rm -fr exe.* results.* obj.* dependency.*
 	@echo "Removed all: objects, executables, and dependency files."
 
 #==============================================================================
@@ -162,4 +166,4 @@ uberclean: FRC
 #------------------------------------------------------------------------------
 FRC:
 
--include deps/*.P
+-include $(DEPENDENCY_DIRECTORY)/*.P

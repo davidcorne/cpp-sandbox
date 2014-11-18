@@ -3,7 +3,7 @@ syntax: glob
 *~
 *.exe
 *.test_result
-deps/*.P
+dependency.*/*.P
 
 # for the MS compiler rubbish
 *.obj
