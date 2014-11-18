@@ -123,7 +123,7 @@ ifneq ($(COMPILER_TYPE), vs)
 endif
 
 #==============================================================================
-.DELETE_ON_ERROR: $(RESULT_DIRECTORY)/%.test_result $(OBJ_DIRECTORY)/$*.d
+.DELETE_ON_ERROR: $(RESULT_DIRECTORY)/%.test_result $(OBJ_DIRECTORY)/%.d
 
 #==============================================================================
 $(RESULT_DIRECTORY)/%.test_result: $(EXE_DIRECTORY)/%.exe
