@@ -2,48 +2,48 @@
 #D makes all of the .cpp files into .exe files using g++
 #==============================================================================
 
-COMPILER_TYPE = gcc
+COMPILER_TYPE := gcc
 -include .config.mk
 
 #==============================================================================
 ifeq ($(COMPILER_TYPE), gcc)
-  COMPILER = g++
-  VERSION := $(shell g++ --version | grep "g++" | sed -e 's:[^0-9]*::' -e 's: \+.*::')
-  COMPILER_ARGS = -std=c++0x -g -Wall -Werror -pthread $(shell pkg-config --cflags-only-I unitcpp)
-  OUT_EXE_FILE = -o 
-  OUT_OBJECT_FILE = -o 
-  NO_LINK = -c
-  GENERATE_DEPENDENCIES = -MMD
+  COMPILER := g++
+  VERSION := $(shell g++ --version | grep "g++" | sed -e 's:.*\([0-9]\+\.[0-9]\+\.[0-9]\+\).*:\1:')
+  COMPILER_ARGS := -std=c++0x -g -Wall -Werror -pthread $(shell pkg-config --cflags-only-I unitcpp)
+  OUT_EXE_FILE := -o 
+  OUT_OBJECT_FILE := -o 
+  NO_LINK := -c
+  GENERATE_DEPENDENCIES := -MMD
 endif
 
 #==============================================================================
 ifeq ($(COMPILER_TYPE), clang)
-  COMPILER = clang++
+  COMPILER := clang++
   VERSION := $(shell clang++ --version | grep "clang" | sed -e 's:[^0-9]*::' -e 's: \+.*::')
-  COMPILER_ARGS = -std=c++1y -g -Wall -Werror -pthread $(shell pkg-config --cflags-only-I unitcpp)
-  OUT_EXE_FILE = -o 
-  OUT_OBJECT_FILE = -o 
-  NO_LINK = -c
-  GENERATE_DEPENDENCIES = -MMD
+  COMPILER_ARGS := -std=c++1y -g -Wall -Werror -pthread $(shell pkg-config --cflags-only-I unitcpp)
+  OUT_EXE_FILE := -o 
+  OUT_OBJECT_FILE := -o 
+  NO_LINK := -c
+  GENERATE_DEPENDENCIES := -MMD
 endif
 
 #==============================================================================
 ifeq ($(COMPILER_TYPE), vs)
-  COMPILER = cl
+  COMPILER := cl
   VERSION := $(shell cl 2>&1 >/dev/null | grep "Version" | sed -e 's:.*Version ::' -e 's:\([0-9][0-9]\)\.\([0-9][0-9]\).*:\1\2:')
   # a bit of a hack because I know I'm in cygwin if I'm using cl in a makefile.
   INCLUDES := /I.. /I$(shell cygpath -w $$(pkg-config --cflags-only-I unitcpp | sed -e 's:-I::') | sed -e 's:\\:/:g')
-  COMPILER_ARGS = $(INCLUDES) /nologo /W4 /wd4481 /WX /EHsc /Zi /MTd
-  OUT_EXE_FILE = /Fe
-  OUT_OBJECT_FILE = /Fo
-  NO_LINK = /c
-  GENERATE_DEPENDENCIES = 
+  COMPILER_ARGS := $(INCLUDES) /nologo /W4 /wd4481 /WX /EHsc /Zi /MTd
+  OUT_EXE_FILE := /Fe
+  OUT_OBJECT_FILE := /Fo
+  NO_LINK := /c
+  GENERATE_DEPENDENCIES := 
 endif
 
-EXE_DIRECTORY = exe.$(COMPILER_TYPE).$(VERSION)
-OBJ_DIRECTORY = obj.$(COMPILER_TYPE).$(VERSION)
-RESULT_DIRECTORY = result.$(COMPILER_TYPE).$(VERSION)
-EXT = cpp
+EXE_DIRECTORY := exe.$(COMPILER_TYPE).$(VERSION)
+OBJ_DIRECTORY := obj.$(COMPILER_TYPE).$(VERSION)
+RESULT_DIRECTORY := results.$(COMPILER_TYPE).$(VERSION)
+EXT := cpp
 
 TEST_SIN_BIN := $(shell cat sin_bin.txt | grep "^TEST: " | sed -e 's/TEST: //')
 
@@ -145,15 +145,15 @@ retest: FRC
 #D For deleting all temporary and made files
 #------------------------------------------------------------------------------
 clean: FRC
-	@rm -fr $(EXE_DIRECTORY) $(OBJ_DIRECTORY)
-	@echo "Removed all: objects, executables, and temp files."
+	@rm -fr $(EXE_DIRECTORY) $(OBJ_DIRECTORY) $(RESULT_DIRECTORY)
+	@echo "Removed: $(EXE_DIRECTORY) $(OBJ_DIRECTORY) $(RESULT_DIRECTORY)"
 
 #==============================================================================
 #D For deleting all temporary and made files
 #------------------------------------------------------------------------------
 uberclean: FRC
-	@rm -fr exe.*/ result.* obj.* deps
-	@echo "Removed all: objects, executables, and temp files."
+	@rm -fr exe.* results.* obj.* deps
+	@echo "Removed all: objects, executables, and dependency files."
 
 #==============================================================================
 #D Pseudo target causes all targets that depend on FRC to be remade even in 
