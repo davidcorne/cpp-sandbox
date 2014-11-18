@@ -35,6 +35,20 @@ TEST(MemoryLeakDetector, memory_leak)
 }
 
 //=============================================================================
+TEST(MemoryLeakDetector, leaked_array)
+{
+  LEAKED = false;
+  {
+    MemoryLeakDetector detector(test_memory_leak_handler);
+    {
+      size_t size = 10;
+      int* array = new int[size];
+    }
+  }
+  TEST_TRUE(LEAKED, "Memory has leaked.");
+}
+
+//=============================================================================
 TEST(MemoryLeakDetector, no_leak)
 {
   MemoryLeakDetector detector;

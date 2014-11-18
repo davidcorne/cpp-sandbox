@@ -21,6 +21,7 @@ public:
 private:
 
   UNITCPP_FRIEND_TEST(MemoryLeakDetector, memory_leak);
+  UNITCPP_FRIEND_TEST(MemoryLeakDetector, leaked_array);
   static void default_handler();
   
   MemoryLeakDetector(MemoryLeakHandler handler);
