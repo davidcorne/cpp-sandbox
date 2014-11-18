@@ -5,14 +5,10 @@
 COMPILER_TYPE = gcc
 -include .config.mk
 
-EXE_DIRECTORY = exe.$(COMPILER_TYPE)
-OBJ_DIRECTORY = obj.$(COMPILER_TYPE)
-RESULT_DIRECTORY = result.$(COMPILER_TYPE)
-EXT = cpp
-
 #==============================================================================
 ifeq ($(COMPILER_TYPE), gcc)
   COMPILER = g++
+  VERSION := $(shell g++ --version | grep "g++" | sed -e 's:[^0-9]*::' -e 's: \+.*::')
   COMPILER_ARGS = -std=c++0x -g -Wall -Werror -pthread $(shell pkg-config --cflags-only-I unitcpp)
   OUT_EXE_FILE = -o 
   OUT_OBJECT_FILE = -o 
@@ -23,6 +19,7 @@ endif
 #==============================================================================
 ifeq ($(COMPILER_TYPE), clang)
   COMPILER = clang++
+  VERSION := $(shell clang++ --version | grep "clang" | sed -e 's:[^0-9]*::' -e 's: \+.*::')
   COMPILER_ARGS = -std=c++1y -g -Wall -Werror -pthread $(shell pkg-config --cflags-only-I unitcpp)
   OUT_EXE_FILE = -o 
   OUT_OBJECT_FILE = -o 
@@ -33,8 +30,9 @@ endif
 #==============================================================================
 ifeq ($(COMPILER_TYPE), vs)
   COMPILER = cl
+  VERSION := $(shell cl 2>&1 >/dev/null | grep "Version" | sed -e 's:.*Version ::' -e 's:\([0-9][0-9]\)\.\([0-9][0-9]\).*:\1\2:')
   # a bit of a hack because I know I'm in cygwin if I'm using cl in a makefile.
-  INCLUDES = /I.. /I$(shell cygpath -w $$(pkg-config --cflags-only-I unitcpp | sed -e 's:-I::') | sed -e 's:\\:/:g')
+  INCLUDES := /I.. /I$(shell cygpath -w $$(pkg-config --cflags-only-I unitcpp | sed -e 's:-I::') | sed -e 's:\\:/:g')
   COMPILER_ARGS = $(INCLUDES) /nologo /W4 /wd4481 /WX /EHsc /Zi /MTd
   OUT_EXE_FILE = /Fe
   OUT_OBJECT_FILE = /Fo
@@ -42,10 +40,15 @@ ifeq ($(COMPILER_TYPE), vs)
   GENERATE_DEPENDENCIES = 
 endif
 
-TEST_SIN_BIN = $(shell cat sin_bin.txt | grep "^TEST: " | sed -e 's/TEST: //')
+EXE_DIRECTORY = exe.$(COMPILER_TYPE).$(VERSION)
+OBJ_DIRECTORY = obj.$(COMPILER_TYPE).$(VERSION)
+RESULT_DIRECTORY = result.$(COMPILER_TYPE).$(VERSION)
+EXT = cpp
+
+TEST_SIN_BIN := $(shell cat sin_bin.txt | grep "^TEST: " | sed -e 's/TEST: //')
 
 
-TO_TEST =  $(shell grep -l "<UnitCpp" *.cpp | \
+TO_TEST :=  $(shell grep -l "<UnitCpp" *.cpp | \
              sed -e 's/\.cpp/\.exe/' \
              $(foreach test, $(TEST_SIN_BIN), | grep -v $(test)) \
            )
@@ -62,9 +65,9 @@ TEST_RESULTS := $(shell \
 #D Requires: $(EXT), $(CC) and $(CC_OPTS) to be defined.
 #------------------------------------------------------------------------------
 
-BUILD_SIN_BIN = $(shell cat sin_bin.txt | grep "^BUILD: " | sed -e 's/BUILD: //')
+BUILD_SIN_BIN := $(shell cat sin_bin.txt | grep "^BUILD: " | sed -e 's/BUILD: //')
 
-EXE_FILES = $(shell \
+EXE_FILES := $(shell \
   ls *.$(EXT) | \
   sed -e 's:^:$(EXE_DIRECTORY)/:' \
       -e 's/\.$(EXT)/\.exe/' \

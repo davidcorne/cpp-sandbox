@@ -53,7 +53,7 @@ fi
 chmod +x $test_file
 result=$(./$test_file 0)
 exit_value=$?
-printf "%-50s" $test_file
+printf "%-50s " $test_file
 if [ $exit_value -eq 0 ]
 then
   echo -e "\e[0;32mPassed.\e[1;37m"
