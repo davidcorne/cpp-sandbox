@@ -22,5 +22,14 @@ tested_compilers=""
 #==============================================================================
 test_compiler clang clang
 test_compiler gcc gcc
-test_compiler cl vs
+if type vc10x64 2>/dev/null > /dev/null
+then
+  vc10x64
+  test_compiler cl vs
+fi
+if type vc11x64 2>/dev/null > /dev/null
+then
+  vc11x64
+  test_compiler cl vs
+fi
 echo "Tested with:$tested_compilers"
