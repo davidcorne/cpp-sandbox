@@ -2,6 +2,10 @@
 #D makes all of the .cpp files into .exe files using g++
 #==============================================================================
 
+#==============================================================================
+# disable built in rules
+.SUFFIXES:
+
 COMPILER_TYPE := gcc
 -include .config.mk
 
