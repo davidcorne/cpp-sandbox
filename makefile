@@ -116,7 +116,7 @@ $(OBJ_DIRECTORY)/%.obj: %.$(EXT)
 	@mkdir -p $(OBJ_DIRECTORY) $(DEPENDENCY_DIRECTORY)
 	@echo ""
 	$(COMPILER) $(COMPILER_ARGS) $(NO_LINK) $(GENERATE_DEPENDENCIES) $< \
-        $(OUT_OBJECT_FILE)$@
+        $(OUT_OBJECT_FILE)$@ || rm -f $(OBJ_DIRECTORY)/$*.d || exit 1
 # vs type compilers don't make the .P files, so make this part conditional
 ifneq ($(COMPILER_TYPE), vs)
 	@cp $(OBJ_DIRECTORY)/$*.d $(DEPENDENCY_DIRECTORY)/$*.P
@@ -127,7 +127,7 @@ ifneq ($(COMPILER_TYPE), vs)
 endif
 
 #==============================================================================
-.DELETE_ON_ERROR: $(RESULT_DIRECTORY)/%.test_result $(OBJ_DIRECTORY)/%.d
+.DELETE_ON_ERROR: $(RESULT_DIRECTORY)/%.test_result
 
 #==============================================================================
 $(RESULT_DIRECTORY)/%.test_result: $(EXE_DIRECTORY)/%.exe
