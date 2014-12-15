@@ -73,8 +73,9 @@ typedef Ring<Request> RequestRing;
 TEST(RingBuffer, add)
 {
   RequestRing ring;
-  ring.add({0, "Hey"});
-  Request request = ring.update();
+  Request request = {0, "Hey"};
+  ring.add(request);
+  request = ring.update();
   TEST_EQUAL(request.Num, 0, "Correct Num.");
   TEST_EQUAL(request.Descriptiton, "Hey", "Correct Descriptiton.");
 }
@@ -91,24 +92,28 @@ TEST(RingBuffer, count)
   RequestRing ring;
   TEST_EQUAL(ring.size(), 0, "Wrong size");
 
-  ring.add({0, "Hey"});
+  Request request = {0, "Hey"};
+  ring.add(request);
   TEST_EQUAL(ring.size(), 1, "Wrong size");
 
-  ring.add({1, "Hey"});
+  request = {1, "Hey"};
+  ring.add(request);
   TEST_EQUAL(ring.size(), 2, "Wrong size");
 
-  ring.add({2, "Hey"});
+  request = {2, "Hey"};
+  ring.add(request);
   TEST_EQUAL(ring.size(), 3, "Wrong size");
 
-  ring.add({3, "Hey"});
+  request = {3, "Hey"};
+  ring.add(request);
   TEST_EQUAL(ring.size(), 4, "Wrong size");
 
   ring.update();
   ring.update();
   TEST_EQUAL(ring.size(), 2, "Wrong size");
 
-  ring.add({3, "Hey"});
-  ring.add({3, "Hey"});
+  ring.add(request);
+  ring.add(request);
   TEST_EQUAL(ring.size(), 4, "Wrong size");
 }
 

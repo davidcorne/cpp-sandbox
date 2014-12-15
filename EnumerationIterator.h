@@ -17,13 +17,16 @@ public:
     const_iterator begin,
     const_iterator end,
     const_iterator current,
-    int pos
+    size_t pos
   );
   
   void operator++();
 
-  std::pair<int, typename CONTAINER::value_type > operator*();
+  std::pair<size_t, typename CONTAINER::value_type > operator*();
 
+  EnumerationIterator(const EnumerationIterator&) = default;
+  EnumerationIterator& operator=(const EnumerationIterator&) = default;
+  
 private:
   template <typename U>
   friend bool operator==(
@@ -37,10 +40,10 @@ private:
     const EnumerationIterator<U>& other
   );
 
-  const const_iterator m_begin;
-  const const_iterator m_end;
+  const_iterator m_begin;
+  const_iterator m_end;
   const_iterator m_current;
-  int m_pos;
+  size_t m_pos;
 };
 
 template <typename CONTAINER>
@@ -63,7 +66,7 @@ EnumerationIterator<CONTAINER>::EnumerationIterator(
   const_iterator begin,
   const_iterator end,
   const_iterator current,
-  int pos
+  size_t pos
 )
   : m_begin(begin),
     m_end(end),
@@ -81,9 +84,9 @@ void EnumerationIterator<CONTAINER>::operator++()
 
 //=============================================================================
 template <typename CONTAINER>
-std::pair<int, typename CONTAINER::value_type> EnumerationIterator<CONTAINER>::operator*()
+std::pair<size_t, typename CONTAINER::value_type> EnumerationIterator<CONTAINER>::operator*()
 {
-  return std::pair<int, value_type>(m_pos, *m_current);
+  return std::pair<size_t, value_type>(m_pos, *m_current);
 }
 
 //=============================================================================

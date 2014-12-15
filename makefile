@@ -40,6 +40,12 @@ ifeq ($(COMPILER_TYPE), vs)
   # a bit of a hack because I know I'm in cygwin if I'm using cl in a makefile.
   INCLUDES := /I$(shell cygpath -w $$(pkg-config --cflags-only-I unitcpp | sed -e 's:-I::') | sed -e 's:\\:/:g')
   COMPILER_ARGS := $(INCLUDES) /nologo /W4 /wd4481 /WX /EHsc /Zi /MTd
+
+  VERSION_SUPPORTS_FS := $(shell expr `echo $(VERSION)` \>= 1800)
+  ifeq "$(VERSION_SUPPORTS_FS)" "1"
+    COMPILER_ARGS += /FS
+  endif
+
   OUT_EXE_FILE := /Fe
   OUT_OBJECT_FILE := /Fo
   NO_LINK := /c

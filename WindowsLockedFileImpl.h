@@ -6,6 +6,8 @@
 
 #include "LockedFileImpl.h"
 
+#include <algorithm>
+
 struct FileHandle;
 
 //=============================================================================

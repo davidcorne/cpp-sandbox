@@ -4,6 +4,10 @@
 
 #include "Capabilities.h"
 #if CAPABILITY_VARIADIC_TEMPLATES
+
+#define LOSS_OF_DATA_CONVERSION 1
+#include "IgnoreDiagnostics.h"
+
 #include <vector>
 
 #include <UnitCpp/Test.h>
@@ -17,8 +21,8 @@ TEST(Enumeration, vector)
 {
   // This uses the Enumeration class, this makes no copies of the array.
   std::vector<double> array = {0, 2, 4, 6, 8};
-  int i = 0;
-  for (std::pair<int, double> pair: Enumeration<std::vector<double> >(array)) {
+  size_t i = 0;
+  for (std::pair<size_t, double> pair: Enumeration<std::vector<double> >(array)) {
     TEST_EQUAL(pair.first, i, "Wrong index.");
     TEST_EQUAL(pair.second, static_cast<double>(i * 2), "Wrong value.");
     ++i;
@@ -27,12 +31,12 @@ TEST(Enumeration, vector)
 
   Printer printer(std::cout);
   printer.print("\nExample use.\n");
-  for (std::pair<int, double> pair: Enumeration<std::vector<double> >(array)) {
+  for (std::pair<size_t, double> pair: Enumeration<std::vector<double> >(array)) {
     printer.print(pair.first, " x 2 = ", pair.second);
   }
 
   printer.print("\nUsing make_enumeration()\n");
-  for (std::pair<int, double> pair: make_enumeration(array)) {
+  for (std::pair<size_t, double> pair: make_enumeration(array)) {
     printer.print(pair.first, " x 2 = ", pair.second);
   }
 
@@ -44,8 +48,8 @@ TEST(Enumeration, enumerate)
   // Uses the free funtion enumerate. The disadvantage to this is that it
   // creates and copies an extra container.
   std::vector<double> array = {0, 2, 4, 6, 8};
-  int i = 0;
-  for (std::pair<int, double> pair: enumerate(array)) {
+  size_t i = 0;
+  for (std::pair<size_t, double> pair: enumerate(array)) {
     TEST_EQUAL(pair.first, i, "Wrong index.");
     TEST_EQUAL(pair.second, static_cast<double>(i * 2), "Wrong value.");
     ++i;
@@ -54,7 +58,7 @@ TEST(Enumeration, enumerate)
 
   Printer printer(std::cout);
   printer.print("\nExample use.\n");
-  for (std::pair<int, double> pair: enumerate(array)) {
+  for (std::pair<size_t, double> pair: enumerate(array)) {
     printer.print(pair.first, " x 2 = ", pair.second);
   }
 

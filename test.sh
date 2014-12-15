@@ -32,4 +32,9 @@ then
   vc11x64
   test_compiler cl vs
 fi
+if type vc12x64 2>/dev/null > /dev/null
+then
+  vc12x64
+  test_compiler cl vs
+fi
 echo "Tested with:$tested_compilers"

@@ -3,6 +3,9 @@
 #include "Capabilities.h"
 #if CAPABILITY_VARIADIC_TEMPLATES
 
+#define UNUSED_PARAMETER 1
+#include "IgnoreDiagnostics.h"
+
 #include <iostream>
 #include <string>
 

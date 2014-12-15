@@ -36,9 +36,9 @@ public:
   
 private:
 
-  const T m_start;
-  const T m_end;
-  const T m_step;
+  T m_start;
+  T m_end;
+  T m_step;
   T m_current;
 };
 

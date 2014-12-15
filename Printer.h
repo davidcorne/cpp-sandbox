@@ -22,6 +22,10 @@ public:
 
 private:
 
+  Printer(const Printer&);
+  Printer& operator=(const Printer&);
+  // Copying prohibited.
+  
   std::ostream& m_os;
 };
 
