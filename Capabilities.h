@@ -1,6 +1,12 @@
 //=============================================================================
 //
-// This defines compiler capabilities.
+// This defines compiler capabilities. If there is a feature which a file uses
+// in this list it's best to guard it like this:
+// #if CAPABILITY_XXX
+// ...
+// #else
+// UNSUPPORTED_FEATURE_MAIN(CAPABILITY_XXX)
+// #endif
 
 #include "Compiler.h"
 #include "Version.h"
