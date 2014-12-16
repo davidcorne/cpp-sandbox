@@ -13,7 +13,7 @@ test_compiler()
     echo "Has $compiler"
     make -j 4 COMPILER_TYPE=$compiler_type
     make test COMPILER_TYPE=$compiler_type
-    tested_compilers="$tested_compilers $compiler_type"
+    tested_compilers="$tested_compilers $(make COMPILER_TYPE=$compiler_type compiler_description)"
   fi
 }
 

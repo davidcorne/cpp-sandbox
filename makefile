@@ -54,9 +54,10 @@ ifeq ($(COMPILER_TYPE), vs)
   DEPENDENCY_DIRECTORY := dependency.gcc.*
 endif
 
-EXE_DIRECTORY := exe.$(COMPILER_TYPE).$(VERSION)
-OBJ_DIRECTORY := obj.$(COMPILER_TYPE).$(VERSION)
-RESULT_DIRECTORY := results.$(COMPILER_TYPE).$(VERSION)
+COMPILER_DESCRIPTION := $(COMPILER_TYPE).$(VERSION)
+EXE_DIRECTORY := exe.$(COMPILER_DESCRIPTION)
+OBJ_DIRECTORY := obj.$(COMPILER_DESCRIPTION)
+RESULT_DIRECTORY := results.$(COMPILER_DESCRIPTION)
 EXT := cpp
 
 TEST_SIN_BIN := $(shell cat sin_bin.txt | grep "^TEST: " | sed -e 's/TEST: //')
@@ -95,11 +96,7 @@ EXE_FILES := $(shell \
 all: $(EXE_FILES)
 	@echo ""
 	@echo \
-"make: \`all' is up to date with" \
-"$(shell ./$(EXE_DIRECTORY)/Compiler.exe)"\
-" version "\
-"$(shell ./$(EXE_DIRECTORY)/Version.exe)"\
-"."
+"make: \`all' is up to date with $(COMPILER_DESCRIPTION)."
 	@echo ""
 
 #==============================================================================
@@ -144,11 +141,7 @@ $(RESULT_DIRECTORY)/%.test_result: $(EXE_DIRECTORY)/%.exe
 test: $(EXE_FILES) $(TEST_RESULTS)
 	@echo
 	@echo \
-"tests passed with" \
-"$(shell ./$(EXE_DIRECTORY)/Compiler.exe)"\
-" version "\
-"$(shell ./$(EXE_DIRECTORY)/Version.exe)"\
-"."
+"Tests passed with $(COMPILER_DESCRIPTION)."
 
 #==============================================================================
 retest: FRC
@@ -168,6 +161,12 @@ clean: FRC
 uberclean: FRC
 	@rm -fr exe.* results.* obj.* dependency.*
 	@echo "Removed all: objects, executables, and dependency files."
+
+#==============================================================================
+#D Getting the compiler you are using.
+#------------------------------------------------------------------------------
+compiler_description: FRC
+	@echo "$(COMPILER_DESCRIPTION)"
 
 #==============================================================================
 #D Pseudo target causes all targets that depend on FRC to be remade even in 
