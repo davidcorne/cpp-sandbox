@@ -83,22 +83,22 @@ struct Prepend {
 //=============================================================================
 TEST(MetaList, construction)
 {
-  typedef List< Value<1>, List<Value<2> > > ListOneTwo;
+  typedef List<Value<1>, List<Value<2> > > ListOneTwo;
 }
 
 //=============================================================================
 TEST(MetaList, length)
 {
-  typedef List< Value<1>, List<Value<2> > > ListOneTwo;
+  typedef List<Value<1>, List<Value<2> > > ListOneTwo;
   TEST_EQUAL(Length<ListOneTwo>::result, 2);
-  typedef List< Value<1>, List<Value<2>, List<Value<3> > > > ListOneTwoThree;
+  typedef List<Value<1>, List<Value<2>, List<Value<3> > > > ListOneTwoThree;
   TEST_EQUAL(Length<ListOneTwoThree>::result, 3);
 }
 
 //=============================================================================
 TEST(MetaList, Nth)
 {
-  typedef List< Value<1>, List<Value<2>, List<Value<3> > > > ListOneTwoThree;
+  typedef List<Value<1>, List<Value<2>, List<Value<3> > > > ListOneTwoThree;
   TEST_EQUAL((Nth<ListOneTwoThree, 0>::result::value), 1);
   TEST_EQUAL((Nth<ListOneTwoThree, 1>::result::value), 2);
 }
@@ -126,7 +126,7 @@ TEST(MetaList, append)
 //=============================================================================
 TEST(MetaList, prepend)
 {
-  typedef List< Value<2>, List<Value<3> > > ListTwoThree;
+  typedef List<Value<2>, List<Value<3> > > ListTwoThree;
   typedef Prepend<Value<1>, ListTwoThree>::result ListOneTwoThree;
   TEST_EQUAL(Length<ListOneTwoThree>::result, 3);
   TEST_EQUAL((Nth<ListOneTwoThree, 0>::result::value), 1);
