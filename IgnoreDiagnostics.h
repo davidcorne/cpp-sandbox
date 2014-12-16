@@ -69,3 +69,10 @@
 #undef UNUSED_PARAMETER
 #endif // UNUSED_PARAMETER
 
+#ifdef UNUSED_TYPEDEF
+#if COMPILER_TYPE == COMPILER_TYPE_GCC
+#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
+#endif // COMPILER_TYPE 
+#undef UNUSED_TYPEDEF
+#endif // UNUSED_TYPEDEF
+
