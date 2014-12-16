@@ -14,10 +14,10 @@
 template <int tNUMERATOR, int tDENOMINATOR>
 struct Fraction {
 private:
-  static const int mcd = GCD<tNUMERATOR, tDENOMINATOR>::result;
+  static const int gcd = GCD<tNUMERATOR, tDENOMINATOR>::result;
 public:
-  constexpr static const int Numerator = tNUMERATOR / mcd;
-  constexpr static const int Denominator = tDENOMINATOR / mcd;
+  constexpr static const int Numerator = tNUMERATOR / gcd;
+  constexpr static const int Denominator = tDENOMINATOR / gcd;
 };
 
 template <int tNUMERATOR, int tDENOMINATOR>
