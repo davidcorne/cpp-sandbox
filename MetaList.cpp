@@ -10,12 +10,12 @@
 #include "IgnoreDiagnostics.h"
 
 template <int N>
-struct Value {
+struct IntValue {
   constexpr static const int value = N;
 };
 
 template <int N>
-constexpr const int Value<N>::value;
+constexpr const int IntValue<N>::value;
 
 //=============================================================================
 struct NullList {
@@ -81,24 +81,63 @@ struct Prepend {
 };
 
 //=============================================================================
+template <typename tLIST, typename tFUNCTION>
+struct ForEach {
+
+  static void execute(tFUNCTION func) {
+    func(tLIST::Head::value);
+    ForEach<typename tLIST::Tail, tFUNCTION>::execute(func);
+  }
+  
+};
+
+//=============================================================================
+template <typename tFUNCTION>
+struct ForEach<NullList, tFUNCTION> {
+
+  static void execute(tFUNCTION func) {
+  }
+  
+};
+
+//=============================================================================
+template <typename tLIST>
+struct Sum {
+  constexpr static const int result = tLIST::Head::value + Sum<typename tLIST::Tail>::result;
+};
+
+//=============================================================================
+template <>
+struct Sum<NullList> {
+  constexpr static const int result = 0;
+};
+
+//=============================================================================
+template <typename tLIST>
+constexpr const int Sum<tLIST>::result;
+
+//=============================================================================
+constexpr const int Sum<NullList>::result;
+
+//=============================================================================
 TEST(MetaList, construction)
 {
-  typedef List<Value<1>, List<Value<2> > > ListOneTwo;
+  typedef List<IntValue<1>, List<IntValue<2> > > ListOneTwo;
 }
 
 //=============================================================================
 TEST(MetaList, length)
 {
-  typedef List<Value<1>, List<Value<2> > > ListOneTwo;
+  typedef List<IntValue<1>, List<IntValue<2> > > ListOneTwo;
   TEST_EQUAL(Length<ListOneTwo>::result, 2);
-  typedef List<Value<1>, List<Value<2>, List<Value<3> > > > ListOneTwoThree;
+  typedef List<IntValue<1>, List<IntValue<2>, List<IntValue<3> > > > ListOneTwoThree;
   TEST_EQUAL(Length<ListOneTwoThree>::result, 3);
 }
 
 //=============================================================================
 TEST(MetaList, Nth)
 {
-  typedef List<Value<1>, List<Value<2>, List<Value<3> > > > ListOneTwoThree;
+  typedef List<IntValue<1>, List<IntValue<2>, List<IntValue<3> > > > ListOneTwoThree;
   TEST_EQUAL((Nth<ListOneTwoThree, 0>::result::value), 1);
   TEST_EQUAL((Nth<ListOneTwoThree, 1>::result::value), 2);
 }
@@ -106,16 +145,16 @@ TEST(MetaList, Nth)
 //=============================================================================
 TEST(MetaList, append)
 {
-  typedef Append<Value<1>, NullList>::result ListOne;
+  typedef Append<IntValue<1>, NullList>::result ListOne;
   TEST_EQUAL((Nth<ListOne, 0>::result::value), 1);
   TEST_EQUAL(Length<ListOne>::result, 1);
 
-  typedef Append<Value<2>, ListOne>::result ListOneTwo;
+  typedef Append<IntValue<2>, ListOne>::result ListOneTwo;
   TEST_EQUAL((Nth<ListOne, 0>::result::value), 1);
   TEST_EQUAL((Nth<ListOneTwo, 1>::result::value), 2);
   TEST_EQUAL(Length<ListOneTwo>::result, 2);
 
-  typedef Append<Value<3>, ListOneTwo>::result ListOneTwoThree;
+  typedef Append<IntValue<3>, ListOneTwo>::result ListOneTwoThree;
   TEST_EQUAL(Length<ListOneTwoThree>::result, 3);
   TEST_EQUAL((Nth<ListOneTwoThree, 0>::result::value), 1);
   TEST_EQUAL((Nth<ListOneTwoThree, 1>::result::value), 2);
@@ -126,12 +165,29 @@ TEST(MetaList, append)
 //=============================================================================
 TEST(MetaList, prepend)
 {
-  typedef List<Value<2>, List<Value<3> > > ListTwoThree;
-  typedef Prepend<Value<1>, ListTwoThree>::result ListOneTwoThree;
+  typedef List<IntValue<2>, List<IntValue<3> > > ListTwoThree;
+  typedef Prepend<IntValue<1>, ListTwoThree>::result ListOneTwoThree;
   TEST_EQUAL(Length<ListOneTwoThree>::result, 3);
   TEST_EQUAL((Nth<ListOneTwoThree, 0>::result::value), 1);
   TEST_EQUAL((Nth<ListOneTwoThree, 1>::result::value), 2);
   TEST_EQUAL((Nth<ListOneTwoThree, 2>::result::value), 3);
+}
+
+//=============================================================================
+TEST(MetaList, for_each)
+{
+  typedef List<IntValue<1>, List<IntValue<2>, List<IntValue<3> > > > ListOneTwoThree;
+  int total = 0;
+  auto sum = [&total](int i){total += i;};
+  ForEach<ListOneTwoThree, decltype(sum)>::execute(sum);
+  TEST_EQUAL(total, 6);
+}
+
+//=============================================================================
+TEST(MetaList, sum)
+{
+  typedef List<IntValue<1>, List<IntValue<2>, List<IntValue<3> > > > ListOneTwoThree;
+  TEST_EQUAL(Sum<ListOneTwoThree>::result, 6);
 }
 
 //=============================================================================
