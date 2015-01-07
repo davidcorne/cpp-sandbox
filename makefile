@@ -54,7 +54,7 @@ ifeq ($(COMPILER_TYPE), vs)
   DEPENDENCY_DIRECTORY := dependency.gcc.*
 endif
 
-ifndef $(COMPILER)
+ifndef COMPILER
   $(error "COMPILER_TYPE \"$(COMPILER_TYPE)\" unknown.")
 endif
 
