@@ -103,7 +103,8 @@ struct ForEach<NullList, tFUNCTION> {
 //=============================================================================
 template <typename tLIST>
 struct Sum {
-  constexpr static const int result = tLIST::Head::value + Sum<typename tLIST::Tail>::result;
+  constexpr static const int result =
+    tLIST::Head::value + Sum<typename tLIST::Tail>::result;
 };
 
 //=============================================================================
