@@ -3,7 +3,7 @@
 // This is for when you have to use enums, in preference to a switch statement.
 
 #include "Capabilities.h"
-#if CAPABILITY_VARIADIC_TEMPLATES
+#ifdef CAPABILITY_VARIADIC_TEMPLATES
 
 #include <assert.h>
 #include <iostream>

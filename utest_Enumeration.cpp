@@ -3,7 +3,7 @@
 // 
 
 #include "Capabilities.h"
-#if CAPABILITY_VARIADIC_TEMPLATES
+#ifdef CAPABILITY_VARIADIC_TEMPLATES
 
 #define LOSS_OF_DATA_CONVERSION 1
 #include "IgnoreDiagnostics.h"

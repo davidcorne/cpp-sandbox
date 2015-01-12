@@ -3,7 +3,7 @@
 // Idea from http://www.drdobbs.com/cpp/mixin-based-programming-in-c/184404445
 
 #include "Capabilities.h"
-#if CAPABILITY_VARIADIC_TEMPLATES
+#ifdef CAPABILITY_VARIADIC_TEMPLATES
 
 #include <iostream>
 #include <string>

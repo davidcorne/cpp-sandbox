@@ -3,7 +3,7 @@
 // and trailing return type function syntax.
 
 #include "Capabilities.h"
-#if CAPABILITY_INITIALISER_LISTS
+#ifdef CAPABILITY_INITIALISER_LISTS
 
 #include <iostream>
 #include <string>

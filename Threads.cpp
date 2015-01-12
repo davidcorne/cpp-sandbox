@@ -3,7 +3,7 @@
 // 
 
 #include "Capabilities.h"
-#if CAPABILITY_THREAD && CAPABILITY_THREAD_LOCAL_VARIABLES
+#if defined(CAPABILITY_THREAD) && defined(CAPABILITY_THREAD_LOCAL_VARIABLES)
 
 #include <iostream>
 #include <thread>

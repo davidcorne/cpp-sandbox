@@ -2,7 +2,7 @@
 // Unit tests for GCD.h
 
 #include "Capabilities.h"
-#if CAPABILITY_CONSTEXPR
+#ifdef CAPABILITY_CONSTEXPR
 #include <UnitCpp/Test.h>
 
 #include "GCD.h"

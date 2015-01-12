@@ -5,7 +5,7 @@
 //
 
 #include "Capabilities.h"
-#if CAPABILITY_GENERIC_LAMBDAS == 1
+#ifdef CAPABILITY_GENERIC_LAMBDAS
 #include <iostream>
 #include <string>
 

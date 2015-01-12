@@ -7,7 +7,7 @@
 #include <iostream>
 
 #include "Capabilities.h"
-#if CAPABILITY_VARIADIC_TEMPLATES
+#ifdef CAPABILITY_VARIADIC_TEMPLATES
 
 #define UNUSED_PRIVATE_FIELD 1
 #include "IgnoreDiagnostics.h"

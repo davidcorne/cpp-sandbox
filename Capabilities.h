@@ -32,7 +32,6 @@
 #if COMPILER_TYPE == COMPILER_TYPE_GCC
 #if VERSION < 40900
 #undef CAPABILITY_GENERIC_LAMBDAS
-#define CAPABILITY_GENERIC_LAMBDAS 0
 #endif // VERSION > 40900
 
 
@@ -41,47 +40,38 @@
 #if COMPILER_TYPE == COMPILER_TYPE_CLANG
 #if !__has_feature(c_atomic)
 #undef CAPABILITY_ATOMICS
-#define CAPABILITY_ATOMICS 0
 #endif // __has_feature(c_atomic)
 
 #if !__has_feature(cxx_constexpr)
 #undef CAPABILITY_CONSTEXPR
-#define CAPABILITY_CONSTEXPR 0
 #endif // __has_feature(cxx_constexpr)
 
 #if !__has_feature(cxx_delegating_constructors)
 #undef CAPABILITY_DELEGATING_CONSTRUCTOR
-#define CAPABILITY_DELEGATING_CONSTRUCTOR 0
 #endif // __has_feature(cxx_delegating_constructors)
 
 #if !__has_feature(cxx_defaulted_functions)
 #undef CAPABILITY_DEFAULTED_FUNCTIONS
-#define CAPABILITY_DEFAULTED_FUNCTIONS 0
 #endif // __has_feature(cxx_defaulted_functions)
 
 #if !__has_feature(cxx_generalized_initializers)
 #undef CAPABILITY_INITIALISER_LISTS
-#define CAPABILITY_INITIALISER_LISTS 1
 #endif // !__has_feature(cxx_generalized_initializers)
 
 #if !__has_feature(cxx_range_for)
 #undef CAPABILITY_RANGE_BASE_FOR
-#define CAPABILITY_RANGE_BASE_FOR 0
 #endif // !__has_feature(cxx_range_for)
 
 #if !__has_feature(cxx_thread_local)
 #undef CAPABILITY_THREAD_LOCAL_VARIABLES
-#define CAPABILITY_THREAD_LOCAL_VARIABLES 0
 #endif // __has_feature(cxx_thread_local)
 
 #if !__has_feature(cxx_user_literals)
 #undef CAPABILITY_USER_DEFINED_LITERALS
-#define CAPABILITY_USER_DEFINED_LITERALS 0
 #endif //!__has_feature(cxx_user_literals)
 
 #if !__has_feature(cxx_variadic_templates)
 #undef CAPABILITY_VARIADIC_TEMPLATES
-#define CAPABILITY_VARIADIC_TEMPLATES 0
 #endif // __has_feature(cxx_variadic_templates)
 
 // it appears that __has_feature(cxx_generic_lambdas) is not working in my
@@ -105,39 +95,26 @@
 // MSVC++ 5.0  VERSION == 1100
 
 #undef CAPABILITY_DIGRAPHS
-#define CAPABILITY_DIGRAPHS 0
-
 #undef CAPABILITY_CONSTEXPR
-#define CAPABILITY_CONSTEXPR 0
 
 // VS14 CTP1
 #if VERSION < 1900
 #undef CAPABILITY_USER_DEFINED_LITERALS
-#define CAPABILITY_USER_DEFINED_LITERALS 0
 #undef CAPABILITY_DEFAULTED_FUNCTIONS
-#define CAPABILITY_DEFAULTED_FUNCTIONS 0
 #undef CAPABILITY_GENERIC_LAMBDAS
-#define CAPABILITY_GENERIC_LAMBDAS 0
 #endif // VERSION < 1900
 
 #if VERSION < 1800
 #undef CAPABILITY_DELEGATING_CONSTRUCTOR
-#define CAPABILITY_DELEGATING_CONSTRUCTOR 0
 #undef CAPABILITY_INITIALISER_LISTS
-#define CAPABILITY_INITIALISER_LISTS 0
 #undef CAPABILITY_VARIADIC_TEMPLATES
-#define CAPABILITY_VARIADIC_TEMPLATES 0
 #endif // VERSION < 1800
 
 #if VERSION < 1700
 #undef CAPABILITY_ATOMICS
-#define CAPABILITY_ATOMICS 0
 #undef CAPABILITY_RANGE_BASE_FOR
-#define CAPABILITY_RANGE_BASE_FOR 0
 #undef CAPABILITY_THREAD
-#define CAPABILITY_THREAD 0
 #undef CAPABILITY_TYPE_TRAITS
-#define CAPABILITY_TYPE_TRAITS 0
 #endif // VERSION < 1700
 
 #endif // COMPILER_TYPE == COMPILER_TYPE_VS

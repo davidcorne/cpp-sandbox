@@ -3,7 +3,7 @@
 // 
 
 #include "Capabilities.h"
-#if CAPABILITY_VARIADIC_TEMPLATES && CAPABILITY_DEFAULTED_FUNCTIONS
+#if defined(CAPABILITY_VARIADIC_TEMPLATES) && defined(CAPABILITY_DEFAULTED_FUNCTIONS)
 #include "DuckTyping.h"
 #include <random>
 #include <chrono>

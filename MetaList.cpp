@@ -3,7 +3,7 @@
 // A template meta programming list.
 
 #include "Capabilities.h"
-#if CAPABILITY_CONSTEXPR
+#ifdef CAPABILITY_CONSTEXPR
 #include <UnitCpp/Test.h>
 
 #define UNUSED_TYPEDEF 1

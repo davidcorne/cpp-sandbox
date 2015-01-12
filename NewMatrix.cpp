@@ -2,7 +2,7 @@
 // A C++ 11 style matrix
 
 #include "Capabilities.h"
-#if CAPABILITY_CONSTEXPR
+#ifdef CAPABILITY_CONSTEXPR
 #include <array>
 #include <iostream>
 #include <UnitCpp/Test.h>

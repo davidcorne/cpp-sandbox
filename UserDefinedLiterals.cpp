@@ -10,7 +10,7 @@
 // constexpr implies const.
 
 #include "Capabilities.h"
-#if CAPABILITY_USER_DEFINED_LITERALS
+#ifdef CAPABILITY_USER_DEFINED_LITERALS
 
 #include <iostream>
 

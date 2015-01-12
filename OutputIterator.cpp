@@ -3,7 +3,7 @@
 // 
 
 #include "Capabilities.h"
-#if CAPABILITY_INITIALISER_LISTS
+#ifdef CAPABILITY_INITIALISER_LISTS
 #include <iostream>
 #include <functional>
 #include <string>

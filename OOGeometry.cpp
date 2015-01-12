@@ -4,7 +4,7 @@
 // but in C++.
 
 #include "Capabilities.h"
-#if CAPABILITY_INITIALISER_LISTS
+#ifdef CAPABILITY_INITIALISER_LISTS
 #include <cassert>
 
 #include <iostream>

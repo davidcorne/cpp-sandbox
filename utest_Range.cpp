@@ -3,7 +3,7 @@
 // 
 
 #include "Capabilities.h"
-#if CAPABILITY_DELEGATING_CONSTRUCTOR
+#ifdef CAPABILITY_DELEGATING_CONSTRUCTOR
 
 #include <iostream>
 

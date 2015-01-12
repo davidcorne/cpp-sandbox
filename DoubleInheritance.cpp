@@ -2,7 +2,7 @@
 //
 
 #include "Capabilities.h"
-#if CAPABILITY_DEFAULTED_FUNCTIONS
+#ifdef CAPABILITY_DEFAULTED_FUNCTIONS
 #include <iostream>
 
 //=============================================================================

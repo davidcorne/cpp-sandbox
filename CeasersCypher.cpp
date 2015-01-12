@@ -1,7 +1,7 @@
 //=============================================================================
 
 #include "Capabilities.h"
-#if CAPABILITY_RANGE_BASE_FOR
+#ifdef CAPABILITY_RANGE_BASE_FOR
 #include <UnitCpp/Test.h>
 
 //=============================================================================

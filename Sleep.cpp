@@ -2,7 +2,7 @@
 // This shows how you sleep a C++ program in a platform independent way
 
 #include "Capabilities.h"
-#if CAPABILITY_THREAD
+#ifdef CAPABILITY_THREAD
 #include <thread>
 #include <chrono>
 #include <iostream>

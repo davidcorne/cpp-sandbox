@@ -3,7 +3,7 @@
 #include <UnitCpp/Test.h>
 
 #include "Capabilities.h"
-#if CAPABILITY_CONSTEXPR
+#ifdef CAPABILITY_CONSTEXPR
 
 #include "TML.h"
 

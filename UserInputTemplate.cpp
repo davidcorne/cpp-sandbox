@@ -3,7 +3,7 @@
 // This is a conditional templatised input function.
 
 #include "Capabilities.h"
-#if CAPABILITY_GENERIC_LAMBDAS
+#ifdef CAPABILITY_GENERIC_LAMBDAS
 
 #include <iostream>
 #include <string>

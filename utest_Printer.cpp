@@ -3,7 +3,7 @@
 // 
 
 #include "Capabilities.h"
-#if CAPABILITY_VARIADIC_TEMPLATES
+#ifdef CAPABILITY_VARIADIC_TEMPLATES
 #include <sstream>
 
 #include <UnitCpp/Test.h>

@@ -3,7 +3,7 @@
 // 
 
 #include "Capabilities.h"
-#if CAPABILITY_INITIALISER_LISTS
+#ifdef CAPABILITY_INITIALISER_LISTS
 
 #define LOSS_OF_DATA_CONVERSION 1
 #include "IgnoreDiagnostics.h"

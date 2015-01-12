@@ -4,7 +4,7 @@
 // http://www.drdobbs.com/typedefs-and-iterators-if-youve-got-em-u/184401853
 
 #include "Capabilities.h"
-#if CAPABILITY_INITIALISER_LISTS
+#ifdef CAPABILITY_INITIALISER_LISTS
 #include <iostream>
 #include <vector>
 #include <list>

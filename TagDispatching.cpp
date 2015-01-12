@@ -1,5 +1,5 @@
 #include "Capabilities.h"
-#if CAPABILITY_TYPE_TRAITS
+#ifdef CAPABILITY_TYPE_TRAITS
 
 #include <iostream>
 #include <type_traits>

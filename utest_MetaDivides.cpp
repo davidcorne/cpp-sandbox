@@ -4,7 +4,7 @@
 #include <UnitCpp/Test.h>
 
 #include "Capabilities.h"
-#if CAPABILITY_CONSTEXPR
+#ifdef CAPABILITY_CONSTEXPR
 
 #include "MetaDivides.h"
 #include "MetaDivides.h" // test multiple includes
