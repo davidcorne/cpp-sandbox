@@ -5,7 +5,7 @@
 #ifdef CAPABILITY_CONSTEXPR
 #include <array>
 #include <iostream>
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 #define UNUSED_VARIABLE 1
 #include "IgnoreDiagnostics.h"

@@ -13,7 +13,7 @@
 
 #include <cassert>
 #include <cmath>
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 // (4.1) - integral or enumeration type

@@ -6,7 +6,7 @@
 #ifdef CAPABILITY_VARIADIC_TEMPLATES
 #include <sstream>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 #include "Printer.h"
 

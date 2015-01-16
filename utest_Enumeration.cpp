@@ -10,7 +10,7 @@
 
 #include <vector>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 #include "Enumeration.h"
 #include "enumerate.h"

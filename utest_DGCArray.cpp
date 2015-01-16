@@ -5,7 +5,7 @@
 #include "DGCArray.h"
 #include "IteratorCreators.h"
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 TEST(DGCArray, constructor)

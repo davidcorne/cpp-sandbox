@@ -5,7 +5,7 @@
 //
 // Note this is undefined behaviour, so it won't work on some compilers.
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 #include "Compiler.h"
 

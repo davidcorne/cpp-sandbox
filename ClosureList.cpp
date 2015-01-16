@@ -9,7 +9,7 @@
 #include <iostream>
 #include <vector>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 void out_closure(std::ostream& os)

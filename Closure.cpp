@@ -5,7 +5,7 @@
 #include <iostream>
 #include <functional>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 template <class T>

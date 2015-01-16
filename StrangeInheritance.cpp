@@ -6,7 +6,7 @@
 #include <sstream>
 #include <memory>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 class Foo {

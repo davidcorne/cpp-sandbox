@@ -11,7 +11,7 @@
 #include <map>
 #include <string>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 enum SwitchThing {

@@ -6,7 +6,7 @@
 #include <sstream>
 #include <string>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 class IEmployeeExporter {

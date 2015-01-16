@@ -8,7 +8,7 @@
 #include <thread>
 #include <vector>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 class Counter {

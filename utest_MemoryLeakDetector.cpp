@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 #define UNUSED_VARIABLE
 #include "IgnoreDiagnostics.h"

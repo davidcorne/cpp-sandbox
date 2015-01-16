@@ -4,7 +4,7 @@
 
 #include "Capabilities.h"
 #ifdef CAPABILITY_VARIADIC_TEMPLATES
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 #include <memory>
 

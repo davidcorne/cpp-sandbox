@@ -3,7 +3,7 @@
 // *(ptr + 3). This can be equivalently written as *(3 + ptr) and therefore
 // as 3[ptr]
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 TEST(OddArrayAccess, access)

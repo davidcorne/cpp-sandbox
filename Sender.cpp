@@ -6,7 +6,7 @@
 #include <functional>
 #include <map>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 class Reason {

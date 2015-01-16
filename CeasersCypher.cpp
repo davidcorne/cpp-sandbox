@@ -2,7 +2,7 @@
 
 #include "Capabilities.h"
 #ifdef CAPABILITY_RANGE_BASE_FOR
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 class Cyper {

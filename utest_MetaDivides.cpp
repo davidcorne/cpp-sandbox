@@ -1,7 +1,7 @@
 //=============================================================================
 // Unit test for Divides
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 #include "Capabilities.h"
 #ifdef CAPABILITY_CONSTEXPR

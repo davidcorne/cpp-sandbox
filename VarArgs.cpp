@@ -5,7 +5,7 @@
 #include <iostream>
 #include <stdarg.h>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 class VarArgs {

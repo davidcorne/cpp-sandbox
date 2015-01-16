@@ -3,7 +3,7 @@
 // 
 #include <functional>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 std::function<int(int)> factorial = [](int number)->int {

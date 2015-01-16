@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 // A type-level Pressburger encoding of natural numbers.
 

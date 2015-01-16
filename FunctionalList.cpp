@@ -6,7 +6,7 @@
 
 #include <memory>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 template<typename T>

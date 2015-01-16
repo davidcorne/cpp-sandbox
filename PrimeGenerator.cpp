@@ -8,7 +8,7 @@
 #include <vector>
 #include <math.h>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 #include "Iterator.h"
 

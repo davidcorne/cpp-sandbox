@@ -4,7 +4,7 @@
 #include <functional>
 #include <cmath>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 
 // These are obviously terrible lambdas. This is to show very complicated one

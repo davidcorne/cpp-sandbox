@@ -5,7 +5,7 @@
 #include "Capabilities.h"
 #ifdef CAPABILITY_DELEGATING_CONSTRUCTOR
 #include <iostream>
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 #include "Range.h"
 

@@ -10,7 +10,7 @@
 
 #include <vector>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 template <typename T, typename Iterable>

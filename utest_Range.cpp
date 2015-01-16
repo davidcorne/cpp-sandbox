@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 #include "Range.h"
 

@@ -4,7 +4,7 @@
 #define STLIteratorWrapper_H
 
 #include "AbsIterator.h"
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 template <typename ITER>

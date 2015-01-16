@@ -6,7 +6,7 @@
 #include <iostream>
 #include <sstream>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 void output(std::string message)

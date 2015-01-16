@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 class Image {

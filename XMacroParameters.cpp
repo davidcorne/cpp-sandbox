@@ -1,7 +1,7 @@
 //=============================================================================
 //
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 #define UNUSED_PRIVATE_FIELD
 #include "IgnoreDiagnostics.h"

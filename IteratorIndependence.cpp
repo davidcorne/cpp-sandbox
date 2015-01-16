@@ -10,7 +10,7 @@
 #include <list>
 #include <set>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 class IntSummer {

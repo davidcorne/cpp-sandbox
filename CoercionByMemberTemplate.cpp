@@ -10,7 +10,7 @@
 #include <iostream>
 #include <random>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 template <class T>

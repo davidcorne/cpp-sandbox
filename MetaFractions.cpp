@@ -6,7 +6,7 @@
 #include "Capabilities.h"
 
 #ifdef CAPABILITY_CONSTEXPR
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 #include "GCD.h"
 

@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 class Keeper {

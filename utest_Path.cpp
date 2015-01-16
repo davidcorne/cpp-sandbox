@@ -4,7 +4,7 @@
 
 #include "Compiler.h"
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 TEST(Path, path)

@@ -6,7 +6,7 @@ typedef int Key;
 typedef int Value;
 
 #include <iostream>
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 #include "Iterator.h"
 

@@ -4,7 +4,7 @@
 
 #include "Capabilities.h"
 #ifdef CAPABILITY_CONSTEXPR
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 #define UNUSED_TYPEDEF 1
 #include "IgnoreDiagnostics.h"

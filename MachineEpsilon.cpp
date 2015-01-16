@@ -9,7 +9,7 @@
 #include <iomanip>
 #include <limits>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 template<typename float_t, typename int_t>

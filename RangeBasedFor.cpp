@@ -8,7 +8,7 @@
 #include <iostream>
 #include <vector>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 TEST(RangeBasedFor, vector)

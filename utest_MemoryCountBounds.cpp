@@ -2,7 +2,7 @@
 //
 // 
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 #define CUSTOM_MEMORY_MAP_CAPACITY 512
 #include "MemoryCount.h"

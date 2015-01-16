@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 class Base {

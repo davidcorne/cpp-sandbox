@@ -4,7 +4,7 @@
 
 #include <cassert>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 #include "MemoryCount.h"
 

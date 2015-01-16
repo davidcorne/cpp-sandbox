@@ -6,7 +6,7 @@
 #include <assert.h>
 #include <iostream>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 template <class T>

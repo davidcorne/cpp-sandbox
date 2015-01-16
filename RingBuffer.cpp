@@ -9,7 +9,7 @@
 #include <iostream>
 #include <string>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 template <typename T>

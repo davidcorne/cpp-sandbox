@@ -5,7 +5,7 @@
 #include <iostream>
 #include <vector>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 int legecy_sum(const int* array, size_t size)

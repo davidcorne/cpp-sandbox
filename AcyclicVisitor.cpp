@@ -5,7 +5,7 @@
 
 #include <assert.h>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 // Degenerate class, only used for passing around. Anyone who wants to use

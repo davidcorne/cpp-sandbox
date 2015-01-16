@@ -8,7 +8,7 @@
 #include <vector>
 #include <algorithm>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 class ICarElement;
 class Wheel;

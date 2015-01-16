@@ -7,7 +7,7 @@
 #include <string>
 #include <sstream>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 std::vector<std::string> split(std::string in, char delimiter=' ')

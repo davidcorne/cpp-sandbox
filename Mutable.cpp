@@ -4,7 +4,7 @@
 #include <iostream>
 #include <math.h>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 //=============================================================================
 struct Point {

@@ -8,7 +8,7 @@
 #include <string>
 #include <map>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 class GameObject;
 

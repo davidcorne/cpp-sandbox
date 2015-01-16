@@ -6,7 +6,7 @@
 #include "Compiler.h"
 #include <assert.h>
 
-#include <UnitCpp/Test.h>
+#include <UnitCpp.h>
 
 #include "LockedFile.h"
 #include "LockFileError.h"
