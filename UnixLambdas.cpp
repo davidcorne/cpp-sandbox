@@ -11,6 +11,7 @@
 #include <sstream>
 #include <vector>
 
+#include "StringOperations.h"
 
 //=============================================================================
 namespace unix {
@@ -44,14 +45,6 @@ public:
 
 //=============================================================================
 String operator|(String source, const Operation& function);
-
-//=============================================================================
-template <typename tOUT>
-void split(String string, String::value_type delimiter, tOUT ouput_iterator);
-
-//=============================================================================
-template <typename tIN>
-String join(tIN begin, tIN end, String::value_type delimiter);
 
 } // namespace unix
 
@@ -149,9 +142,9 @@ sort::sort()
 unix::String sort::operator()(unix::String out) const
 {
   std::vector<unix::String> after;
-  unix::split(out, '\n', back_inserter(after));
+  split(out, '\n', back_inserter(after));
   std::sort(begin(after), end(after));
-  return unix::join(begin(after), end(after), '\n');
+  return join(begin(after), end(after), '\n');
 }
 
 //=============================================================================
@@ -176,40 +169,6 @@ String operator|(String source, const Operation& function)
   return function(source);
 }
 
-//=============================================================================
-template <typename tOUT>
-void split(String string, String::value_type delimiter, tOUT ouput_iterator)
-{
-  std::vector<std::pair<String::size_type, String::size_type> > pairs;
-  String::size_type previous = 0;
-  for (String::size_type i = 0; i < string.length(); ++i) {
-    if (string[i] == delimiter) {
-      pairs.push_back(std::make_pair(previous, i));
-      previous = i + 1;
-    }
-  }
-  pairs.push_back(std::make_pair(previous, string.length() + 1));
-  // e.g. if string: "hello\nyou" delimiter: '\n'
-  //         pairs: {0, 5}, {6, 9}
-
-  for (auto it = begin(pairs); it != end(pairs); ++it) {
-    String token(string, it->first, it->second - it->first);
-    *ouput_iterator = token;
-    ++ouput_iterator;
-  }
-}
-
-//=============================================================================
-template <typename tIN>
-String join(tIN begin, tIN end, String::value_type delimiter)
-{
-  String out;
-  for (auto it = begin; it != end; ++it) {
-    out += *it;
-    out += delimiter;
-  }
-  return out.substr(0, out.size() - 1);
-}
 
 } // namespace unix
 
