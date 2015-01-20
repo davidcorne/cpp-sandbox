@@ -53,6 +53,7 @@ TEST(PrintableType, enum)
   ss.str("");
 }
 
+//=============================================================================
 struct NotPrintable {
 
 };
@@ -68,10 +69,12 @@ TEST(PrintableType, NotPrintable)
   ss.str("");
 }
 
+//=============================================================================
 struct Printable {
 
 };
 
+//=============================================================================
 std::ostream& operator<<(std::ostream& os, const Printable&)
 {
   return os;
