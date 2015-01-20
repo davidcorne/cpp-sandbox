@@ -7,10 +7,10 @@
 #include "Capabilities.h"
 
 #define DISPLAY_SUPPORTED(name)\
-  std::cout << "Feature: " << std::left << std::setw(35) << #name << " enabled" << std::endl
+  std::cout << "Feature: " << std::left << std::setw(45) << #name << " enabled" << std::endl
 
 #define DISPLAY_UNSUPPORTED(name)\
-  std::cout << "Feature: " << std::left << std::setw(35) << #name << " disabled" << std::endl
+  std::cout << "Feature: " << std::left << std::setw(45) << #name << " disabled" << std::endl
 
 //=============================================================================
 int main() {
@@ -32,10 +32,16 @@ int main() {
   DISPLAY_UNSUPPORTED(CAPABILITY_DELEGATING_CONSTRUCTOR);
 #endif
 
-#ifdef CAPABILITY_DELEGATING_CONSTRUCTOR
+#ifdef CAPABILITY_DEFAULTED_FUNCTIONS
   DISPLAY_SUPPORTED(CAPABILITY_DEFAULTED_FUNCTIONS);
 #else
   DISPLAY_UNSUPPORTED(CAPABILITY_DEFAULTED_FUNCTIONS);
+#endif
+
+#ifdef CAPABILITY_DEFAULT_FUNCTION_TEMPLATE_ARGS
+  DISPLAY_SUPPORTED(CAPABILITY_DEFAULT_FUNCTION_TEMPLATE_ARGS);
+#else
+  DISPLAY_UNSUPPORTED(CAPABILITY_DEFAULT_FUNCTION_TEMPLATE_ARGS);
 #endif
 
 #ifdef CAPABILITY_DIGRAPHS
