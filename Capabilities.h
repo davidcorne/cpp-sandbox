@@ -19,6 +19,7 @@
 #define CAPABILITY_CONSTEXPR 1
 #define CAPABILITY_DELEGATING_CONSTRUCTOR 1
 #define CAPABILITY_DEFAULTED_FUNCTIONS 1
+#define CAPABILITY_DEFAULT_FUNCTION_TEMPLATE_ARGS 1
 #define CAPABILITY_DIGRAPHS 1
 #define CAPABILITY_GENERIC_LAMBDAS 1
 #define CAPABILITY_INITIALISER_LISTS 1
@@ -74,6 +75,10 @@
 #undef CAPABILITY_VARIADIC_TEMPLATES
 #endif // __has_feature(cxx_variadic_templates)
 
+#if !__has_feature(cxx_default_function_template_args)
+#undef CAPABILITY_DEFAULT_FUNCTION_TEMPLATE_ARGS
+#endif // __has_feature(cxx_variadic_templates)
+
 // it appears that __has_feature(cxx_generic_lambdas) is not working in my
 // version of clang.
 // <nnn> #if ! __has_feature(cxx_generic_lambdas)
@@ -96,6 +101,7 @@
 
 #undef CAPABILITY_DIGRAPHS
 #undef CAPABILITY_CONSTEXPR
+#undef CAPABILITY_DEFAULT_FUNCTION_TEMPLATE_ARGS
 
 // VS14 CTP1
 #if VERSION < 1900

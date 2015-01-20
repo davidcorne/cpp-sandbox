@@ -1,5 +1,8 @@
 #include <UnitCpp.h>
 
+#include "Capabilities.h"
+
+#ifdef CAPABILITY_DEFAULT_FUNCTION_TEMPLATE_ARGS
 #include "StringOperations.h"
 
 //=============================================================================
@@ -45,6 +48,9 @@ TEST(StringOperations, split)
   TEST_EQUAL(result[3], std::string("sn't "));
   TEST_EQUAL(result[4], std::string("t."));
   result.clear();
+
+  // <nnn> split(source, 'T', back_inserter(result));
+  // <nnn> TEST_EQUAL(result.size(), 1);
   
 }
 
@@ -54,3 +60,6 @@ int main(int argc, char** argv)
 {
   return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }
+#else
+UNSUPPORTED_FEATURE_MAIN(CAPABILITY_DEFAULT_FUNCTION_TEMPLATE_ARGS)
+#endif

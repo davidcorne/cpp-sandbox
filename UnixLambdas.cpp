@@ -4,6 +4,7 @@
 // 
 // However, I took it in a completely different direction.
 
+
 #include <algorithm>
 #include <iostream>
 #include <iterator>
@@ -11,10 +12,12 @@
 #include <sstream>
 #include <vector>
 
+#include "Capabilities.h"
+#ifdef CAPABILITY_DEFAULT_FUNCTION_TEMPLATE_ARGS
 #include "StringOperations.h"
 
 //=============================================================================
-namespace unix {
+namespace nix {
 
 typedef std::string String;
   
@@ -46,76 +49,76 @@ public:
 //=============================================================================
 String operator|(String source, const Operation& function);
 
-} // namespace unix
+} // namespace nix
 
            
 //=============================================================================
-class grep : public unix::Operation {
+class grep : public nix::Operation {
 public:
   
-  grep(unix::String re);
+  grep(nix::String re);
   
-  virtual unix::String operator()(unix::String in) const override;
+  virtual nix::String operator()(nix::String in) const override;
 
 private:
 
-  unix::String m_re;
+  nix::String m_re;
 };
 
 //=============================================================================
-class wc : public unix::Operation {
+class wc : public nix::Operation {
 public:
 
-  wc(unix::Options options=unix::Options());
+  wc(nix::Options options=nix::Options());
 
-  virtual unix::String operator()(unix::String in) const override;
+  virtual nix::String operator()(nix::String in) const override;
 };
 
 //=============================================================================
-class echo : public unix::Operation {
+class echo : public nix::Operation {
 public:
 
   echo();
 
-  virtual unix::String operator()(unix::String in) const override;
+  virtual nix::String operator()(nix::String in) const override;
   
 };
   
 //=============================================================================
-class sort : public unix::Operation {
+class sort : public nix::Operation {
 public:
 
   sort();
 
-  virtual unix::String operator()(unix::String in) const override;
+  virtual nix::String operator()(nix::String in) const override;
   
 };
   
 //=============================================================================
 int main() {
-  unix::String result = echo()("hi\nthere\nbeautiful!") | sort();
+  nix::String result = echo()("hi\nthere\nbeautiful!") | sort();
   std::cout << result << std::endl;
 }
 
 //=============================================================================
-grep::grep(unix::String re)
+grep::grep(nix::String re)
   : m_re(re)
 {
 }
 
 //=============================================================================
-unix::String grep::operator()(unix::String in) const
+nix::String grep::operator()(nix::String in) const
 {
   return in;
 }
 
 //=============================================================================
-wc::wc(unix::Options options)
+wc::wc(nix::Options options)
 {
 }
 
 //=============================================================================
-unix::String wc::operator()(unix::String in) const
+nix::String wc::operator()(nix::String in) const
 {
   std::stringstream ss;
   ss << in.length();
@@ -128,7 +131,7 @@ echo::echo()
 }
 
 //=============================================================================
-unix::String echo::operator()(unix::String out) const
+nix::String echo::operator()(nix::String out) const
 {
   return out;
 }
@@ -139,16 +142,16 @@ sort::sort()
 }
 
 //=============================================================================
-unix::String sort::operator()(unix::String out) const
+nix::String sort::operator()(nix::String out) const
 {
-  std::vector<unix::String> after;
+  std::vector<nix::String> after;
   split(out, '\n', back_inserter(after));
   std::sort(begin(after), end(after));
   return join(begin(after), end(after), '\n');
 }
 
 //=============================================================================
-namespace unix {
+namespace nix {
   
 //=============================================================================
 Options::Options()
@@ -170,5 +173,8 @@ String operator|(String source, const Operation& function)
 }
 
 
-} // namespace unix
+} // namespace nix
 
+#else
+UNSUPPORTED_FEATURE_MAIN(CAPABILITY_DEFAULT_FUNCTION_TEMPLATE_ARGS)
+#endif

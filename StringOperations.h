@@ -4,6 +4,8 @@
 #ifndef StringOperations_H
 #define StringOperations_H
 
+#include "Capabilities.h"
+#ifdef CAPABILITY_DEFAULT_FUNCTION_TEMPLATE_ARGS
 #include <string>
 #include <vector>
 
@@ -61,5 +63,9 @@ tSTRING join(tIN begin, tIN end, typename tSTRING::value_type delimiter)
   }
   return out.substr(0, out.size() - 1);
 }
+
+#else
+#error "Need default function template arguments."
+#endif
 
 #endif
