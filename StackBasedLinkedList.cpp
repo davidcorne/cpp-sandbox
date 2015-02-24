@@ -6,6 +6,10 @@
 
 #include <UnitCpp.h>
 
+struct LinkedListOutOfSpaceException : std::exception
+{
+};
+
 //=============================================================================
 template <typename T, unsigned I=50>
 class LinkedList {
@@ -17,6 +21,7 @@ public:
   // Pop the first item from the list.
   T pop();
 
+    
 private:
 
   UNITCPP_FRIEND_TEST(StackBasedLinkedList, prepend);
@@ -137,6 +142,8 @@ TEST(StackBasedLinkedList, constructor)
   LinkedList<int> int_list;
   LinkedList<double> double_list;
   LinkedList<std::string> string_list;
+
+  LinkedList<const int> const_int_list;
 }
 
 //=============================================================================
@@ -200,6 +207,22 @@ TEST(StackBasedLinkedList, iterator)
   TEST_EQUAL(equivilant[9], 1);
 }
 
+//=============================================================================
+TEST(StackBasedLinkedList, limit)
+{
+  LinkedList<int, 3> list;
+  list.prepend(0);
+  list.prepend(1);
+  list.prepend(2);
+  bool throws = false;
+  try {
+    list.prepend(3);
+  } catch (LinkedListOutOfSpaceException e) {
+    throws = true;
+  }
+  TEST_TRUE(throws);
+}
+
 //----- Source
 //----- LinkedList
 
@@ -227,6 +250,9 @@ ObserverPtr<typename LinkedList<T, I>::Node> LinkedList<T, I>::NodeStore::next()
       node = ObserverPtr<Node>(&n);
       break;
     }
+  }
+  if (!node) {
+    throw LinkedListOutOfSpaceException();
   }
   return node;
 }
