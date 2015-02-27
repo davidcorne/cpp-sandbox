@@ -16,19 +16,19 @@ struct Y {
 
 };
 
-void function(X x, Y y)
+void function(X, Y)
 {
   std::cout << "x first." << std::endl;
 }
 
-void function(Y y, X x)
+void function(Y, X)
 {
   std::cout << "y first." << std::endl;
 }
 
 
 //=============================================================================
-int main(int argc, char** argv) 
+int main() 
 {
   X x;
   Y y;
