@@ -28,6 +28,7 @@ TEST(Day, create)
   day = Friday;
   day = Saturday;
   day = Sunday;
+  (void)day;
 }
 
 //=============================================================================
@@ -57,6 +58,7 @@ TEST(Greeting, create)
   Greeting greeting = Hi;
   greeting = Hello;
   greeting = Salut;
+  (void)greeting;
 }
 
 //=============================================================================

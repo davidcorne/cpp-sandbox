@@ -74,7 +74,7 @@ ObserverPtr<T>::ObserverPtr(T* pointer)
 template <typename T>
 ObserverPtr<T>::operator bool() const
 {
-  return m_pointer;
+  return m_pointer ? true : false;
 }
 
 //=============================================================================

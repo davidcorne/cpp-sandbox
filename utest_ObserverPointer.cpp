@@ -18,7 +18,7 @@ TEST(ObserverPointer, operator_bool)
 {
   ObserverPtr<std::string> invalid;
   TEST_FALSE(invalid);
-  std::unique_ptr<float> f(new float(17.2));
+  std::unique_ptr<float> f(new float(17.2f));
   ObserverPtr<float> observer(f.get());
   TEST_TRUE(observer);
 }

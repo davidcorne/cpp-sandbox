@@ -55,13 +55,13 @@ private:
   static std::string s_unsplit_string;
 };
 
-#define ENUM_WITH_CONVERTER(NAME, VALUES...)                            \
+#define ENUM_WITH_CONVERTER(NAME, ...)                                  \
   enum NAME {                                                           \
-    VALUES                                                              \
+    __VA_ARGS__                                                         \
   };                                                                    \
   typedef EnumConverter<NAME> NAME##Converter;                          \
   template<>                                                            \
-  std::string EnumConverter<NAME>::s_unsplit_string(#VALUES);           \
+  std::string EnumConverter<NAME>::s_unsplit_string(#__VA_ARGS__);      \
 
 template <typename tENUM>
 std::unique_ptr<std::vector<std::string> > EnumConverter<tENUM>::s_container(nullptr);
