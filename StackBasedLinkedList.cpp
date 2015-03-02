@@ -2,6 +2,9 @@
 //
 // 
 
+#include "Capabilities.h"
+#ifdef CAPABILITY_RANGE_BASE_FOR
+
 #include "ObserverPointer.h"
 
 #include <UnitCpp.h>
@@ -44,6 +47,9 @@ private:
     ObserverPtr<Node> next;
     ObserverPtr<Node> previous;
     bool invalid;
+  private:
+    Node(const Node&);
+    Node operator=(const Node&);
   };
 
   ObserverPtr<Node> m_head;
@@ -324,7 +330,7 @@ LinkedListIterator<T> begin(LinkedList<T>& list)
 //=============================================================================
 // Return an end iterator
 template <typename T>
-LinkedListIterator<T> end(LinkedList<T>& list)
+LinkedListIterator<T> end(LinkedList<T>&)
 {
   return LinkedListIterator<T>();
 }
@@ -396,7 +402,7 @@ LinkedListConstIterator<T> cbegin(LinkedList<T>& list)
 //=============================================================================
 // Return an end iterator
 template <typename T>
-LinkedListConstIterator<T> cend(LinkedList<T>& list)
+LinkedListConstIterator<T> cend(LinkedList<T>&)
 {
   return LinkedListConstIterator<T>();
 }
@@ -406,3 +412,7 @@ int main(int argc, char** argv)
 {
   return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }
+
+#else
+UNSUPPORTED_FEATURE_MAIN(CAPABILITY_RANGE_BASE_FOR)
+#endif
