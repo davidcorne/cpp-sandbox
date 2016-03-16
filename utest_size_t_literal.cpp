@@ -17,13 +17,17 @@ TEST(size_t_literal, construction)
     std::is_same<decltype(s), std::size_t>::value,
     "*_st should be a size_t."
   );
+  TEST_EQUAL(s, std::size_t{15});
 }
 
 //=============================================================================
 TEST(size_t_literal, large)
 {
-  auto large = 18446744073709551615_st;
-  TEST_EQUAL(large, std::numeric_limits<std::size_t>::max());
+  static_assert(
+    std::numeric_limits<std::size_t>::max() < 18446744073709551615u,
+    ""
+  );
+  TEST_THROWS([](){18446744073709551615_st;}, std::overflow_error);
 }
 
 
