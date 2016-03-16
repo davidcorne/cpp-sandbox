@@ -10,6 +10,8 @@
 
 #include <UnitCpp.h>
 
+#include "size_t_literal.h"
+
 class ICarElement;
 class Wheel;
 class Body;
@@ -164,7 +166,7 @@ TEST(Visitor, visit)
   car.accept(visitor);
   TEST_EQUAL(
     visitor.m_wheels_visited.size(),
-    4,
+    4_st,
     "Wrong number of wheels visited."
   );
   auto pos = std::find(

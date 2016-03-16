@@ -12,6 +12,7 @@
 #include <UnitCpp.h>
 
 #include "IteratorCreators.h"
+#include "size_t_literal.h"
 
 //=============================================================================
 template <typename T, typename OutputIterator>
@@ -52,7 +53,7 @@ TEST(OutputIterator, transform_int)
   };
   Iterator<int> iter = IteratorCreators::iter(in_vector);
   transform(double_int, iter, std::back_inserter(results));
-  TEST_EQUAL(results.size(), 4, "Wrong size ", results.size(), " != 4");
+  TEST_EQUAL(results.size(), 4_st, "Wrong size ", results.size(), " != 4");
   TEST_EQUAL(results[0], 2, "1st element should be 2.");
   TEST_EQUAL(results[1], 4, "2nd element should be 4.");
   TEST_EQUAL(results[2], 6, "3rd element should be 6.");
@@ -71,7 +72,7 @@ TEST(OutputIterator, transform_string)
     };
   Iterator<std::string> iter = IteratorCreators::iter(in_vector);
   transform(first, iter, std::back_inserter(results));
-  TEST_EQUAL(results.size(), 2, "Wrong size ", results.size(), " != 2.");
+  TEST_EQUAL(results.size(), 2_st, "Wrong size ", results.size(), " != 2.");
   TEST_EQUAL(results[0], "h", "1st element wrong.");
   TEST_EQUAL(results[1], "T", "2nd element wrong.");
 }

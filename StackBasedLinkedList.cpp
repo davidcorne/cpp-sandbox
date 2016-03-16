@@ -7,6 +7,8 @@
 
 #include "ObserverPointer.h"
 
+#include "size_t_literal.h"
+
 #include <UnitCpp.h>
 
 struct LinkedListOutOfSpaceException : std::exception
@@ -200,7 +202,7 @@ TEST(StackBasedLinkedList, iterator)
   for (int i: int_list) {
     equivilant.push_back(i);
   }
-  TEST_EQUAL(equivilant.size(), 10);
+  TEST_EQUAL(equivilant.size(), 10_st);
   TEST_EQUAL(equivilant[0], 10);
   TEST_EQUAL(equivilant[1], 9);
   TEST_EQUAL(equivilant[2], 8);

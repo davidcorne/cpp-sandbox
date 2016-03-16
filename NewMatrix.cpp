@@ -106,21 +106,21 @@ bool operator!=(const Matrix<T, N, M>& a, const Matrix<T, P, Q>& b);
 TEST(Matrix, dimensions)
 {
   Matrix<int, 3, 3> square_matrix;
-  TEST_EQUAL(square_matrix.rows(), 3);
-  TEST_EQUAL(square_matrix.columns(), 3);
-  TEST_EQUAL(square_matrix.elements(), 9);
+  TEST_EQUAL(square_matrix.rows(), 3u);
+  TEST_EQUAL(square_matrix.columns(), 3u);
+  TEST_EQUAL(square_matrix.elements(), 9u);
   TEST_TRUE(square_matrix.square());
 
   Matrix<double, 1, 7> row_matrix;
-  TEST_EQUAL(row_matrix.rows(), 1);
-  TEST_EQUAL(row_matrix.columns(), 7);
-  TEST_EQUAL(row_matrix.elements(), 7);
+  TEST_EQUAL(row_matrix.rows(), 1u);
+  TEST_EQUAL(row_matrix.columns(), 7u);
+  TEST_EQUAL(row_matrix.elements(), 7u);
   TEST_FALSE(row_matrix.square());
 
   Matrix<std::string, 5, 1> column_matrix;
-  TEST_EQUAL(column_matrix.rows(), 5);
-  TEST_EQUAL(column_matrix.columns(), 1);
-  TEST_EQUAL(column_matrix.elements(), 5);
+  TEST_EQUAL(column_matrix.rows(), 5u);
+  TEST_EQUAL(column_matrix.columns(), 1u);
+  TEST_EQUAL(column_matrix.elements(), 5u);
   TEST_FALSE(column_matrix.square());
 }
 
@@ -321,9 +321,9 @@ TEST(Matrix, matrix_multiplication)
   // (2 3)                  (3 -2 -7 -12)
 
   // these tests are probably unnecessary, as I assign it to the right class.
-  TEST_EQUAL(result.rows(), 3);
-  TEST_EQUAL(result.columns(), 4);
-  TEST_EQUAL(result.elements(), 12);
+  TEST_EQUAL(result.rows(), 3u);
+  TEST_EQUAL(result.columns(), 4u);
+  TEST_EQUAL(result.elements(), 12u);
 
   TEST_EQUAL(result[0][0],   1);
   TEST_EQUAL(result[0][1],   0);

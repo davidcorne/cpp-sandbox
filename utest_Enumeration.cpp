@@ -15,6 +15,7 @@
 #include "Enumeration.h"
 #include "enumerate.h"
 #include "Printer.h"
+#include "size_t_literal.h"
 
 //=============================================================================
 TEST(Enumeration, vector)
@@ -27,7 +28,7 @@ TEST(Enumeration, vector)
     TEST_EQUAL(pair.second, static_cast<double>(i * 2), "Wrong value.");
     ++i;
   }
-  TEST_EQUAL(i, 5, "Should iterate 5 times.");
+  TEST_EQUAL(i, 5_st, "Should iterate 5 times.");
 
   Printer printer(std::cout);
   printer.print("\nExample use.\n");
@@ -54,7 +55,7 @@ TEST(Enumeration, enumerate)
     TEST_EQUAL(pair.second, static_cast<double>(i * 2), "Wrong value.");
     ++i;
   }
-  TEST_EQUAL(i, 5, "Should iterate 5 times.");
+  TEST_EQUAL(i, 5_st, "Should iterate 5 times.");
 
   Printer printer(std::cout);
   printer.print("\nExample use.\n");

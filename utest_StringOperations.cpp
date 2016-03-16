@@ -5,6 +5,8 @@
 #ifdef CAPABILITY_DEFAULT_FUNCTION_TEMPLATE_ARGS
 #include "StringOperations.h"
 
+#include "size_t_literal.h"
+
 //=============================================================================
 TEST(StringOperations, join)
 {
@@ -27,12 +29,12 @@ TEST(StringOperations, split)
   std::vector<std::string> result;
   std::string source("This is a test:isn't it.");
   split(source, '\n', back_inserter(result));
-  TEST_EQUAL(result.size(), 1);
+  TEST_EQUAL(result.size(), 1_st);
   TEST_EQUAL(result[0], source);
   result.clear();
 
   split(source, ' ', back_inserter(result));
-  TEST_EQUAL(result.size(), 5);
+  TEST_EQUAL(result.size(), 5_st);
   TEST_EQUAL(result[0], std::string("This"));
   TEST_EQUAL(result[1], std::string("is"));
   TEST_EQUAL(result[2], std::string("a"));
@@ -41,7 +43,7 @@ TEST(StringOperations, split)
   result.clear();
 
   split(source, 'i', back_inserter(result));
-  TEST_EQUAL(result.size(), 5);
+  TEST_EQUAL(result.size(), 5_st);
   TEST_EQUAL(result[0], std::string("Th"));
   TEST_EQUAL(result[1], std::string("s "));
   TEST_EQUAL(result[2], std::string("s a test:"));

@@ -9,6 +9,8 @@
 
 #include <UnitCpp.h>
 
+#include "size_t_literal.h"
+
 //=============================================================================
 std::vector<std::string> split(std::string in, char delimiter=' ')
 {
@@ -25,7 +27,7 @@ std::vector<std::string> split(std::string in, char delimiter=' ')
 TEST(Split, other_delimiters)
 {
   std::vector<std::string> out(split("Name,Address,Phone Number", ','));
-  TEST_EQUAL(out.size(), 3, "Wrong size for out.");
+  TEST_EQUAL(out.size(), 3_st, "Wrong size for out.");
   TEST_EQUAL(out[0], "Name", "Wrong element 0 in out.");
   TEST_EQUAL(out[1], "Address", "Wrong element 1 in out.");
   TEST_EQUAL(out[2], "Phone Number", "Wrong element 2 in out.");
@@ -36,7 +38,7 @@ TEST(Split, other_delimiters)
 TEST(Split, space)
 {
   std::vector<std::string> out(split("This is a sentence."));
-  TEST_EQUAL(out.size(), 4, "Wrong size for out.");
+  TEST_EQUAL(out.size(), 4_st, "Wrong size for out.");
   TEST_EQUAL(out[0], "This", "Wrong element 0 in out.");
   TEST_EQUAL(out[1], "is", "Wrong element 1 in out.");
   TEST_EQUAL(out[2], "a", "Wrong element 2 in out.");
