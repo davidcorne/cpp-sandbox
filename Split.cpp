@@ -2,6 +2,8 @@
 //
 // 
 
+#include "Capabilities.h"
+#if defined(CAPABILITY_USER_DEFINED_LITERALS)
 #include <iostream>
 #include <vector>
 #include <string>
@@ -51,3 +53,7 @@ int main(int argc, char** argv)
 {
   return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }
+
+#else // defined(CAPABILITY_USER_DEFINED_LITERALS)
+UNSUPPORTED_FEATURE_MAIN(CAPABILITY_USER_DEFINED_LITERALS);
+#endif

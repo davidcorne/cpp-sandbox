@@ -3,7 +3,7 @@
 // 
 
 #include "Capabilities.h"
-#ifdef CAPABILITY_INITIALISER_LISTS
+#if defined(CAPABILITY_INITIALISER_LISTS) && defined(CAPABILITY_USER_DEFINED_LITERALS)
 #include <iostream>
 #include <functional>
 #include <string>

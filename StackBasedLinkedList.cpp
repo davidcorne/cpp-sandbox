@@ -3,7 +3,7 @@
 // 
 
 #include "Capabilities.h"
-#ifdef CAPABILITY_RANGE_BASE_FOR
+#if defined(CAPABILITY_RANGE_BASE_FOR) && defined(CAPABILITY_USER_DEFINED_LITERALS)
 
 #include "ObserverPointer.h"
 

@@ -3,6 +3,8 @@
 // Inspired by the Visitor pattern in
 // http://isa.unomaha.edu/wp-content/uploads/2012/08/Design-Patterns.pdf
 
+#include "Capabilities.h"
+#if defined(CAPABILITY_USER_DEFINED_LITERALS)
 #include <iostream>
 #include <string>
 #include <vector>
@@ -218,3 +220,7 @@ int main(int argc, char** argv)
 {
   return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
 }
+
+#else // defined(CAPABILITY_USER_DEFINED_LITERALS)
+UNSUPPORTED_FEATURE_MAIN(CAPABILITY_USER_DEFINED_LITERALS);
+#endif
