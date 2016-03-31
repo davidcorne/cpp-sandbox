@@ -76,6 +76,25 @@ TEST(ObserverPointer, conversion)
 }
 
 //=============================================================================
+TEST(ObserverPointer, const)
+{
+  // Ensure that a ObserverPtr<const T> will get back a const T*
+  int i = 5;
+  ObserverPtr<const int> const_observer(&i);
+  auto const_ptr = const_observer.get();
+  static_assert(
+    std::is_const<std::remove_pointer<decltype(const_ptr)>::type>::value,
+    "const_ptr should be a const int*"
+  );
+  ObserverPtr<int> observer(&i);
+  auto ptr = observer.get();
+  static_assert(
+    !std::is_const<std::remove_pointer<decltype(ptr)>::type>::value,
+    "ptr should be an int*"
+  );
+}
+
+//=============================================================================
 int main(int argc, char** argv) 
 {
   return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
