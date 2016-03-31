@@ -3,13 +3,13 @@
 // This is from:
 // http://stackoverflow.com/questions/27828822/cant-understand-this-way-to-calculate-the-square-of-a-number
 //
-// Note this is undefined behaviour, so it won't work on some compilers.
+// Note this is undefined behaviour, so it won't work on most/any compilers.
 
 #include <UnitCpp.h>
 
 #include "Compiler.h"
 
-#if COMPILER_TYPE != COMPILER_TYPE_VS
+#if 0
 
 //=============================================================================
 int square(int n) {
