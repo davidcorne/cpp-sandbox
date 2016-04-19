@@ -193,9 +193,9 @@ MemoryImageDatabase& MemoryEntityDatabase::image_database()
 //=============================================================================
 std::unique_ptr<EntityDatabase> create_database()
 {
-  auto database = std::unique_ptr<MemoryEntityDatabase>(new MemoryEntityDatabase());
+  auto database = std::make_unique<MemoryEntityDatabase>();
   database->image_database().add(MemoryImage("test"));
-  return std::unique_ptr<EntityDatabase>(database.release());
+  return std::move(database);
 }
 
 //=============================================================================
