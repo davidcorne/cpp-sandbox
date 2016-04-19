@@ -10,6 +10,11 @@ COMPILER_TYPE := gcc
 -include .config.mk
 
 #==============================================================================
+ifndef $(CYGWIN)
+  UNITCPP := $(shell  cygpath -w $$(pkg-config --cflags-only-I unitcpp | sed -e 's:-I::') | sed -e 's:\\:/:g')
+endif
+
+#==============================================================================
 ifeq ($(COMPILER_TYPE), gcc)
   COMPILER := g++
   VERSION := $(shell g++ --version | grep "g++" | sed -e 's:.*\([0-9]\+\.[0-9]\+\.[0-9]\+\).*:\1:')
@@ -25,7 +30,10 @@ endif
 ifeq ($(COMPILER_TYPE), clang)
   COMPILER := clang++
   VERSION := $(shell clang++ --version | grep "clang" | sed -e 's:[^0-9]*::' -e 's: \+.*::')
-  COMPILER_ARGS := -std=c++1y -g -Wall -Werror -pthread $(shell pkg-config --cflags-only-I unitcpp)
+
+  INCLUDES := -I$(UNITCPP)
+  COMPILER_ARGS := -std=c++1y -g -Wall -Werror -pthread $(INCLUDES)
+
   OUT_EXE_FILE := -o 
   OUT_OBJECT_FILE := -o 
   NO_LINK := -c
