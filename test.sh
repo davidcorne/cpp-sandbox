@@ -8,7 +8,7 @@ test_compiler()
 {
   compiler=$1
   compiler_type=$2
-  if $(command -v $program >/dev/null 2>&1)
+  if type $program >/dev/null 2>&1
   then
     echo "Has $compiler"
     make -j 4 COMPILER_TYPE=$compiler_type
@@ -20,21 +20,16 @@ test_compiler()
 tested_compilers=""
 
 #==============================================================================
-test_compiler clang clang
-test_compiler gcc gcc
-if type vc10x64 2>/dev/null > /dev/null
+if type gcc 2>/dev/null > /dev/null
 then
-  vc10x64
-  test_compiler cl vs
+  test_compiler gcc gcc
 fi
-if type vc11x64 2>/dev/null > /dev/null
+if type clang 2>/dev/null > /dev/null
 then
-  vc11x64
-  test_compiler cl vs
+  test_compiler clang clang
 fi
-if type vc12x64 2>/dev/null > /dev/null
+if type cl 2>/dev/null > /dev/null
 then
-  vc12x64
   test_compiler cl vs
 fi
 echo "Tested with:$tested_compilers"
