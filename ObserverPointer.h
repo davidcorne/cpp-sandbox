@@ -5,6 +5,7 @@
 #ifndef ObserverPointer_H
 #define ObserverPointer_H
 
+#include <cstddef>
 
 //=============================================================================
 template <typename T>
@@ -16,6 +17,9 @@ public:
 
   // Explicit constructor.
   explicit ObserverPtr(T* pointer);
+
+  // Implicit nullptr constructor.
+  ObserverPtr(std::nullptr_t ptr);
 
   // Is the pointer valid?
   operator bool() const;
@@ -66,6 +70,14 @@ ObserverPtr<T>::ObserverPtr()
 template <typename T>
 ObserverPtr<T>::ObserverPtr(T* pointer)
   : m_pointer(pointer)
+{
+}
+
+//=============================================================================
+// Implicit nullptr constructor.
+template <typename T>
+ObserverPtr<T>::ObserverPtr(std::nullptr_t ptr)
+  : m_pointer(ptr)
 {
 }
 

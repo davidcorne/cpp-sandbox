@@ -11,6 +11,8 @@ TEST(ObserverPointer, constructors)
   ObserverPtr<double> invalid;
   int* i = nullptr;
   ObserverPtr<int> i_observer(i);
+  ObserverPtr<double> null = nullptr;
+  TEST_FALSE(null);
 }
 
 //=============================================================================
