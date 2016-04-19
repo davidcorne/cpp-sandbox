@@ -23,11 +23,10 @@ TEST(size_t_literal, construction)
 //=============================================================================
 TEST(size_t_literal, large)
 {
-  static_assert(
-    std::numeric_limits<std::size_t>::max() < 18446744073709551615u,
-    ""
-  );
-  TEST_THROWS([](){18446744073709551615_st;}, std::overflow_error);
+  // This is a very platform specific test.
+  if (std::numeric_limits<std::size_t>::max() < 18446744073709551615u) {
+    TEST_THROWS([](){18446744073709551615_st;}, std::overflow_error);
+  }
 }
 
 
