@@ -22,10 +22,6 @@ public:
 };
 
 //=============================================================================
-Image::Image() {}
-Image::~Image() {}
-
-//=============================================================================
 class ImageDatabase {
 public:
 
@@ -42,10 +38,6 @@ public:
 };
 
 //=============================================================================
-ImageDatabase::ImageDatabase() {}
-ImageDatabase::~ImageDatabase() {}
-
-//=============================================================================
 class EntityDatabase {
 public:
 
@@ -55,10 +47,6 @@ public:
 
   virtual ~EntityDatabase() = 0;
 };
-
-//=============================================================================
-EntityDatabase::EntityDatabase() {}
-EntityDatabase::~EntityDatabase() {}
 
 //=============================================================================
 class MemoryImage : public Image {
@@ -77,6 +65,74 @@ private:
 
   std::string m_name;
 };
+
+//=============================================================================
+class MemoryImageDatabase : public ImageDatabase {
+public:
+
+  MemoryImageDatabase();
+
+  virtual const Image& find(std::string name) const override;
+  // Finds the named image.
+  // Precondition: member(name)
+
+  virtual bool member(std::string name) const override;
+  // Is the named image a member of ImageDatabase?
+
+  void add(MemoryImage image);
+
+  virtual ~MemoryImageDatabase();
+
+private:
+
+  std::vector<MemoryImage>::const_iterator position(std::string name) const;
+  
+  std::vector<MemoryImage> m_images;
+};
+
+//=============================================================================
+class MemoryEntityDatabase : public EntityDatabase {
+public:
+
+  MemoryEntityDatabase();
+
+  virtual MemoryImageDatabase& image_database() override;
+  
+  virtual ~MemoryEntityDatabase();
+private:
+
+  MemoryImageDatabase m_image_database;
+};
+
+//=============================================================================
+std::unique_ptr<EntityDatabase> create_database();
+
+//=============================================================================
+TEST(CovariantReturns, create_database)
+{
+  auto database = create_database();
+  TEST_TRUE(database);
+  ImageDatabase& image_database = database->image_database();
+  TEST_TRUE(image_database.member("test"));
+}
+
+//=============================================================================
+int main(int argc, char** argv) 
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
+}
+
+//=============================================================================
+Image::Image() {}
+Image::~Image() {}
+
+//=============================================================================
+ImageDatabase::ImageDatabase() {}
+ImageDatabase::~ImageDatabase() {}
+
+//=============================================================================
+EntityDatabase::EntityDatabase() {}
+EntityDatabase::~EntityDatabase() {}
 
 //=============================================================================
 MemoryImage::MemoryImage(std::string name)
@@ -107,30 +163,6 @@ std::string MemoryImage::name() const
 {
   return m_name;
 }
-
-//=============================================================================
-class MemoryImageDatabase : public ImageDatabase {
-public:
-
-  MemoryImageDatabase();
-
-  virtual const Image& find(std::string name) const override;
-  // Finds the named image.
-  // Precondition: member(name)
-
-  virtual bool member(std::string name) const override;
-  // Is the named image a member of ImageDatabase?
-
-  void add(MemoryImage image);
-
-  virtual ~MemoryImageDatabase();
-
-private:
-
-  std::vector<MemoryImage>::const_iterator position(std::string name) const;
-  
-  std::vector<MemoryImage> m_images;
-};
 
 //=============================================================================
 MemoryImageDatabase::MemoryImageDatabase() {}
@@ -167,20 +199,6 @@ void MemoryImageDatabase::add(MemoryImage image)
 }
 
 //=============================================================================
-class MemoryEntityDatabase : public EntityDatabase {
-public:
-
-  MemoryEntityDatabase();
-
-  virtual MemoryImageDatabase& image_database() override;
-  
-  virtual ~MemoryEntityDatabase();
-private:
-
-  MemoryImageDatabase m_image_database;
-};
-
-//=============================================================================
 MemoryEntityDatabase::MemoryEntityDatabase() {}
 MemoryEntityDatabase::~MemoryEntityDatabase() {}
 
@@ -198,18 +216,3 @@ std::unique_ptr<EntityDatabase> create_database()
   return std::move(database);
 }
 
-//=============================================================================
-TEST(CovariantReturns, create_database)
-{
-  auto database = create_database();
-  TEST_TRUE(database);
-  ImageDatabase& image_database = database->image_database();
-  TEST_TRUE(image_database.member("test"));
-}
-
-
-//=============================================================================
-int main(int argc, char** argv) 
-{
-  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
-}
