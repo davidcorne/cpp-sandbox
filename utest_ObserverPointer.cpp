@@ -1,6 +1,9 @@
 //=============================================================================
 //
 // 
+#define UNUSED_VARIABLE
+#include "IgnoreDiagnostics.h"
+
 #include "ObserverPointer.h"
 
 #include <UnitCpp.h>
