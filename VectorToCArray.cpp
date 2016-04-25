@@ -28,18 +28,8 @@ void fill_arrray(int* array, size_t size)
 //=============================================================================
 TEST(VectorToCArray, sum)
 {
-  std::vector<int> array;
-  array.push_back(1);
-  array.push_back(2);
-  array.push_back(3);
-  array.push_back(4);
-  array.push_back(5);
-  array.push_back(6);
-  array.push_back(7);
-  array.push_back(8);
-  array.push_back(9);
-  array.push_back(10);
-  TEST_EQUAL(legecy_sum(&array[0], array.size()), 55, "Wrong sum");
+  std::vector<int> array = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+  TEST_EQUAL(legecy_sum(array.data(), array.size()), 55, "Wrong sum");
 }
 
 //=============================================================================
@@ -47,7 +37,7 @@ TEST(VectorToCArray, fill_array)
 {
   // fill an array of size 10 with -1
   std::vector<int> array(10, -1);
-  fill_arrray(&array[0], array.size());
+  fill_arrray(array.data(), array.size());
   TEST_EQUAL(array[0], 0, "Array element wrong.");
   TEST_EQUAL(array[1], 1, "Array element wrong.");
   TEST_EQUAL(array[2], 4, "Array element wrong.");
