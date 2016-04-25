@@ -5,12 +5,13 @@
 //
 
 #include <iostream>
+#include <UnitCpp.h>
 
 //=============================================================================
-class Borg {
+class IntBorg {
 public:
 
-  Borg();
+  IntBorg();
 
   void set_i(int i);
   int i() const;
@@ -19,34 +20,38 @@ private:
   static int s_i;
 };
 
-int Borg::s_i(0);
+//=============================================================================
+TEST(IntBorg, int)
+{
+  IntBorg b_1;
+  b_1.set_i(10);
+  IntBorg b_2;
+  TEST_EQUAL(b_2.i(), 10);
+  b_1.set_i(15);
+  TEST_EQUAL(b_2.i(), 15);
+}
 
 //=============================================================================
-Borg::Borg()
+int main(int argc, char** argv) 
+{
+  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
+}
+
+int IntBorg::s_i(0);
+
+//=============================================================================
+IntBorg::IntBorg()
 {
 }
 
 //=============================================================================
-int main() {
-  Borg b_1;
-  b_1.set_i(5);
-  Borg b_2;
-  std::cout << b_2.i() << std::endl;
-  b_1.set_i(-5);
-  
-  std::cout << b_1.i() << " " << b_2.i() << std::endl;
-  
-  return 0;
-}
-
-//=============================================================================
-void Borg::set_i(int i)
+void IntBorg::set_i(int i)
 {
   s_i = i;
 }
 
 //=============================================================================
-int Borg::i() const
+int IntBorg::i() const
 {
   return s_i;
 }
