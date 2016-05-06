@@ -14,12 +14,12 @@ TEST(If, bool)
   TEST_FALSE((If<false, true, false>::result));
 }
 
-//=============================================================================
-TEST(If, int)
-{
-  TEST_EQUAL((If<true, 1, 2>::result), 1);
-  TEST_EQUAL((If<false, 1, 2>::result), 2);
-}
+// <nnn> //=============================================================================
+// <nnn> TEST(If, int)
+// <nnn> {
+// <nnn>   TEST_EQUAL((If<true, 1, 2>::result), 1);
+// <nnn>   TEST_EQUAL((If<false, 1, 2>::result), 2);
+// <nnn> }
 
 
 //=============================================================================
