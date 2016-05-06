@@ -76,3 +76,10 @@
 #undef UNUSED_TYPEDEF
 #endif // UNUSED_TYPEDEF
 
+#ifdef UNREACHABLE_CODE
+#if COMPILER_TYPE == COMPILER_TYPE_VS
+#pragma warning(disable : 4702)
+#endif // COMPILER_TYPE 
+#undef UNREACHABLE_CODE
+#endif // UNREACHABLE_CODE
+
