@@ -9,16 +9,18 @@
 COMPILER_TYPE := gcc
 -include .config.mk
 
+UNITCPP := $(shell pkg-config --cflags-only-I unitcpp | sed -e 's:-I::')
+
 #==============================================================================
 ifndef $(CYGWIN)
-  UNITCPP := $(shell  cygpath -w $$(pkg-config --cflags-only-I unitcpp | sed -e 's:-I::') | sed -e 's:\\:/:g')
+  UNITCPP := $(shell  cygpath -w $(UNITCPP) | sed -e 's:\\:/:g')
 endif
 
 #==============================================================================
 ifeq ($(COMPILER_TYPE), gcc)
   COMPILER := g++
   VERSION := $(shell g++ --version | grep "g++" | sed -e 's:.*\([0-9]\+\.[0-9]\+\.[0-9]\+\).*:\1:')
-  COMPILER_ARGS := -std=c++1y -g -Wall -Werror -pthread $(shell pkg-config --cflags-only-I unitcpp)
+  COMPILER_ARGS := -std=c++1y -g -Wall -Werror -pthread -I $(UNITCPP)
   OUT_EXE_FILE := -o 
   OUT_OBJECT_FILE := -o 
   NO_LINK := -c
@@ -46,7 +48,7 @@ ifeq ($(COMPILER_TYPE), vs)
   COMPILER := cl
   VERSION := $(shell cl 2>&1 >/dev/null | grep "Version" | sed -e 's:.*Version ::' -e 's:\([0-9][0-9]\)\.\([0-9][0-9]\).*:\1\2:')
   # a bit of a hack because I know I'm in cygwin if I'm using cl in a makefile.
-  INCLUDES := /I$(shell cygpath -w $$(pkg-config --cflags-only-I unitcpp | sed -e 's:-I::') | sed -e 's:\\:/:g')
+  INCLUDES := /I$(UNITCPP)
   COMPILER_ARGS := $(INCLUDES) /nologo /W4 /wd4481 /WX /EHsc /Zi /MTd
 
   VERSION_SUPPORTS_FS := $(shell expr `echo $(VERSION)` \>= 1800)
