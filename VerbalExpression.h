@@ -6,6 +6,10 @@
 #ifndef VerbalExpression_H
 #define VerbalExpression_H
 
+#ifndef CAPABILITY_REGEX
+#error "Can't include this without <regex>"
+#endif
+
 #include <numeric>
 #include <regex>
 #include <string>
