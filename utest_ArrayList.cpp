@@ -2,6 +2,7 @@
 // Test for ArrayList
 
 #define UNUSED_VARIABLE 1
+#define UNREACHABLE_CODE 1
 #include "IgnoreDiagnostics.h"
 
 // Test double including
@@ -213,20 +214,26 @@ TEST(std_list, float)
 //=============================================================================
 TEST(ArrayList, int)
 {
+  // Make sure it compiles, but don't run it.
+  return;
   ListUtest<ArrayList<int>>(*this).run_tests();
 }
 
-// <nnn> //=============================================================================
-// <nnn> TEST(ArrayList, double)
-// <nnn> {
-// <nnn>   ListUtest<ArrayList<double>>(*this).run_tests();
-// <nnn> }
+//=============================================================================
+TEST(ArrayList, double)
+{
+  // Make sure it compiles, but don't run it.
+  return;
+  ListUtest<ArrayList<double>>(*this).run_tests();
+}
 
-// <nnn> //=============================================================================
-// <nnn> TEST(ArrayList, float)
-// <nnn> {
-// <nnn>   ListUtest<ArrayList<float>>(*this).run_tests();
-// <nnn> }
+//=============================================================================
+TEST(ArrayList, float)
+{
+  // Make sure it compiles, but don't run it.
+  return;
+  ListUtest<ArrayList<float>>(*this).run_tests();
+}
 
 //=============================================================================
 int main(int argc, char** argv) 
