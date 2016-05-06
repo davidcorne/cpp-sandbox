@@ -3,7 +3,7 @@
 // 
 
 #include "Capabilities.h"
-#ifndef CAPABILITY_REGEX
+#ifdef CAPABILITY_REGEX
 
 #include "VerbalExpression.h"
 

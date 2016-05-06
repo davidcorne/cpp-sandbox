@@ -6,6 +6,8 @@
 #ifndef VerbalExpression_H
 #define VerbalExpression_H
 
+#include "Capabilities.h"
+
 #ifndef CAPABILITY_REGEX
 #error "Can't include this without <regex>"
 #endif
