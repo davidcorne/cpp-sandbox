@@ -2,9 +2,6 @@
 //
 // This is for when you have to use enums, in preference to a switch statement.
 
-#include "Capabilities.h"
-#ifdef CAPABILITY_VARIADIC_TEMPLATES
-
 #include <assert.h>
 #include <iostream>
 #include <functional>
@@ -86,6 +83,3 @@ std::string CustomVirtualTable::three() const
   return "Three";
 }
 
-#else
-UNSUPPORTED_FEATURE_MAIN(CAPABILITY_VARIADIC_TEMPLATES)
-#endif
