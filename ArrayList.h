@@ -28,7 +28,7 @@ private:
   class NodeIteratorBase {
   public:
     using difference_type = std::ptrdiff_t;
-    using value_type = decltype(std::remove_pointer_t<tNODE_TYPE>::value);
+    using value_type = decltype(std::remove_pointer<tNODE_TYPE>::type::value);
     using pointer = value_type*;
     using reference = value_type&;
     using iterator_category = std::bidirectional_iterator_tag;
