@@ -21,6 +21,19 @@ TEST(If, bool)
 // <nnn>   TEST_EQUAL((If<false, 1, 2>::result), 2);
 // <nnn> }
 
+// <nnn> //=============================================================================
+// <nnn> TEST(Sqrt, perfect)
+// <nnn> {
+// <nnn>   TEST_EQUAL(Sqrt<16>::result, 4u);
+// <nnn> }
+
+//=============================================================================
+TEST(Less, test)
+{
+  TEST_TRUE((Less<2, 3>::result));
+  TEST_FALSE((Less<2, 2>::result));
+  TEST_FALSE((Less<8, 3>::result));
+}
 
 //=============================================================================
 int main(int argc, char** argv) 
