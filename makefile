@@ -20,8 +20,11 @@ endif
 #==============================================================================
 ifeq ($(COMPILER_TYPE), gcc)
   COMPILER := g++
+  LINKER := g++
   VERSION := $(shell g++ --version | grep "g++" | sed -e 's:.*\([0-9]\+\.[0-9]\+\.[0-9]\+\).*:\1:')
-  COMPILER_ARGS := -std=c++1y -g -Wall -Werror -pthread -I $(UNITCPP)
+  COMMON_ARGS := -g 
+  COMPILER_ARGS := $(COMMON_ARGS) -std=c++1y -Wall -Werror -pthread -I $(UNITCPP)
+  LINKER_ARGS := $(COMMON_ARGS)
   OUT_EXE_FILE := -o 
   OUT_OBJECT_FILE := -o 
   NO_LINK := -c
@@ -32,10 +35,13 @@ endif
 #==============================================================================
 ifeq ($(COMPILER_TYPE), clang)
   COMPILER := clang++
+  LINKER := clang++
   VERSION := $(shell clang++ --version | grep "clang" | sed -e 's:[^0-9]*::' -e 's: \+.*::')
 
   INCLUDES := -I$(UNITCPP)
-  COMPILER_ARGS := -std=c++1y -g -Wall -Werror -pthread $(INCLUDES)
+  COMMON_ARGS:= -g
+  COMPILER_ARGS := $(COMMON_ARGS) -std=c++1y -Wall -Werror $(INCLUDES) -fexceptions -Wno-error=microsoft-pure-definition
+  LINKER_ARGS := $(COMMON_ARGS) #-pthread 
 
   OUT_EXE_FILE := -o 
   OUT_OBJECT_FILE := -o 
@@ -47,10 +53,13 @@ endif
 #==============================================================================
 ifeq ($(COMPILER_TYPE), vs)
   COMPILER := cl
+  LINKER := cl
   VERSION := $(shell cl 2>&1 >/dev/null | grep "Version" | sed -e 's:.*Version ::' -e 's:\([0-9][0-9]\)\.\([0-9][0-9]\).*:\1\2:')
   # a bit of a hack because I know I'm in cygwin if I'm using cl in a makefile.
   INCLUDES := /I$(UNITCPP)
-  COMPILER_ARGS := $(INCLUDES) /nologo /W4 /wd4481 /WX /EHsc /Zi /MTd
+  COMMON_ARGS := /nologo /Zi 
+  COMPILER_ARGS := $(COMMON_ARGS) $(INCLUDES) /W4 /wd4481 /WX /EHsc
+  LINKER_ARGS := $(COMMON_ARGS) /MTd
 
   VERSION_SUPPORTS_FS := $(shell expr `echo $(VERSION)` \>= 1800)
   ifeq "$(VERSION_SUPPORTS_FS)" "1"
@@ -123,8 +132,7 @@ all: $(EXE_FILES)
 #------------------------------------------------------------------------------
 $(EXE_DIRECTORY)/%.exe: $(OBJ_DIRECTORY)/%.obj
 	@mkdir -p $(EXE_DIRECTORY)
-	$(COMPILER) $(COMPILER_ARGS) $< \
-        $(OUT_EXE_FILE)$@
+	$(LINKER) $(LINKER_ARGS) $< $(OUT_EXE_FILE)$@
 
 #==============================================================================
 .PRECIOUS: $(OBJ_DIRECTORY)/%.obj
