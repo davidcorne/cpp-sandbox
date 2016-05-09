@@ -12,16 +12,22 @@
 #ifndef __clang__
 #define COMPILER_TYPE COMPILER_TYPE_GCC
 #define COMPILER_NAME "gcc"
-#else
-#define COMPILER_TYPE COMPILER_TYPE_CLANG
-#define COMPILER_NAME "clang"
 #endif // __clang__
 #else
 #ifdef _MSC_VER
+#ifndef __clang__
 #define COMPILER_TYPE COMPILER_TYPE_VS
 #define COMPILER_NAME "vs"
+#endif // ifdef __clang__
 #endif // ifdef _MSC_VER
 #endif // ifdef __GNUC__
+
+#ifndef COMPILER_TYPE
+#ifdef __clang__
+#define COMPILER_TYPE COMPILER_TYPE_CLANG
+#define COMPILER_NAME "clang"
+#endif // __clang__
+#endif // COMPILER_TYPE_CLANG
 
 #ifndef COMPILER_TYPE
 #error "Unknown compiler type."
