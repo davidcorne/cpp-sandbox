@@ -4,7 +4,7 @@ This repository is a sandbox for trying out ideas in C++ or new features (like C
 
 Each experiment must be one file with extension .cpp. In the main directory it compiles using gcc with argument -std=c++0x if you need the Microsoft compiler put the file in the UnsupportedByCompiler directory
 
-Most files act as a test. These are run automatically on drone.io, [![Build Status](https://drone.io/bitbucket.org/davidcorne/sandbox/status.png)](https://drone.io/bitbucket.org/davidcorne/sandbox/latest)
+Most files act as a test. These are run automatically on drone.io, [![Build Status](https://drone.io/bitbucket.org/davidcorne/sandbox/status.png)](https://drone.io/bitbucket.org/davidcorne/sandbox/latest) and codeship [ ![Codeship Status for davidcorne/sandbox](https://codeship.com/projects/c74a6080-f5c1-0133-e12b-7ac4f1a4f01a/status?branch=default)](https://codeship.com/projects/150449).
 
 Here is a short summery of what I was trying to do for some of the files.
 
