@@ -6,7 +6,7 @@
 #ifdef CAPABILITY_INITIALISER_LISTS
 #include <iostream>
 #include <vector>
-#include <math.h>
+#include <cmath>
 
 #include <UnitCpp.h>
 
@@ -154,7 +154,7 @@ bool PrimeGenerator::PrimeIterator::prime(BigNum number) const
   if (number % 2 == 0) {
     return number == 2;
   }
-  for (BigNum i = 3; i <= sqrt(number); i += 2) {
+  for (BigNum i = 3; i <= std::sqrt(number); i += 2) {
     if (number % i == 0) {
       return false;
     }

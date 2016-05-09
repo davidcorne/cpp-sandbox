@@ -6,7 +6,7 @@
 #include "Capabilities.h"
 #ifdef CAPABILITY_VARIADIC_TEMPLATES
 
-#include <assert.h>
+#include <cassert>
 #include <iostream>
 #include <random>
 

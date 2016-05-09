@@ -3,7 +3,7 @@
 // Monostate design pattern. A bit better singleton (possibly?)
 // See http://c2.com/cgi/wiki?MonostatePattern for a little more detail.
 
-#include <assert.h>
+#include <cassert>
 #include <iostream>
 
 #include <UnitCpp.h>

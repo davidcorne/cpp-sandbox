@@ -2,7 +2,7 @@
 //
 // This is for when you have to use enums, in preference to a switch statement.
 
-#include <assert.h>
+#include <cassert>
 #include <iostream>
 #include <functional>
 #include <map>

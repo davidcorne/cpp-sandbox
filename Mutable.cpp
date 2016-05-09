@@ -1,8 +1,8 @@
 //=============================================================================
 
-#include <assert.h>
+#include <cassert>
 #include <iostream>
-#include <math.h>
+#include <cmath>
 
 #include <UnitCpp.h>
 
@@ -164,26 +164,26 @@ double Triangle::area() const
     // work out the area using 1/2 ab sin(C)
     
     // a is the length between point 1 and point 2
-    double a = sqrt(
+    double a = std::sqrt(
       (m_point_2.x - m_point_1.x) * (m_point_2.x - m_point_1.x) +
       (m_point_2.y - m_point_1.y) * (m_point_2.y - m_point_1.y)
     );
 
     // b is the length between point 2 and point 3
-    double b = sqrt(
+    double b = std::sqrt(
       (m_point_3.x - m_point_2.x) * (m_point_3.x - m_point_2.x) +
       (m_point_3.y - m_point_2.y) * (m_point_3.y - m_point_2.y)
     );
 
     // c is the length between point 3 and point 1
-    double c = sqrt(
+    double c = std::sqrt(
       (m_point_1.x - m_point_3.x) * (m_point_1.x - m_point_3.x) +
       (m_point_1.y - m_point_3.y) * (m_point_1.y - m_point_3.y)
     );
 
     // use the cosine rule cos(C) = (a^2 + b^2 - c^2) / 2ab
     double cos_C = (a*a + b*b - c*c) / (2 * a * b);
-    m_area.set_data(0.5 * a * b * sin(acos(cos_C)));
+    m_area.set_data(0.5 * a * b * std::sin(std::acos(cos_C)));
     
     // output to demonstrate which path is being taken
     std::cout << "Area calculated." << std::endl;

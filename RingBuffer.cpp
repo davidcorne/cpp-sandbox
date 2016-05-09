@@ -5,7 +5,7 @@
 
 #include "Capabilities.h"
 #ifdef CAPABILITY_INITIALISER_LISTS
-#include <assert.h>
+#include <cassert>
 #include <iostream>
 #include <string>
 

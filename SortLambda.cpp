@@ -7,8 +7,9 @@
 #include <functional>
 #include <iostream>
 #include <list>
-#include <math.h>
 #include <string>
+
+#include <cmath>
 
 //=============================================================================
 template <typename T>
@@ -100,7 +101,7 @@ int main()
 
   // sort by absolue minimum
   std::list<double> abs_min_sorted = sort<double>(
-    [](double x, double y){return fabs(x) < fabs(y);},
+    [](double x, double y){return std::fabs(x) < std::fabs(y);},
     random_list
   );
   print_list<double>(

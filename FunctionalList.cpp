@@ -2,7 +2,7 @@
 //
 // Based on:
 // http://bartoszmilewski.com/2013/11/13/functional-data-structures-in-c-lists/
-#include <assert.h>
+#include <cassert>
 
 #include <memory>
 

@@ -2,7 +2,7 @@
 //
 // Inspired by item 31 in Scott Meyers "More Effective C++".
 
-#include <assert.h>
+#include <cassert>
 #include <functional>
 #include <iostream>
 #include <string>

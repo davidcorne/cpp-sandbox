@@ -7,7 +7,7 @@
 #if COMPILER_TYPE != COMPILER_TYPE_VS
 
 #include <iostream>
-#include <assert.h>
+#include <cassert>
 
 //=============================================================================
 int main(void)

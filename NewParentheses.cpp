@@ -5,7 +5,7 @@
 // In g++ this works as (I) would expect. In cl, this works how the standard
 // would suggest.
 
-#include <assert.h>
+#include <cassert>
 #include <iostream>
 
 //=============================================================================

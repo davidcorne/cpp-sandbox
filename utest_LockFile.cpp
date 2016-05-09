@@ -3,7 +3,7 @@
 //D An RAII file locker. On creation, this will lock the file given.
 //
 
-#include <assert.h>
+#include <cassert>
 #include <cstdio>
 
 #include <UnitCpp.h>

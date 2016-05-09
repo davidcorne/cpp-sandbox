@@ -4,7 +4,7 @@
 //
 
 #include <iostream>
-#include <stdio.h>
+#include <cstdio>
 #include <string>
 
 //=============================================================================
@@ -13,7 +13,7 @@ int main(int, char* arguments[])
 {
   std::string file_name(arguments[0]);
   file_name += + "/SelfDeleting.exe";
-  if (remove(file_name.c_str()) == 0) {
+  if (std::remove(file_name.c_str()) == 0) {
     std::cout << "Somehow I've deleted myself." << std::endl;
   } else {
     std::cerr << "I've not deleted myself, OUTRAGE!!!!" << std::endl;

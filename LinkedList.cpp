@@ -2,7 +2,7 @@
 //
 // 
 
-#include <assert.h>
+#include <cassert>
 #include <iostream>
 
 #include <UnitCpp.h>

@@ -5,7 +5,7 @@
 
 #include <iostream>
 
-#include <stdlib.h>
+#include <cstdlib>
 
 //=============================================================================
 int main(int argc, char *argv[])
@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     return 1;
   }
 
-  int total = atoi(argv[1]);
+  int total = std::atoi(argv[1]);
 
   std::cout << "quarter\tdime\tnickle\tpenny\tto make " << total << std::endl;
 

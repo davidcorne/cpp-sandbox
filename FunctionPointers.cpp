@@ -7,7 +7,6 @@
 #include <functional>
 #include <iostream>
 #include <list>
-#include <math.h>
 #include <string>
 
 //=============================================================================

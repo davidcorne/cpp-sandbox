@@ -8,7 +8,7 @@
 #include <random>
 #include <chrono>
 #include <thread>
-#include <assert.h>
+#include <cassert>
 
 // construct a trivial random generator engine from a time-based seed:
 unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();

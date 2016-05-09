@@ -4,7 +4,7 @@
 #define Iterator_H
 
 #include "AbsIterator.h"
-#include <assert.h>
+#include <cassert>
 
 //=============================================================================
 template<typename T>

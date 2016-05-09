@@ -5,7 +5,7 @@
 #ifndef DGCArray_H
 #define DGCArray_H
 
-#include <assert.h>
+#include <cassert>
 
 //=============================================================================
 namespace DGC {

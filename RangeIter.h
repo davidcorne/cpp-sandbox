@@ -3,7 +3,7 @@
 #ifndef RangeIter_H
 #define RangeIter_H
 
-#include <assert.h>
+#include <cassert>
 
 template <typename T>
 class Range;

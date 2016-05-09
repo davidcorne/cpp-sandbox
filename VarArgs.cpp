@@ -3,7 +3,7 @@
 // 
 
 #include <iostream>
-#include <stdarg.h>
+#include <cstdarg>
 
 #include <UnitCpp.h>
 

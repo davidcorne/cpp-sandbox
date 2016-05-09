@@ -3,7 +3,7 @@
 // Motivated by this:
 // http://www.objectmentor.com/resources/articles/acv.pdf
 
-#include <assert.h>
+#include <cassert>
 
 #include <UnitCpp.h>
 

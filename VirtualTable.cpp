@@ -2,7 +2,7 @@
 // D from
 // http://webcache.googleusercontent.com/search?q=cache:3ZVUKlbaWkkJ:www.moythreads.com/wordpress/2007/09/14/overriding-the-virtual-table-in-a-c-object/+&cd=1&hl=en&ct=clnk&gl=uk
 
-#include <string.h>
+#include <cstring>
 #include <iostream>
 
 class Parent
@@ -54,7 +54,7 @@ int main()
     /* take the address of our stack virtual table and override the real object pointer to the virtual table */
     FakeVirtualTable* table_ptr = &custom_table;
 
-    memcpy(static_cast<void*>(parent_class_ptr), &table_ptr, sizeof(void*));
+    std::memcpy(static_cast<void*>(parent_class_ptr), &table_ptr, sizeof(void*));
 
     /* call the methods ( but we're really calling the faked functions ) */
 

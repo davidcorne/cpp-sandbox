@@ -2,7 +2,7 @@
 //
 // A test of http://accu.org/index.php/journals/1924?utm_content=buffer25009&utm_medium=social&utm_source=plus.google.com&utm_campaign=buffer
 
-#include <assert.h>
+#include <cassert>
 #include <iostream>
 #include <string>
 

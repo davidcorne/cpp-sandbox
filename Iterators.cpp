@@ -6,7 +6,7 @@
 //   iter() += 5;
 // }
 
-#include <assert.h>
+#include <cassert>
 #include <iostream>
 #include <vector>
 
