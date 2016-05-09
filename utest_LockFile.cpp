@@ -4,6 +4,7 @@
 //
 
 #include <assert.h>
+#include <cstdio>
 
 #include <UnitCpp.h>
 
@@ -34,7 +35,7 @@ TEST(LockedFile, write)
     TEST_EQUAL(whole_file, new_contents, "Write incorrect.");
   }
   // Clean up
-  int result = remove(path.path().c_str());
+  int result = std::remove(path.path().c_str());
   TEST_EQUAL(result, 0);
 }
 
@@ -55,7 +56,7 @@ TEST(LockedFile, overwrite)
     TEST_EQUAL(lock_file.read(), std::string(""), "Overwriting file fails.");
   }
   // Clean up
-  int result = remove(path.path().c_str());
+  int result = std::remove(path.path().c_str());
   TEST_EQUAL(result, 0);
 }
 
@@ -77,7 +78,7 @@ TEST(LockedFile, multiple_read)
     TEST_EQUAL(first_read, second_read, "Read inconsistent.");
   }
   // Clean up
-  int result = remove(path.path().c_str());
+  int result = std::remove(path.path().c_str());
   TEST_EQUAL(result, 0);
 #endif
 }
@@ -97,7 +98,7 @@ TEST(LockedFile, read)
     TEST_EQUAL(lock_file.read(), contents, "Contents is wrong.");
   }
   // Clean up
-  int result = remove(path.path().c_str());
+  int result = std::remove(path.path().c_str());
   TEST_EQUAL(result, 0);
 #endif
 }
@@ -113,10 +114,10 @@ TEST(LockedFile, lock)
     ErrorPtr error;
     LockedFile lock(path, error);
     TEST_TRUE(!error);
-    result = remove(path.path().c_str());
+    result = std::remove(path.path().c_str());
     TEST_NOT_EQUAL(result, 0, "Locked file was deleted.");
   }
-  result = remove(path.path().c_str());
+  result = std::remove(path.path().c_str());
   TEST_EQUAL(result, 0, "Unlocked file could not be deleted.");
 }
 
@@ -136,7 +137,7 @@ TEST(LockedFile, multiple_lock)
     Error* err = error.get();
     TEST_TRUE(dynamic_cast<LockFileError*>(err), "Wrong error type.");
   }
-  result = remove(path.path().c_str());
+  result = std::remove(path.path().c_str());
   TEST_EQUAL(result, 0, "Unlocked file could not be deleted.");
 }
 
