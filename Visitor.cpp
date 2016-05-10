@@ -4,7 +4,7 @@
 // http://isa.unomaha.edu/wp-content/uploads/2012/08/Design-Patterns.pdf
 
 #include "Capabilities.h"
-#if defined(CAPABILITY_USER_DEFINED_LITERALS)
+#if defined(CAPABILITY_USER_DEFINED_LITERALS) && defined(CAPABILITY_CONSTEXPR)
 #include <iostream>
 #include <string>
 #include <vector>

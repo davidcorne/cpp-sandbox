@@ -100,7 +100,7 @@ Object create_enemy(
   enemy["name"] = Primitive().s(enemy_class);
   enemy["hp"] = Primitive().d(hp);
   enemy.set_method("attack") = attack;
-  return std::move(enemy);
+  return enemy;
 }
 
 //=============================================================================

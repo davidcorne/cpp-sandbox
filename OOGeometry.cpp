@@ -571,9 +571,9 @@ ConsoleCanvas::~ConsoleCanvas()
 template <typename tSHAPE, typename tDRAWABLE_SHAPE>
 std::unique_ptr<IDrawableShape> create_drawable(const IShape& shape)
 {
-  const tSHAPE& derived_shape = dynamic_cast<const tSHAPE&>(shape);
-  assert(&derived_shape && "dynamic_cast should be valid.");
-  return std::unique_ptr<IDrawableShape>(new tDRAWABLE_SHAPE(derived_shape));
+  const tSHAPE* derived_shape = dynamic_cast<const tSHAPE*>(&shape);
+  assert(derived_shape && "dynamic_cast should be valid.");
+  return std::unique_ptr<IDrawableShape>(new tDRAWABLE_SHAPE(*derived_shape));
 }
 
 #else

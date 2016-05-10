@@ -1,16 +1,18 @@
 //=============================================================================
 // This is an attempt to encode the lambda calculus using C++14 lambdas.
 
-#include <iostream>
-
-#include <UnitCpp.h>
-
 #include "Capabilities.h"
 #ifdef CAPABILITY_GENERIC_LAMBDAS
 
 #define UNUSED_VARIABLE 1
 #include "IgnoreDiagnostics.h"
+
+#include <functional>
+#include <iostream>
 #include <stdexcept>
+
+#include <UnitCpp.h>
+
 
 // A function-level Pressburger encoding of natural numbers.
 

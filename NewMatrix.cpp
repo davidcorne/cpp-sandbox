@@ -8,6 +8,7 @@
 #include <UnitCpp.h>
 
 #define UNUSED_VARIABLE 1
+#define SELF_MOVE 1
 #include "IgnoreDiagnostics.h"
 #undef UNUSED_VARIABLE
 

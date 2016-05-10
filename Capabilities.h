@@ -47,6 +47,9 @@
 
 #if !__has_feature(cxx_constexpr)
 #undef CAPABILITY_CONSTEXPR
+#else
+// <nnn> 
+#undef CAPABILITY_CONSTEXPR
 #endif // __has_feature(cxx_constexpr)
 
 #if !__has_feature(cxx_delegating_constructors)
@@ -84,8 +87,7 @@
 // it appears that __has_feature(cxx_generic_lambdas) is not working in my
 // version of clang.
 // <nnn> #if ! __has_feature(cxx_generic_lambdas)
-// <nnn> #undef CAPABILITY_GENERIC_LAMBDAS
-// <nnn> #define CAPABILITY_GENERIC_LAMBDAS 0
+#undef CAPABILITY_GENERIC_LAMBDAS
 // <nnn> #endif // __has_feature(cxx_generic_lambdas)
 
 #endif // COMPILER_TYPE == COMPILER_TYPE_CLANG

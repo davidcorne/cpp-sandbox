@@ -3,7 +3,7 @@
 // 
 
 #include "Capabilities.h"
-#if defined(CAPABILITY_USER_DEFINED_LITERALS)
+#if defined(CAPABILITY_USER_DEFINED_LITERALS) && defined(CAPABILITY_CONSTEXPR)
 #include <iostream>
 #include <vector>
 #include <string>

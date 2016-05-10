@@ -37,6 +37,8 @@
 #ifdef RECURSIVE_ON_ALL_PATHS
 #if COMPILER_TYPE == COMPILER_TYPE_VS
 #pragma warning(disable : 4717)
+#elif COMPILER_TYPE == COMPILER_TYPE_CLANG
+#pragma clang diagnostic ignored "-Winfinite-recursion"
 #endif // COMPILER_TYPE 
 #undef RECURSIVE_ON_ALL_PATHS
 #endif // UNUSED_VARIABLE
@@ -45,7 +47,7 @@
 #if COMPILER_TYPE == COMPILER_TYPE_VS
 #pragma warning(disable : 4127)
 #endif // COMPILER_TYPE 
-#undef RECURSIVE_ON_ALL_PATHS
+#undef CONSTANT_CONDITIONAL
 #endif // UNUSED_VARIABLE
 
 #ifdef IMPLICIT_EXCEPTION_SPEC_MISMATCH
@@ -72,6 +74,8 @@
 #ifdef UNUSED_TYPEDEF
 #if COMPILER_TYPE == COMPILER_TYPE_GCC
 #pragma GCC diagnostic ignored "-Wunused-local-typedefs"
+#elif COMPILER_TYPE == COMPILER_TYPE_CLANG
+#pragma clang diagnostic ignored "-Wunused-local-typedef"
 #endif // COMPILER_TYPE 
 #undef UNUSED_TYPEDEF
 #endif // UNUSED_TYPEDEF
@@ -82,4 +86,11 @@
 #endif // COMPILER_TYPE 
 #undef UNREACHABLE_CODE
 #endif // UNREACHABLE_CODE
+
+#ifdef SELF_MOVE
+#if COMPILER_TYPE == COMPILER_TYPE_CLANG
+#pragma clang diagnostic ignored "-Wself-move"
+#endif // COMPILER_TYPE 
+#undef SELF_MOVE
+#endif // SELF_MOVE
 

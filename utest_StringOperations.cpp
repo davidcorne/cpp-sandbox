@@ -2,7 +2,7 @@
 
 #include "Capabilities.h"
 
-#ifdef CAPABILITY_DEFAULT_FUNCTION_TEMPLATE_ARGS
+#if defined(CAPABILITY_DEFAULT_FUNCTION_TEMPLATE_ARGS) && defined(CAPABILITY_CONSTEXPR)
 #include "StringOperations.h"
 
 #include "size_t_literal.h"

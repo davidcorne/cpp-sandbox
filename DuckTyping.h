@@ -188,7 +188,7 @@ Object Object::clone() const
   Object o;
   o.m_properties = m_properties;
   o.m_methods = m_methods;
-  return std::move(o);
+  return o;
 }
 
 //=============================================================================

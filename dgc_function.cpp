@@ -36,7 +36,7 @@ public:
 
   virtual tRETURN operator()(tARGS... args) override;
 
-  virtual std::unique_ptr<callable_base<tRETURN, tARGS...> > clone() const;
+  virtual std::unique_ptr<callable_base<tRETURN, tARGS...> > clone() const override;
   
   virtual ~function_callable() {}
   
