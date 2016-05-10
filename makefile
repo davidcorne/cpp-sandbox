@@ -23,8 +23,8 @@ ifeq ($(COMPILER_TYPE), gcc)
   LINKER := g++
   VERSION := $(shell g++ --version | grep "g++" | sed -e 's:.*\([0-9]\+\.[0-9]\+\.[0-9]\+\).*:\1:')
   COMMON_ARGS := -g 
-  COMPILER_ARGS := $(COMMON_ARGS) -std=c++1y -Wall -Werror -pthread -I $(UNITCPP)
-  LINKER_ARGS := $(COMMON_ARGS)
+  COMPILER_ARGS := $(COMMON_ARGS) -std=c++1y -Wall -Werror -I $(UNITCPP)
+  LINKER_ARGS := $(COMMON_ARGS) -pthread
   OUT_EXE_FILE := -o 
   OUT_OBJECT_FILE := -o 
   NO_LINK := -c
