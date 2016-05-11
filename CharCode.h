@@ -70,7 +70,7 @@ CharCode from_int(int value)
 
   // Base case for when the value is in the range 1-26.
   if (value < 26) {
-    return CharCode(1, 'a' + value);
+    return CharCode(1, static_cast<char>('a' + value));
   }
 
   // Recurse to find representation of value / 26.
@@ -79,7 +79,7 @@ CharCode from_int(int value)
   // Add the character representation of the remainder as the least significant
   // position in the string.
   int remainder = value % 26;
-  str += CharCode(1, 'a' + remainder);
+  str += CharCode(1, static_cast<char>('a' + remainder));
 
   return str;
 }
