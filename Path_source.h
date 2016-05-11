@@ -3,6 +3,8 @@
 // Path is a utility class for this repository, so it has the source included.
 
 #include <fstream>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 //=============================================================================
 Path::Path(std::string path)
@@ -44,11 +46,12 @@ bool Path::operator!=(Path other) const
   return !(*this == other);
 }
 
+
 //=============================================================================
 bool Path::exists() const
 {
-  std::ifstream ifile(m_path);
-  return !!ifile;
+  struct stat info;
+  return stat(m_path.c_str(), &info) == 0;
 }
 
 //=============================================================================
