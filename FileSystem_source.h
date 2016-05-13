@@ -41,30 +41,30 @@ bool FileSystem::create_directory(Path directory)
   return result;
 }
 
-//=============================================================================
-std::vector<Path> FileSystem::list_contents(Path path) const
-{
-  std::vector<Path> list;
-#ifndef _MSC_VER
-  DIR* dp = nullptr;
-  struct dirent* dirp = nullptr;
-  if ((dp  = opendir(path.path().c_str())) == NULL) {
-    // error
-    return list;
-// <nnn> // <nnn>     cout << "Error(" << errno << ") opening " << dir << endl;
-// <nnn>     return errno;
-  }
+// <nnn> //=============================================================================
+// <nnn> std::vector<Path> FileSystem::list_contents(Path path) const
+// <nnn> {
+// <nnn>   std::vector<Path> list;
+// <nnn> #ifndef _MSC_VER
+// <nnn>   DIR* dp = nullptr;
+// <nnn>   struct dirent* dirp = nullptr;
+// <nnn>   if ((dp  = opendir(path.path().c_str())) == NULL) {
+// <nnn>     // error
+// <nnn>     return list;
+// <nnn> // <nnn> // <nnn>     cout << "Error(" << errno << ") opening " << dir << endl;
+// <nnn> // <nnn>     return errno;
+// <nnn>   }
 
-  while ((dirp = readdir(dp)) != NULL) {
-    Path path(dirp->d_name);
-    if (path != Path(".") && path != Path("..")) {
-      list.push_back(path);
-    }
-  }
-  closedir(dp);
-#endif
-  return list;  
-}
+// <nnn>   while ((dirp = readdir(dp)) != NULL) {
+// <nnn>     Path path(dirp->d_name);
+// <nnn>     if (path != Path(".") && path != Path("..")) {
+// <nnn>       list.push_back(path);
+// <nnn>     }
+// <nnn>   }
+// <nnn>   closedir(dp);
+// <nnn> #endif
+// <nnn>   return list;  
+// <nnn> }
 
 //=============================================================================
 bool FileSystem::delete_directory(Path directory)
