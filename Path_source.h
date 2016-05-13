@@ -55,6 +55,30 @@ bool Path::exists() const
 }
 
 //=============================================================================
+bool Path::is_file() const
+{
+  bool l_is_file = false;
+  if (exists()) {
+    struct stat info;
+    stat(m_path.c_str(), &info);
+    l_is_file = !!(info.st_mode & S_IFREG);
+  }
+  return l_is_file;
+}
+
+//=============================================================================
+bool Path::is_directory() const
+{
+  bool l_is_file = false;
+  if (exists()) {
+    struct stat info;
+    stat(m_path.c_str(), &info);
+    l_is_file = !!(info.st_mode & S_IFDIR);
+  }
+  return l_is_file;
+}
+
+//=============================================================================
 std::ostream& operator<<(std::ostream& os, const Path& path)
 {
   os << path.path();

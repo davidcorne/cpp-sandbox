@@ -37,7 +37,6 @@ TEST(Path, exists)
   Path test_file("data/test.txt");
   TEST_TRUE(test_file.exists());
 
-  // Can't tell why, but this is only working on GCC.
   Path test_directory("data");
   TEST_TRUE(test_directory.exists());
   
@@ -49,13 +48,33 @@ TEST(Path, exists)
 //=============================================================================
 TEST(Path, is_directory)
 {
-  // not implemented yet
+  Path non_existant("non existant");
+  TEST_FALSE(non_existant.is_directory());
+
+  Path test_file("data/test.txt");
+  TEST_FALSE(test_file.is_directory());
+
+  Path test_directory("data");
+  TEST_TRUE(test_directory.is_directory());
+  
+  Path test_nonexistant_directory("data2");
+  TEST_FALSE(test_nonexistant_directory.is_directory());
 }
 
 //=============================================================================
 TEST(Path, is_file)
 {
-  // not implemented yet
+  Path non_existant("non existant");
+  TEST_FALSE(non_existant.is_file());
+
+  Path test_file("data/test.txt");
+  TEST_TRUE(test_file.is_file());
+
+  Path test_directory("data");
+  TEST_FALSE(test_directory.is_file());
+  
+  Path test_nonexistant_directory("data2");
+  TEST_FALSE(test_nonexistant_directory.is_file());
 }
 
 //=============================================================================
