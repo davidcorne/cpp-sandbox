@@ -13,6 +13,8 @@
 #define DGC_MKDIR(dir) _mkdir((dir))
 #endif
 
+//----- FileSystem source.
+
 //=============================================================================
 Path FileSystem::temporary_directory() const
 {
@@ -31,15 +33,43 @@ Path FileSystem::temporary_directory() const
 }
 
 //=============================================================================
-bool FileSystem::create_directory(Path directory)
+FileSystemError FileSystem::create_directory(Path directory)
 {
-  bool result = false;
+  FileSystemError error(FileSystemErrorType::DIRECTORY_ALREADY_EXISTS);
   if (!directory.exists()) {
     int res = DGC_MKDIR(directory.path().c_str());
-    result = res == 0;
+    if (res != 0) {
+      error = FileSystemErrorType::UNKNOWN;
+    } else {
+      error = FileSystemErrorType::OK;
+    }
   }
-  return result;
+  return error;
 }
+
+//=============================================================================
+FileSystemError FileSystem::delete_directory(Path directory)
+{
+  FileSystemError error(FileSystemErrorType::DIRECTORY_NOT_EXISTS);
+  if (directory.exists()) {
+    bool success = false;
+#ifdef _MSC_VER
+    success = !!RemoveDirectory(directory.path().c_str());
+#else
+    success = std::remove(directory.path().c_str()) == 0;
+#endif
+    if (!success) {
+      error = FileSystemErrorType::UNKNOWN;
+    } else {
+      error = FileSystemErrorType::OK;
+    }
+  }
+  return error;
+}
+
+
+
+
 
 // <nnn> //=============================================================================
 // <nnn> std::vector<Path> FileSystem::list_contents(Path path) const
@@ -66,17 +96,6 @@ bool FileSystem::create_directory(Path directory)
 // <nnn>   return list;  
 // <nnn> }
 
-//=============================================================================
-bool FileSystem::delete_directory(Path directory)
-{
-#ifdef _MSC_VER
-  BOOL success = RemoveDirectory(directory.path().c_str());
-  return !!success;
-#else
-  return std::remove(directory.path().c_str()) == 0;
-#endif
-}
-
 // <nnn> //=============================================================================
 // <nnn> bool FileSystem::delete_tree(Path directory)
 // <nnn> {
@@ -100,5 +119,31 @@ bool FileSystem::delete_directory(Path directory)
 // <nnn>   }
 // <nnn>   return result;
 // <nnn> }
+
+//----- FileSystemError source.
+
+//=============================================================================
+FileSystemError::FileSystemError(FileSystemErrorType type)
+  : m_type(type)
+{
+}
+
+//=============================================================================
+FileSystemError::operator bool() const
+{
+  return m_type != FileSystemErrorType::OK;
+}
+
+//=============================================================================
+std::string FileSystemError::message() const
+{
+  static std::map<FileSystemErrorType, std::string> error_map = {
+    {FileSystemErrorType::OK, "No error."},
+    {FileSystemErrorType::DIRECTORY_NOT_EXISTS, "Given directory does not exist."},
+    {FileSystemErrorType::DIRECTORY_ALREADY_EXISTS, "Directory exists, and should not.."},
+    {FileSystemErrorType::UNKNOWN, "Unknown error."}
+  };
+  return error_map[m_type];
+}
 
 #undef DGC_MKDIR

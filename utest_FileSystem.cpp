@@ -22,17 +22,22 @@ TEST(FileSystem, empty_directories)
 {
   // Create and delete empty directories.
   FileSystem fs;
-  bool result = false;
   Path directory("FileSystem_empty_directories");
   TEST_FALSE(directory.exists(), "The directory shouldn't already exist.");
   
-  result = fs.create_directory(directory);
-  TEST_TRUE(result, "Should have been able to create this directory.");
+  FileSystemError error = fs.create_directory(directory);
+  TEST_FALSE(error, "Should have been able to create this directory.");
   TEST_TRUE(directory.exists(), "The directory should now exist.");
+  if (error) {
+    std::cout << error.message() << std::endl;
+  }
 
-  result = fs.delete_directory(directory);
-  TEST_TRUE(result, "Should have been able to delete this directory.");
+  error = fs.delete_directory(directory);
+  TEST_FALSE(error, "Should have been able to delete this directory.");
   TEST_FALSE(directory.exists(), "The directory should no longer exist.");
+  if (error) {
+    std::cout << error.message() << std::endl;
+  }
 }
 
 //=============================================================================

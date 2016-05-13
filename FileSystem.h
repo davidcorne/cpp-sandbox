@@ -8,25 +8,26 @@
 #include <UnitCpp.h>
 
 class Path;
+class FileSystemError;
 
 //=============================================================================
 class FileSystem {
 public:
 
-  bool create_directory(Path directory);
+  FileSystemError create_directory(Path directory);
   // Creates and empty directory on the file system.
   // directory should not already exist.
 
-  bool delete_directory(Path directory);
+  FileSystemError delete_directory(Path directory);
   // Removes an empty directory, directory.
   // directory should exist.
   // directory should be empty.
 
-  bool delete_tree(Path directory);
+  FileSystemError delete_tree(Path directory);
   // Removes a directory and all it's subdirectories and files.
   // directory should empty
 
-  bool delete_path(Path path);
+  FileSystemError delete_path(Path path);
   // Delete the file or directory.
   // If path is a directory, it deletes the contents recursivly.
 
@@ -41,13 +42,31 @@ public:
   
 private:
 
-  // <nnn> static int remove_path_callback(
-  // <nnn>   const char* path,
-  // <nnn>   const struct stat* sb,
-  // <nnn>   int typeflag,
-  // <nnn>   struct FTW* ftwbuf
-  // <nnn> );
+};
 
+//=============================================================================
+enum class FileSystemErrorType {
+  OK,
+  DIRECTORY_NOT_EXISTS,
+  DIRECTORY_ALREADY_EXISTS,
+  UNKNOWN
+};
+
+//=============================================================================
+class FileSystemError {
+public:
+
+  FileSystemError(FileSystemErrorType type);
+
+  explicit operator bool() const;
+  // Ask if (error) or !error;
+
+  std::string message() const;
+  // What has gone wrong?
+  
+private:
+
+  FileSystemErrorType m_type;
 };
 
 #include "FileSystem_source.h"
