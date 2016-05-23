@@ -33,6 +33,9 @@ static MemoryTrace MEMORY_MAP[MEMORY_MAP_CAPACITY];
 void* operator new(std::size_t size)
 {
   void* pointer = malloc(size);
+  if (!pointer) {
+    throw std::bad_alloc();
+  }
   for (std::size_t i = 0; i < MEMORY_MAP_CAPACITY; ++i) {
     if (!MEMORY_MAP[i].pointer) {
       MEMORY_USED += size;
