@@ -12,5 +12,6 @@ dependency.*/*.P
 *.pdb
 *.suo
 .git/*
+*.nativecodeanalysis.xml
 
 .config.mk
