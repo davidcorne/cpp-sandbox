@@ -30,6 +30,7 @@ ifeq ($(COMPILER_TYPE), gcc)
   NO_LINK := -c
   GENERATE_DEPENDENCIES := -MMD
   DEPENDENCY_DIRECTORY := dependency.$(COMPILER_TYPE).$(VERSION)
+  CLEAN_DIRECTORIES := $(EXE_DIRECTORY) $(OBJ_DIRECTORY) $(RESULT_DIRECTORY) $(DEPENDENCY_DIRECTORY)
 endif
 
 #==============================================================================
@@ -57,7 +58,7 @@ ifeq ($(COMPILER_TYPE), vs)
   VERSION := $(shell cl 2>&1 >/dev/null | grep "Version" | sed -e 's:.*Version ::' -e 's:\([0-9][0-9]\)\.\([0-9][0-9]\).*:\1\2:')
   # a bit of a hack because I know I'm in cygwin if I'm using cl in a makefile.
   INCLUDES := /I$(UNITCPP)
-  COMMON_ARGS := /nologo /Zi 
+  COMMON_ARGS := /nologo /Zi
   COMPILER_ARGS := $(COMMON_ARGS) $(INCLUDES) /W4 /wd4481 /WX /EHsc
   LINKER_ARGS := $(COMMON_ARGS) /MTd
 
@@ -72,6 +73,11 @@ ifeq ($(COMPILER_TYPE), vs)
   GENERATE_DEPENDENCIES := 
   # use the gcc dependencies.
   DEPENDENCY_DIRECTORY := dependency.gcc.*
+  ifeq ($(wildcard $(DEPENDENCY_DIRECTORY)),) 
+      # No dependency.gcc files, unset the variable
+      DEPENDENCY_DIRECTORY :=
+  endif
+  CLEAN_DIRECTORIES := $(EXE_DIRECTORY) $(OBJ_DIRECTORY) $(RESULT_DIRECTORY)
 endif
 
 ifndef COMPILER
@@ -82,6 +88,11 @@ COMPILER_DESCRIPTION := $(COMPILER_TYPE).$(VERSION)
 EXE_DIRECTORY := exe.$(COMPILER_DESCRIPTION)
 OBJ_DIRECTORY := obj.$(COMPILER_DESCRIPTION)
 RESULT_DIRECTORY := results.$(COMPILER_DESCRIPTION)
+ifneq ($(COMPILER_TYPE), vs)
+  CLEAN_DIRECTORIES := $(EXE_DIRECTORY) $(OBJ_DIRECTORY) $(RESULT_DIRECTORY) $(DEPENDENCY_DIRECTORY)
+else
+  CLEAN_DIRECTORIES := $(EXE_DIRECTORY) $(OBJ_DIRECTORY) $(RESULT_DIRECTORY)
+endif
 EXT := cpp
 
 TEST_SIN_BIN := $(shell cat sin_bin.txt | grep "^TEST: " | sed -e 's/TEST: //')
@@ -175,8 +186,8 @@ retest: FRC
 #D For deleting all temporary and made files
 #------------------------------------------------------------------------------
 clean: FRC
-	@rm -fr $(EXE_DIRECTORY) $(OBJ_DIRECTORY) $(RESULT_DIRECTORY) $(DEPENDENCY_DIRECTORY)
-	@echo "Removed: $(EXE_DIRECTORY) $(OBJ_DIRECTORY) $(RESULT_DIRECTORY) $(DEPENDENCY_DIRECTORY)"
+	@rm -fr $(CLEAN_DIRECTORIES)
+	@echo "Removed: $(CLEAN_DIRECTORIES)"
 
 #==============================================================================
 #D For deleting all temporary and made files
