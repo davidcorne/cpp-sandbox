@@ -55,5 +55,14 @@ TEST(MachineEpsilon, double)
 //=============================================================================
 int main(int argc, char** argv) 
 {
-  return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
+  int result =
+    UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
+  std::cout
+    << "Float: "
+    << machine_eps<float, uint32_t>()
+    << "\n"
+    << "Double: "
+    << machine_eps<double, uint64_t>()
+    << "\n";
+  return result;
 }
