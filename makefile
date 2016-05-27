@@ -169,7 +169,7 @@ endif
 #==============================================================================
 $(RESULT_DIRECTORY)/%.test_result: $(EXE_DIRECTORY)/%.exe
 	@mkdir -p $(RESULT_DIRECTORY)
-	@./run_test $< $@
+	@./bin/run_test.sh $< $@
 
 #==============================================================================
 test: $(EXE_FILES) $(TEST_RESULTS)
