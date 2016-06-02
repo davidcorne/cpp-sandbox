@@ -28,9 +28,6 @@ ifeq ($(COMPILER_TYPE), gcc)
   OUT_EXE_FILE := -o 
   OUT_OBJECT_FILE := -o 
   NO_LINK := -c
-  GENERATE_DEPENDENCIES := -MMD
-  DEPENDENCY_DIRECTORY := dependency.$(COMPILER_TYPE).$(VERSION)
-  CLEAN_DIRECTORIES := $(EXE_DIRECTORY) $(OBJ_DIRECTORY) $(RESULT_DIRECTORY) $(DEPENDENCY_DIRECTORY)
 endif
 
 #==============================================================================
@@ -42,13 +39,11 @@ ifeq ($(COMPILER_TYPE), clang)
   INCLUDES := -I$(UNITCPP)
   COMMON_ARGS:= -g
   COMPILER_ARGS := $(COMMON_ARGS) -std=c++1y -Wall -Werror $(INCLUDES) -fexceptions -Wno-error=microsoft-pure-definition
-  LINKER_ARGS := $(COMMON_ARGS) #-pthread 
+  LINKER_ARGS := $(COMMON_ARGS)
 
   OUT_EXE_FILE := -o 
   OUT_OBJECT_FILE := -o 
   NO_LINK := -c
-  GENERATE_DEPENDENCIES := -MMD
-  DEPENDENCY_DIRECTORY := dependency.$(COMPILER_TYPE).$(VERSION)
 endif
 
 #==============================================================================
@@ -70,14 +65,6 @@ ifeq ($(COMPILER_TYPE), vs)
   OUT_EXE_FILE := /Fe
   OUT_OBJECT_FILE := /Fo
   NO_LINK := /c
-  GENERATE_DEPENDENCIES := 
-  # use the gcc dependencies.
-  DEPENDENCY_DIRECTORY := dependency.gcc.*
-  ifeq ($(wildcard $(DEPENDENCY_DIRECTORY)),) 
-      # No dependency.gcc files, unset the variable
-      DEPENDENCY_DIRECTORY :=
-  endif
-  CLEAN_DIRECTORIES := $(EXE_DIRECTORY) $(OBJ_DIRECTORY) $(RESULT_DIRECTORY)
 endif
 
 ifndef COMPILER
@@ -88,11 +75,9 @@ COMPILER_DESCRIPTION := $(COMPILER_TYPE).$(VERSION)
 EXE_DIRECTORY := exe.$(COMPILER_DESCRIPTION)
 OBJ_DIRECTORY := obj.$(COMPILER_DESCRIPTION)
 RESULT_DIRECTORY := results.$(COMPILER_DESCRIPTION)
-ifneq ($(COMPILER_TYPE), vs)
-  CLEAN_DIRECTORIES := $(EXE_DIRECTORY) $(OBJ_DIRECTORY) $(RESULT_DIRECTORY) $(DEPENDENCY_DIRECTORY)
-else
-  CLEAN_DIRECTORIES := $(EXE_DIRECTORY) $(OBJ_DIRECTORY) $(RESULT_DIRECTORY)
-endif
+DEPENDENCY_DIRECTORY := dependency
+CLEAN_DIRECTORIES := $(EXE_DIRECTORY) $(OBJ_DIRECTORY) $(RESULT_DIRECTORY)
+
 EXT := cpp
 
 TEST_SIN_BIN := $(shell cat sin_bin.txt | grep "^TEST: " | sed -e 's/TEST: //')
@@ -129,7 +114,6 @@ EXE_FILES := $(shell \
 #D will be made.
 #------------------------------------------------------------------------------
 all: $(EXE_FILES)
-	@echo ""
 	@echo \
 "make: \`all' is up to date with $(COMPILER_DESCRIPTION)."
 	@echo ""
@@ -144,24 +128,20 @@ all: $(EXE_FILES)
 $(EXE_DIRECTORY)/%.exe: $(OBJ_DIRECTORY)/%.obj
 	@mkdir -p $(EXE_DIRECTORY)
 	$(LINKER) $(LINKER_ARGS) $< $(OUT_EXE_FILE)$@
-
-#==============================================================================
-.PRECIOUS: $(OBJ_DIRECTORY)/%.obj
-
-#==============================================================================
-$(OBJ_DIRECTORY)/%.obj: %.$(EXT)
-	@mkdir -p $(OBJ_DIRECTORY) $(DEPENDENCY_DIRECTORY)
 	@echo ""
-	$(COMPILER) $(COMPILER_ARGS) $(NO_LINK) $(GENERATE_DEPENDENCIES) $< \
-        $(OUT_OBJECT_FILE)$@ || (rm -f $(OBJ_DIRECTORY)/$*.d && exit 1)
-# vs type compilers don't make the .P files, so make this part conditional
-ifneq ($(COMPILER_TYPE), vs)
-	@cp $(OBJ_DIRECTORY)/$*.d $(DEPENDENCY_DIRECTORY)/$*.P
-	@sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
-         -e '/^$$/ d' -e 's/$$/ :/' < $(OBJ_DIRECTORY)/$*.d >> $(DEPENDENCY_DIRECTORY)/$*.P
-	@sed -i -e "s/$(OBJ_DIRECTORY)/\$$(OBJ_DIRECTORY)/" $(DEPENDENCY_DIRECTORY)/$*.P
-	@rm -f $(OBJ_DIRECTORY)/$*.d
-endif
+
+#==============================================================================
+.PRECIOUS: $(OBJ_DIRECTORY)/%.obj $(DEPENDENCY_DIRECTORY)/%.P
+
+#==============================================================================
+$(OBJ_DIRECTORY)/%.obj: %.$(EXT) $(DEPENDENCY_DIRECTORY)/%.P
+	@mkdir -p $(OBJ_DIRECTORY)
+	$(COMPILER) $(COMPILER_ARGS) $(NO_LINK) $< $(OUT_OBJECT_FILE)$@
+
+#==============================================================================
+$(DEPENDENCY_DIRECTORY)/%.P: %.$(EXT) 
+	@mkdir -p $(DEPENDENCY_DIRECTORY)
+	./bin/depends.py $< > $@
 
 #==============================================================================
 .DELETE_ON_ERROR: $(RESULT_DIRECTORY)/%.test_result
@@ -193,7 +173,7 @@ clean: FRC
 #D For deleting all temporary and made files
 #------------------------------------------------------------------------------
 uberclean: FRC
-	@rm -fr exe.* results.* obj.* dependency.*
+	@rm -fr exe.* results.* obj.* $(DEPENDENCY_DIRECTORY)
 	@echo "Removed all: objects, executables, and dependency files."
 
 #==============================================================================
@@ -209,4 +189,4 @@ compiler_description: FRC
 #------------------------------------------------------------------------------
 FRC:
 
--include $(DEPENDENCY_DIRECTORY)/*.P
+-include $(DEPENDENCY_DIRECTORY)/*
