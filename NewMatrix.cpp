@@ -16,7 +16,7 @@ template <typename T, unsigned int N, unsigned int M>
 class Matrix {
 public:
 
-  Matrix();
+  Matrix() = default;
 
   template <typename GENERATOR_FUNCTION>
   Matrix(GENERATOR_FUNCTION generator_function);
@@ -24,10 +24,13 @@ public:
   // std::function<T(unsigned int, unsigned int)> which is used to assign
   // values to each cell in the Matrix.
   
-  ~Matrix();
+  ~Matrix() = default;
   
-  Matrix(Matrix<T, N, M>&& other);
-  Matrix<T, N, M>& operator=(Matrix<T, N, M>&& other);
+  Matrix(Matrix<T, N, M>& other) = default;
+  Matrix<T, N, M>& operator=(Matrix<T, N, M>& other) = default;
+  
+  Matrix(Matrix<T, N, M>&& other) = default;
+  Matrix<T, N, M>& operator=(Matrix<T, N, M>&& other) = default;
   
   typedef typename std::array<std::array<T, M>, N>::iterator iterator;
   typedef typename std::array<std::array<T, M>, N>::const_iterator const_iterator;
@@ -40,6 +43,9 @@ public:
   //----- Iterator access
   iterator begin();
   iterator end();
+  
+  const_iterator begin() const;
+  const_iterator end() const;
   
   const_iterator cbegin() const;
   const_iterator cend() const;
@@ -462,12 +468,6 @@ int main(int argc, char** argv)
 
 //=============================================================================
 template <typename T, unsigned int N, unsigned int M>
-Matrix<T, N, M>::Matrix()
-{
-}
-
-//=============================================================================
-template <typename T, unsigned int N, unsigned int M>
 template <typename GENERATOR_FUNCTION>
 Matrix<T, N, M>::Matrix(GENERATOR_FUNCTION generator_function)
 {
@@ -481,12 +481,6 @@ Matrix<T, N, M>::Matrix(GENERATOR_FUNCTION generator_function)
 
 //=============================================================================
 template <typename T, unsigned int N, unsigned int M>
-Matrix<T, N, M>::~Matrix()
-{
-}
-
-//=============================================================================
-template <typename T, unsigned int N, unsigned int M>
 typename Matrix<T, N, M>::iterator Matrix<T, N, M>::begin()
 {
   return std::begin(m_matrix);
@@ -495,6 +489,20 @@ typename Matrix<T, N, M>::iterator Matrix<T, N, M>::begin()
 //=============================================================================
 template <typename T, unsigned int N, unsigned int M>
 typename Matrix<T, N, M>::iterator Matrix<T, N, M>::end()
+{
+  return std::end(m_matrix);
+}
+
+//=============================================================================
+template <typename T, unsigned int N, unsigned int M>
+typename Matrix<T, N, M>::const_iterator Matrix<T, N, M>::begin() const
+{
+  return std::begin(m_matrix);
+}
+
+//=============================================================================
+template <typename T, unsigned int N, unsigned int M>
+typename Matrix<T, N, M>::const_iterator Matrix<T, N, M>::end() const
 {
   return std::end(m_matrix);
 }
@@ -529,23 +537,6 @@ const typename Matrix<T, N, M>::row& Matrix<T, N, M>::operator[](unsigned int n)
 
 //=============================================================================
 template <typename T, unsigned int N, unsigned int M>
-Matrix<T, N, M>::Matrix(Matrix<T, N, M>&& other)
-  : m_matrix(std::move(other.m_matrix))
-{
-}
-
-//=============================================================================
-template <typename T, unsigned int N, unsigned int M>
-Matrix<T, N, M>& Matrix<T, N, M>::operator=(Matrix<T, N, M>&& other)
-{
-  if (&other != this) {
-    m_matrix = std::move(other.m_matrix);
-  }
-  return *this;
-}
-
-//=============================================================================
-template <typename T, unsigned int N, unsigned int M>
 Matrix<T, M, N> Matrix<T, N, M>::transpose() const
 {
   auto& self = *this;
@@ -559,9 +550,9 @@ Matrix<T, M, N> Matrix<T, N, M>::transpose() const
 template <typename T, unsigned int N, unsigned int M>
 std::ostream& operator<<(std::ostream& os, const Matrix<T, N, M>& matrix)
 {
-  for (auto row_it = matrix.cbegin(); row_it != matrix.cend(); ++row_it) {
-    for (auto it = row_it->cbegin(); it != row_it->cend(); ++it) {
-      os << *it << " ";
+  for (const auto& row : matrix) {
+    for (const T& t : row) {
+      os << t << " ";
     }
     os << "\n";
   }
