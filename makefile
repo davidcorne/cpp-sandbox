@@ -180,7 +180,7 @@ clean: FRC
 #D For deleting all temporary and made files
 #------------------------------------------------------------------------------
 uberclean: FRC
-	rm -fr exe.* results.* obj.* $(DEPENDENCY_DIRECTORY) $(DEPENDS)
+	@rm -fr exe.* results.* obj.* $(DEPENDENCY_DIRECTORY) $(DEPENDS)
 	@echo "Removed all: objects, executables, and dependency files."
 
 #==============================================================================
