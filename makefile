@@ -88,6 +88,9 @@ TO_TEST :=  $(shell grep -l "<UnitCpp" *.cpp | \
              $(foreach test, $(TEST_SIN_BIN), | grep -v $(test)) \
            )
 
+DEPENDS_SOURCE := $(shell ls depends.dev/*.$(EXT))
+DEPENDS := ./bin/depends.exe
+
 TEST_RESULTS := $(shell \
   echo $(TO_TEST) |\
   sed -e 's: : $(RESULT_DIRECTORY)/:g' \
@@ -139,9 +142,13 @@ $(OBJ_DIRECTORY)/%.obj: %.$(EXT) $(DEPENDENCY_DIRECTORY)/%.P
 	$(COMPILER) $(COMPILER_ARGS) $(NO_LINK) $< $(OUT_OBJECT_FILE)$@
 
 #==============================================================================
-$(DEPENDENCY_DIRECTORY)/%.P: %.$(EXT) 
+$(DEPENDENCY_DIRECTORY)/%.P: %.$(EXT) $(DEPENDS)
 	@mkdir -p $(DEPENDENCY_DIRECTORY)
-	./bin/depends.py $< > $@
+	$(DEPENDS) $< > $@
+
+#==============================================================================
+$(DEPENDS): $(DEPENDS_SOURCE)
+	$(COMPILER) $(COMPILER_ARGS) $< $(OUT_EXE_FILE)$@
 
 #==============================================================================
 .DELETE_ON_ERROR: $(RESULT_DIRECTORY)/%.test_result
