@@ -9,11 +9,10 @@
 COMPILER_TYPE := gcc
 -include .config.mk
 
-ifndef $(UNITCPP)
+ifndef UNITCPP
   UNITCPP := $(shell pkg-config --cflags-only-I unitcpp | sed -e 's:-I::')
-
-  ifdef $(CYGWIN)
-    UNITCPP := $(shell  cygpath -w $(UNITCPP) | sed -e 's:\\:/:g')
+  ifdef CYGWIN
+    UNITCPP := $(shell cygpath -w $(UNITCPP) | sed -e 's:\\:/:g')
   endif
 endif
 
