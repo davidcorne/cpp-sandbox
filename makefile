@@ -87,33 +87,40 @@ TEST_SIN_BIN := $(shell cat sin_bin.txt | grep "^TEST: " | sed -e 's/TEST: //')
 
 
 TO_TEST :=  $(shell grep -l "<UnitCpp" *.cpp | \
-             sed -e 's/\.cpp/\.exe/' \
-             $(foreach test, $(TEST_SIN_BIN), | grep -v $(test)) \
-           )
+              sed -e 's/\.cpp/\.exe/' \
+              $(foreach test, $(TEST_SIN_BIN), | grep -v $(test)) \
+            )
 
 DEPENDS_SOURCE := $(shell ls depends.dev/*.$(EXT))
 DEPENDS := ./bin/depends.exe
 
-TEST_RESULTS := $(shell \
-  echo $(TO_TEST) |\
-  sed -e 's: : $(RESULT_DIRECTORY)/:g' \
-      -e 's:^:$(RESULT_DIRECTORY)/:g' \
-      -e 's:\.exe:.test_result:g'\
-)
+DEPENDENCY_SOURCE := $(shell ls *.$(EXT) | \
+                       sed -e 's:^:$(DEPENDENCY_DIRECTORY)/:' \
+                           -e 's/\.$(EXT)/\.P/' \
+                     )
+TEST_RESULTS := $(shell echo $(TO_TEST) | \
+                  sed -e 's: : $(RESULT_DIRECTORY)/:g' \
+                      -e 's:^:$(RESULT_DIRECTORY)/:g' \
+                      -e 's:\.exe:.test_result:g' \
+                )
 
 #==============================================================================
 #D Makes all of the $(EXT) files into exe files using $(CC)
 #D Requires: $(EXT), $(CC) and $(CC_OPTS) to be defined.
 #------------------------------------------------------------------------------
 
-BUILD_SIN_BIN := $(shell cat sin_bin.txt | grep "^BUILD: " | sed -e 's/BUILD: //')
+BUILD_SIN_BIN := $(shell cat sin_bin.txt |\
+                         grep "^BUILD: " | sed -e 's/BUILD: //'\
+                 )
 
-EXE_FILES := $(shell \
-  ls *.$(EXT) | \
-  sed -e 's:^:$(EXE_DIRECTORY)/:' \
-      -e 's/\.$(EXT)/\.exe/' \
-  $(foreach test, $(BUILD_SIN_BIN), | grep -v $(test)) \
-)
+EXE_FILES := $(shell ls *.$(EXT) | \
+               sed -e 's:^:$(EXE_DIRECTORY)/:' \
+                   -e 's/\.$(EXT)/\.exe/' \
+               $(foreach test, $(BUILD_SIN_BIN), | grep -v $(test)) \
+             )
+
+#==============================================================================
+.PHONY: all retest clean uberclean compiler_description depends
 
 #==============================================================================
 #D Target depending on all .exe files made from a .hs file so that all of them 
@@ -168,35 +175,34 @@ test: $(EXE_FILES) $(TEST_RESULTS)
 "Tests passed with $(COMPILER_DESCRIPTION)."
 
 #==============================================================================
-retest: FRC
+retest:
 	@rm -fr $(RESULT_DIRECTORY)
 	@$(MAKE) test
 
 #==============================================================================
 #D For deleting all temporary and made files
 #------------------------------------------------------------------------------
-clean: FRC
+clean:
 	@rm -fr $(CLEAN_DIRECTORIES)
 	@echo "Removed: $(CLEAN_DIRECTORIES)"
 
 #==============================================================================
 #D For deleting all temporary and made files
 #------------------------------------------------------------------------------
-uberclean: FRC
+uberclean:
 	@rm -fr exe.* results.* obj.* $(DEPENDENCY_DIRECTORY) $(DEPENDS)
 	@echo "Removed all: objects, executables, and dependency files."
 
 #==============================================================================
 #D Getting the compiler you are using.
 #------------------------------------------------------------------------------
-compiler_description: FRC
+compiler_description:
 	@echo "$(COMPILER_DESCRIPTION)"
 
 #==============================================================================
-#D Pseudo target causes all targets that depend on FRC to be remade even in 
-#D case a file with the name of the target exists. Works unless there is a file
-#D called FRC in the directory.
+#D Make all of the dependency files
 #------------------------------------------------------------------------------
-FRC:
+depends:
+	@$(MAKE) $(DEPENDENCY_SOURCE)
 
 -include $(DEPENDENCY_DIRECTORY)/*
