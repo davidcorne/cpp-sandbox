@@ -16,6 +16,10 @@ ifndef UNITCPP
   endif
 endif
 
+ifeq "$(wildcard $(UNITCPP) )" ""
+  $(error $$(UNITCPP) directory not found.)
+endif
+
 #==============================================================================
 ifeq ($(COMPILER_TYPE), gcc)
   COMPILER := g++
