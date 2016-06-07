@@ -29,6 +29,16 @@ TEST(MetaFractions, gcd_base)
 }
 
 //=============================================================================
+TEST(MetaFractions, coprime)
+{
+  TEST_EQUAL((GCD<3, 5>::result), 1);
+  TEST_EQUAL((GCD<7, 9>::result), 1);
+  TEST_EQUAL((GCD<6, 5>::result), 1);
+  TEST_EQUAL((GCD<22, 21>::result), 1);
+  TEST_EQUAL((GCD<101, 102>::result), 1);
+}
+
+//=============================================================================
 int main(int argc, char** argv) 
 {
   return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);
