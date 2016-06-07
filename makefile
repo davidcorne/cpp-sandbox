@@ -136,9 +136,9 @@ $(EXE_DIRECTORY)/%.exe: $(OBJ_DIRECTORY)/%.obj
 .PRECIOUS: $(OBJ_DIRECTORY)/%.obj $(DEPENDENCY_DIRECTORY)/%.P
 
 #==============================================================================
-$(OBJ_DIRECTORY)/%.obj: %.$(EXT) $(DEPENDENCY_DIRECTORY)/%.P
+$(OBJ_DIRECTORY)/%.obj: $(DEPENDENCY_DIRECTORY)/%.P
 	@mkdir -p $(OBJ_DIRECTORY)
-	$(COMPILER) $(COMPILER_ARGS) $(NO_LINK) $< $(OUT_OBJECT_FILE)$@
+	$(COMPILER) $(COMPILER_ARGS) $(NO_LINK) $(subst $(DEPENDENCY_DIRECTORY)/,, $(subst .P,.$(EXT),$<)) $(OUT_OBJECT_FILE)$@
 
 #==============================================================================
 $(DEPENDENCY_DIRECTORY)/%.P: %.$(EXT) $(DEPENDS)

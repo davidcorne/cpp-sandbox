@@ -80,9 +80,7 @@ void print_dependencies(std::string path)
   std::cout
     << "$(OBJ_DIRECTORY)/"
     << header
-    << ".obj: "
-    << header
-    << ".cpp ";
+    << ".obj: ";
   for (const std::string& dependency : dependencies) {
     std::cout << dependency << " ";
   }
