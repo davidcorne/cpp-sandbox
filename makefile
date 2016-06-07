@@ -12,7 +12,7 @@ COMPILER_TYPE := gcc
 ifndef $(UNITCPP)
   UNITCPP := $(shell pkg-config --cflags-only-I unitcpp | sed -e 's:-I::')
 
-  ifndef $(CYGWIN)
+  ifdef $(CYGWIN)
     UNITCPP := $(shell  cygpath -w $(UNITCPP) | sed -e 's:\\:/:g')
   endif
 endif
