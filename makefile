@@ -25,9 +25,10 @@ ifeq ($(COMPILER_TYPE), gcc)
   COMPILER := g++
   LINKER := g++
   VERSION := $(shell g++ --version | grep "g++" | sed -e 's:.*\([0-9]\+\.[0-9]\+\.[0-9]\+\).*:\1:')
-  COMMON_ARGS := -g 
-  COMPILER_ARGS := $(COMMON_ARGS) -std=c++1y -Wall -Werror -I $(UNITCPP)
-  LINKER_ARGS := $(COMMON_ARGS) -pthread
+  DEBUG_ARGS := -g 
+  OPTIMISE_ARGS := -O3
+  COMPILER_ARGS := -std=c++1y -Wall -Werror -I $(UNITCPP)
+  LINKER_ARGS := -pthread
   OUT_EXE_FILE := -o 
   OUT_OBJECT_FILE := -o 
   NO_LINK := -c
@@ -40,9 +41,10 @@ ifeq ($(COMPILER_TYPE), clang)
   VERSION := $(shell clang++ --version | grep "clang" | sed -e 's:[^0-9]*::' -e 's: \+.*::')
 
   INCLUDES := -I$(UNITCPP)
-  COMMON_ARGS:= -g
-  COMPILER_ARGS := $(COMMON_ARGS) -std=c++1y -Wall -Werror $(INCLUDES) -fexceptions -Wno-error=microsoft-pure-definition
-  LINKER_ARGS := $(COMMON_ARGS)
+  DEBUG_ARGS := -g
+  OPTIMISE_ARGS := -O3
+  COMPILER_ARGS := -std=c++1y -Wall -Werror $(INCLUDES) -fexceptions -Wno-error=microsoft-pure-definition
+  LINKER_ARGS :=
 
   OUT_EXE_FILE := -o 
   OUT_OBJECT_FILE := -o 
@@ -56,13 +58,15 @@ ifeq ($(COMPILER_TYPE), vs)
   VERSION := $(shell cl 2>&1 >/dev/null | grep "Version" | sed -e 's:.*Version ::' -e 's:\([0-9][0-9]\)\.\([0-9][0-9]\).*:\1\2:')
   # a bit of a hack because I know I'm in cygwin if I'm using cl in a makefile.
   INCLUDES := /I$(UNITCPP)
-  COMMON_ARGS := /nologo /Zi
+  COMMON_ARGS := /nologo
+  DEBUG_ARGS = /Zi
+  OPTIMISE_ARGS := /O2
   COMPILER_ARGS := $(COMMON_ARGS) $(INCLUDES) /W4 /wd4481 /WX /EHsc
   LINKER_ARGS := $(COMMON_ARGS) /MTd
 
   VERSION_SUPPORTS_FS := $(shell expr `echo $(VERSION)` \>= 1800)
   ifeq "$(VERSION_SUPPORTS_FS)" "1"
-    COMPILER_ARGS += /FS
+    DEBUG_ARGS += /FS
   endif
 
   OUT_EXE_FILE := /Fe
@@ -92,6 +96,8 @@ TO_TEST :=  $(shell grep -l "<UnitCpp" *.cpp | \
             )
 
 DEPENDS_SOURCE := $(shell ls depends.dev/*.$(EXT))
+DEPENDS_DIR := depends.dev/$(EXE_DIRECTORY)
+DEPENDS_SPECIFIC := $(DEPENDS_DIR)/depends.exe
 DEPENDS := ./bin/depends.exe
 
 DEPENDENCY_SOURCE := $(shell ls *.$(EXT) | \
@@ -126,7 +132,7 @@ EXE_FILES := $(shell ls *.$(EXT) | \
 #D Target depending on all .exe files made from a .hs file so that all of them 
 #D will be made.
 #------------------------------------------------------------------------------
-all: $(EXE_FILES)
+all: $(EXE_FILES) $(DEPENDS_SPECIFIC)
 	@echo \
 "make: \`all' is up to date with $(COMPILER_DESCRIPTION)."
 	@echo ""
@@ -140,7 +146,7 @@ all: $(EXE_FILES)
 #------------------------------------------------------------------------------
 $(EXE_DIRECTORY)/%.exe: $(OBJ_DIRECTORY)/%.obj
 	@mkdir -p $(EXE_DIRECTORY)
-	$(LINKER) $(LINKER_ARGS) $< $(OUT_EXE_FILE)$@
+	$(LINKER) $(DEBUG_ARGS) $(LINKER_ARGS) $< $(OUT_EXE_FILE)$@
 	@echo ""
 
 #==============================================================================
@@ -149,7 +155,7 @@ $(EXE_DIRECTORY)/%.exe: $(OBJ_DIRECTORY)/%.obj
 #==============================================================================
 $(OBJ_DIRECTORY)/%.obj: $(DEPENDENCY_DIRECTORY)/%.P
 	@mkdir -p $(OBJ_DIRECTORY)
-	$(COMPILER) $(COMPILER_ARGS) $(NO_LINK) $(subst $(DEPENDENCY_DIRECTORY)/,, $(subst .P,.$(EXT),$<)) $(OUT_OBJECT_FILE)$@
+	$(COMPILER) $(DEBUG_ARGS) $(COMPILER_ARGS) $(NO_LINK) $(subst $(DEPENDENCY_DIRECTORY)/,, $(subst .P,.$(EXT),$<)) $(OUT_OBJECT_FILE)$@
 
 #==============================================================================
 $(DEPENDENCY_DIRECTORY)/%.P: %.$(EXT) $(DEPENDS)
@@ -158,7 +164,12 @@ $(DEPENDENCY_DIRECTORY)/%.P: %.$(EXT) $(DEPENDS)
 
 #==============================================================================
 $(DEPENDS): $(DEPENDS_SOURCE)
-	$(COMPILER) $(COMPILER_ARGS) $< $(OUT_EXE_FILE)$@
+	$(COMPILER) $(OPTIMISE_ARGS) $(COMPILER_ARGS) $< $(OUT_EXE_FILE)$@
+
+#==============================================================================
+$(DEPENDS_SPECIFIC): $(DEPENDS_SOURCE)
+	@mkdir -p $(DEPENDS_DIR)
+	$(COMPILER) $(OPTIMISE_ARGS) $(COMPILER_ARGS) $< $(OUT_EXE_FILE)$@
 
 #==============================================================================
 .DELETE_ON_ERROR: $(RESULT_DIRECTORY)/%.test_result
