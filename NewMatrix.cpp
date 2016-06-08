@@ -94,6 +94,12 @@ Matrix<T, N, P> operator*(const Matrix<T, N, M>& a, const Matrix<T, M, P>& b);
 
 //----- Scalar arithmatic operators
 template <typename T, unsigned int N, unsigned int M>
+Matrix<T, N, M> operator+(const T& scalar, const Matrix<T, N, M>& matrix);
+
+template <typename T, unsigned int N, unsigned int M>
+Matrix<T, N, M> operator+(const Matrix<T, N, M>& matrix, const T& scalar);
+
+template <typename T, unsigned int N, unsigned int M>
 Matrix<T, N, M> operator*(const T& scalar, const Matrix<T, N, M>& matrix);
 
 template <typename T, unsigned int N, unsigned int M>
@@ -310,6 +316,32 @@ TEST(Matrix, scalar_multiplication)
   TEST_EQUAL(result[1][1], 8);
   TEST_EQUAL(result[2][0], 8);
   TEST_EQUAL(result[2][1], 12);
+}
+
+//=============================================================================
+TEST(Matrix, scalar_addition)
+{
+  Matrix<int, 3, 2> a(
+    [](unsigned int i, unsigned int j){return i+j;}
+  );
+  // (0, 1)       (2, 3)
+  // (1, 2) + 2 = (3, 4)
+  // (2, 3)       (4, 5)
+  Matrix<int, 3, 2> result = 2 + a;
+  TEST_EQUAL(result[0][0], 2);
+  TEST_EQUAL(result[0][1], 3);
+  TEST_EQUAL(result[1][0], 3);
+  TEST_EQUAL(result[1][1], 4);
+  TEST_EQUAL(result[2][0], 4);
+  TEST_EQUAL(result[2][1], 5);
+
+  result = result + 2;
+  TEST_EQUAL(result[0][0], 4);
+  TEST_EQUAL(result[0][1], 5);
+  TEST_EQUAL(result[1][0], 5);
+  TEST_EQUAL(result[1][1], 6);
+  TEST_EQUAL(result[2][0], 6);
+  TEST_EQUAL(result[2][1], 7);
 }
 
 //=============================================================================
@@ -595,6 +627,26 @@ Matrix<T, N, M> operator*(const T& scalar, const Matrix<T, N, M>& matrix)
 {
   Matrix<T, N, M> result(
     [&matrix, &scalar](unsigned int i, unsigned int j){return scalar * matrix[i][j];}
+  );
+  return std::move(result);
+}
+
+//=============================================================================
+template <typename T, unsigned int N, unsigned int M>
+Matrix<T, N, M> operator+(const Matrix<T, N, M>& matrix, const T& scalar)
+{
+  Matrix<T, N, M> result(
+    [&matrix, &scalar](unsigned int i, unsigned int j){return matrix[i][j] + scalar;}
+  );
+  return std::move(result);
+}
+
+//=============================================================================
+template <typename T, unsigned int N, unsigned int M>
+Matrix<T, N, M> operator+(const T& scalar, const Matrix<T, N, M>& matrix)
+{
+  Matrix<T, N, M> result(
+    [&matrix, &scalar](unsigned int i, unsigned int j){return scalar + matrix[i][j];}
   );
   return std::move(result);
 }
