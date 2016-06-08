@@ -7,16 +7,21 @@
 #include <iostream>
 #include <UnitCpp.h>
 
+#include <cassert>
+
 #define UNUSED_VARIABLE 1
 #define SELF_MOVE 1
 #include "IgnoreDiagnostics.h"
 #undef UNUSED_VARIABLE
 
+//=============================================================================
 template <typename T, unsigned int N, unsigned int M>
 class Matrix {
 public:
 
   Matrix() = default;
+
+  Matrix(std::initializer_list<std::initializer_list<T>> initializers);
 
   template <typename GENERATOR_FUNCTION>
   Matrix(GENERATOR_FUNCTION generator_function);
@@ -201,6 +206,22 @@ TEST(Matrix, generator_constructor)
   TEST_EQUAL(additive[1][0], 1);
   TEST_EQUAL(additive[1][1], 2);
   TEST_EQUAL(additive[1][2], 3);
+}
+
+//=============================================================================
+TEST(Matrix, initializer_constructor)
+{
+  Matrix<double, 2, 3> example({
+      {2, -5, 10},
+      {-4, 19, 4},
+  });
+  
+  TEST_EQUAL(example[0][0], 2);
+  TEST_EQUAL(example[0][1], -5);
+  TEST_EQUAL(example[0][2], 10);
+  TEST_EQUAL(example[1][0], -4);
+  TEST_EQUAL(example[1][1], 19);
+  TEST_EQUAL(example[1][2], 4);
 }
 
 //=============================================================================
@@ -508,6 +529,25 @@ Matrix<T, N, M>::Matrix(GENERATOR_FUNCTION generator_function)
     for (unsigned int j = 0; j < columns(); ++j) {
       row[j] = generator_function(i, j);
     }
+  }
+}
+
+//=============================================================================
+template <typename T, unsigned int N, unsigned int M>
+Matrix<T, N, M>::Matrix(
+  std::initializer_list<std::initializer_list<T>> initializer
+)
+{
+  assert(initializer.size() == N && "initializer has the wrong rows.");
+  std::size_t i = 0;
+  for (const auto& l_row : initializer) {
+    assert(l_row.size() == M && "initializer column has wrong size.");
+    std::size_t j = 0;
+    for (const auto& item : l_row) {
+      m_matrix[i][j] = item;
+      ++j;
+    }
+    ++i;
   }
 }
 
