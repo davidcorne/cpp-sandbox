@@ -5,6 +5,7 @@
 #include "Capabilities.h"
 #if defined(CAPABILITY_VARIADIC_TEMPLATES) && defined(CAPABILITY_DEFAULTED_FUNCTIONS)
 #include "DuckTyping.h"
+#include <algorithm>
 #include <random>
 #include <chrono>
 #include <thread>
@@ -30,9 +31,7 @@ Primitive attack(Object& attacker, Object& defender)
   double damage =
     (attacker["attack"].d() + D6()) -
     (defender["defence"].d());
-  if (damage < 0) {
-    damage = 0;
-  }
+  damage = std::max<double>(0, damage);
   double hp = defender["hp"].d();
   defender["hp"].d(hp - damage);
 
