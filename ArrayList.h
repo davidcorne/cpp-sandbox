@@ -17,6 +17,7 @@ template <typename tCONTAINS>
 class ArrayList {
 private:
 
+  //===========================================================================
   struct Node {
     tCONTAINS value;
     Node* previous;
@@ -24,6 +25,7 @@ private:
     bool operator==(const Node&) const;
   };
   
+  //===========================================================================
   template <typename tDERIVED_ITERATOR, typename tNODE_TYPE>
   class NodeIteratorBase {
   public:
@@ -58,6 +60,7 @@ private:
     tNODE_TYPE m_current;
   };
   
+  //===========================================================================
   class NodeIteratorConst :
     public NodeIteratorBase<NodeIteratorConst, const Node*> {
   public:
@@ -72,6 +75,7 @@ private:
   
   };
   
+  //===========================================================================
   class NodeIterator : public NodeIteratorBase<NodeIterator, Node*> {
   public:
     
@@ -85,7 +89,7 @@ private:
     
     tCONTAINS* operator->();
     
-    using NodeIteratorBase<NodeIterator, Node*>::m_current ;
+    using NodeIteratorBase<NodeIterator, Node*>::m_current;
   };
 
   std::vector<Node> m_storage;
