@@ -98,6 +98,8 @@ void List<tCONTAINS>::clear()
     to_delete->previous = nullptr;
     delete to_delete;
   }
+  m_sentinel.next = nullptr;
+  m_sentinel.previous = nullptr;
 }
 
 //=============================================================================
@@ -108,10 +110,16 @@ typename List<tCONTAINS>::iterator List<tCONTAINS>::insert(
 )
 {
   Node* node = const_cast<Node*>(position.node());
-  Node* old_next = node->next;
-  node->next = new Node{value, node, old_next};
-  assert(old_next && "Shouldn't get any null nodes.");
-  old_next->previous = node->next;
+  if (!node->next || !node->previous) {
+    // If either are null, we should be inserting at end()
+    assert(node == &m_sentinel && "We should be inserting at end()");
+    push_back(value);
+  } else {
+    Node* new_node = new Node{value, nullptr, node};
+    // new_node is inserted *before* node
+    node->previous->next = new_node;
+    node->previous = new_node;
+  }
   return iterator(node->next);
 }
 
@@ -142,14 +150,11 @@ template <typename tCONTAINS>
 void List<tCONTAINS>::push_back(const tCONTAINS& value)
 {
   Node* node = new Node{value, nullptr, nullptr};
-  if (empty()) {
-    m_sentinel.next = node;
-    m_sentinel.previous = node;
-    node->next = &m_sentinel;
-    node->previous = &m_sentinel;
-  } else {
-    
-  }
+  Node* back = empty() ? &m_sentinel : m_sentinel.previous;
+  back->next = node;
+  m_sentinel.previous = node;
+  node->next = &m_sentinel;
+  node->previous = back;
   assert(node->previous && node->next && "Next or previous shouldn't be null.");
 }
 
@@ -157,13 +162,13 @@ void List<tCONTAINS>::push_back(const tCONTAINS& value)
 template <typename tCONTAINS>
 void List<tCONTAINS>::push_front(const tCONTAINS& value)
 {
-  Node* old_front = m_sentinel.next;
-  m_sentinel.next = new Node{value, &m_sentinel, old_front};
-  if (old_front) {
-    old_front->previous = m_sentinel.next;
-  } else {
-    m_sentinel.next->previous = &m_sentinel;
-  }
+  Node* node = new Node{value, nullptr, nullptr};
+  Node* front = empty() ? &m_sentinel : m_sentinel.next;
+  m_sentinel.next = node;
+  front->previous = node;
+  node->next = front;
+  node->previous = &m_sentinel;
+  assert(node->previous && node->next && "Next or previous shouldn't be null.");
 }
 
 //=============================================================================
@@ -184,14 +189,14 @@ void List<tCONTAINS>::pop_front()
 template <typename tCONTAINS>
 typename List<tCONTAINS>::iterator List<tCONTAINS>::begin()
 {
-  return NodeIterator(m_sentinel.next);
+  return !empty() ? NodeIterator(m_sentinel.next) : end();
 }
 
 //=============================================================================
 template <typename tCONTAINS>
 typename List<tCONTAINS>::const_iterator List<tCONTAINS>::begin() const
 {
-  return NodeIteratorConst(m_sentinel.next);
+  return !empty() ? NodeIterator(m_sentinel.next) : end();
 }
 
 //=============================================================================
@@ -212,7 +217,7 @@ typename List<tCONTAINS>::const_iterator List<tCONTAINS>::end() const
 template <typename tCONTAINS>
 typename List<tCONTAINS>::const_iterator List<tCONTAINS>::cbegin() const
 {
-  return NodeIteratorConst(m_sentinel.next);
+  return !empty() ? NodeIterator(m_sentinel.next) : cend();
 }
 
 //=============================================================================

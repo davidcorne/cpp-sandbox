@@ -31,6 +31,8 @@ private:
 
   void test_ctor();
 
+  void test_iterate_empty();
+  
   void test_capacity();
 
   void test_accessors();
@@ -64,6 +66,7 @@ void ListUtest<tLIST>::run_tests()
 {
   test_members();
   test_ctor();
+  test_iterate_empty();
   test_capacity();
   test_accessors();
   test_push_back();
@@ -104,6 +107,16 @@ void ListUtest<tLIST>::test_ctor()
   tLIST other(list);
   list = other;
   tLIST third{0, 1, 2, 3, 4, 5};
+}
+
+//=============================================================================
+template <typename tLIST>
+void ListUtest<tLIST>::test_iterate_empty()
+{
+  tLIST list;
+  for (auto i : list) {
+
+  }
 }
 
 //=============================================================================
@@ -280,24 +293,18 @@ TEST(ArrayList, float)
 //=============================================================================
 TEST(List, int)
 {
-  // Make sure it compiles, but don't run it.
-  return;
   ListUtest<List<int>>(*this).run_tests();
 }
 
 //=============================================================================
 TEST(List, double)
 {
-  // Make sure it compiles, but don't run it.
-  return;
   ListUtest<List<double>>(*this).run_tests();
 }
 
 //=============================================================================
 TEST(List, float)
 {
-  // Make sure it compiles, but don't run it.
-  return;
   ListUtest<List<float>>(*this).run_tests();
 }
 
