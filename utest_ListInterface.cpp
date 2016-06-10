@@ -251,12 +251,28 @@ void ListUtest<tLIST>::test_modifiers()
 template <typename tLIST>
 void ListUtest<tLIST>::test_assign()
 {
+  tLIST expected;
   tLIST list;
+  
   std::vector<value_type> vector = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
   list.assign(begin(vector), end(vector));
   m_test.test_equal(vector.size(), list.size(), "Assign should keep size.");
-  bool equal = std::equal(begin(vector), end(vector), begin(list));
-  m_test.test_true(equal, "Assign should assign the contents.");
+
+  expected = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+  m_test.test_equal(
+    list,
+    expected,
+    "Should have assigned the correct content."
+  );
+
+  list.assign(5, 0);
+  expected = {0, 0, 0, 0, 0};
+  m_test.test_equal(
+    list,
+    expected,
+    "Should have assigned the correct content."
+  );
+  
 }
 
 //=============================================================================
@@ -512,47 +528,53 @@ TEST(std_list, float)
   ListUtest<std::list<float>>(*this).run_tests();
 }
 
-// <nnn> //=============================================================================
-// <nnn> TEST(ArrayList, int)
-// <nnn> {
-// <nnn>   // Make sure it compiles, but don't run it.
-// <nnn>   return;
-// <nnn>   ListUtest<ArrayList<int>>(*this).run_tests();
-// <nnn> }
+//=============================================================================
+TEST(ArrayList, int)
+{
+  // Make sure it compiles, but don't run it.
+  return;
+  ListUtest<ArrayList<int>>(*this).run_tests();
+}
 
-// <nnn> //=============================================================================
-// <nnn> TEST(ArrayList, double)
-// <nnn> {
-// <nnn>   // Make sure it compiles, but don't run it.
-// <nnn>   return;
-// <nnn>   ListUtest<ArrayList<double>>(*this).run_tests();
-// <nnn> }
+//=============================================================================
+TEST(ArrayList, double)
+{
+  // Make sure it compiles, but don't run it.
+  return;
+  ListUtest<ArrayList<double>>(*this).run_tests();
+}
 
-// <nnn> //=============================================================================
-// <nnn> TEST(ArrayList, float)
-// <nnn> {
-// <nnn>   // Make sure it compiles, but don't run it.
-// <nnn>   return;
-// <nnn>   ListUtest<ArrayList<float>>(*this).run_tests();
-// <nnn> }
+//=============================================================================
+TEST(ArrayList, float)
+{
+  // Make sure it compiles, but don't run it.
+  return;
+  ListUtest<ArrayList<float>>(*this).run_tests();
+}
 
-// <nnn> //=============================================================================
-// <nnn> TEST(List, int)
-// <nnn> {
-// <nnn>   ListUtest<List<int>>(*this).run_tests();
-// <nnn> }
+//=============================================================================
+TEST(List, int)
+{
+  // Make sure it compiles, but don't run it.
+  return;
+  ListUtest<List<int>>(*this).run_tests();
+}
 
-// <nnn> //=============================================================================
-// <nnn> TEST(List, double)
-// <nnn> {
-// <nnn>   ListUtest<List<double>>(*this).run_tests();
-// <nnn> }
+//=============================================================================
+TEST(List, double)
+{
+  // Make sure it compiles, but don't run it.
+  return;
+  ListUtest<List<double>>(*this).run_tests();
+}
 
-// <nnn> //=============================================================================
-// <nnn> TEST(List, float)
-// <nnn> {
-// <nnn>   ListUtest<List<float>>(*this).run_tests();
-// <nnn> }
+//=============================================================================
+TEST(List, float)
+{
+  // Make sure it compiles, but don't run it.
+  return;
+  ListUtest<List<float>>(*this).run_tests();
+}
 
 //=============================================================================
 int main(int argc, char** argv) 

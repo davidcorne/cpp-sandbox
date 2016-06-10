@@ -273,3 +273,145 @@ typename ArrayList<tCONTAINS>::size_type ArrayList<tCONTAINS>::back_node_index()
   return index;
 }
 
+//=============================================================================
+template <typename tCONTAINS>
+template <typename tINPUT_ITERATOR>
+void ArrayList<tCONTAINS>::assign(tINPUT_ITERATOR first, tINPUT_ITERATOR last)
+{
+  (void)first;
+  (void)last;
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+void ArrayList<tCONTAINS>::assign(size_type size, value_type value)
+{
+  (void)size;
+  (void)value;
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+void ArrayList<tCONTAINS>::swap(ArrayList<tCONTAINS>& list)
+{
+  (void)list;
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+void ArrayList<tCONTAINS>::resize(size_type size, value_type value)
+{
+  (void)size;
+  (void)value;
+}
+  
+//=============================================================================
+template <typename tCONTAINS>
+void ArrayList<tCONTAINS>::splice(iterator position, ArrayList<tCONTAINS>& list)
+{
+  (void)position;
+  (void)list;
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+void ArrayList<tCONTAINS>::remove(const value_type& value)
+{
+  (void)value;
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+template <typename tPREDICATE>
+void ArrayList<tCONTAINS>::remove_if(tPREDICATE predicate)
+{
+  (void)predicate;
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+typename ArrayList<tCONTAINS>::reverse_iterator ArrayList<tCONTAINS>::rbegin()
+{
+  size_type index = front_node_index();
+  return reverse_iterator(
+    index != max_size() ? &m_storage[index] : nullptr
+  );
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+typename ArrayList<tCONTAINS>::reverse_iterator ArrayList<tCONTAINS>::rend()
+{
+  return reverse_iterator();
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+typename ArrayList<tCONTAINS>::const_reverse_iterator ArrayList<tCONTAINS>::rbegin() const
+{
+  size_type index = front_node_index();
+  return const_reverse_iterator(
+    index != max_size() ? &m_storage[index] : nullptr
+  );
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+typename ArrayList<tCONTAINS>::const_reverse_iterator ArrayList<tCONTAINS>::rend() const
+{
+  return const_reverse_iterator();
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+typename ArrayList<tCONTAINS>::const_reverse_iterator ArrayList<tCONTAINS>::crbegin() const
+{
+  size_type index = front_node_index();
+  return const_reverse_iterator(
+    index != max_size() ? &m_storage[index] : nullptr
+  );
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+typename ArrayList<tCONTAINS>::const_reverse_iterator ArrayList<tCONTAINS>::crend() const
+{
+  return const_reverse_iterator();
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+void ArrayList<tCONTAINS>::unique()
+{
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+void ArrayList<tCONTAINS>::merge(ArrayList<tCONTAINS>& list)
+{
+  (void)list;
+  
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+void ArrayList<tCONTAINS>::sort()
+{
+
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+template <typename tCOMPARATOR>
+void ArrayList<tCONTAINS>::sort(tCOMPARATOR comparator)
+{
+  (void)comparator;
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+void ArrayList<tCONTAINS>::reverse()
+{
+
+}
+

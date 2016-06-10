@@ -114,6 +114,24 @@ public:
   
   ArrayList(std::initializer_list<tCONTAINS>);
 
+  //----- Iterators
+  iterator begin();
+  const_iterator cbegin() const;
+  const_iterator begin() const;
+
+  iterator end();
+  const_iterator end() const;
+  const_iterator cend() const;
+
+  reverse_iterator rbegin();
+  reverse_iterator rend();
+  
+  const_reverse_iterator rbegin() const;
+  const_reverse_iterator rend() const;
+  
+  const_reverse_iterator crbegin() const;
+  const_reverse_iterator crend() const;
+  
   //----- Capacity
   size_type size() const;
 
@@ -136,6 +154,15 @@ public:
   iterator erase(const_iterator position);
   // position must be valid and dereferenceable i.e. can't be end()
 
+  template <typename tINPUT_ITERATOR>
+  void assign(tINPUT_ITERATOR first, tINPUT_ITERATOR last);
+
+  void assign(size_type size, value_type value);
+
+  void swap(ArrayList<tCONTAINS>& list);
+
+  void resize(size_type size, value_type value=value_type());
+  
   void push_back(const tCONTAINS& value);
 
   void push_front(const tCONTAINS& value);
@@ -144,14 +171,24 @@ public:
 
   void pop_front();
 
-  //----- Iterators
-  iterator begin();
-  const_iterator cbegin() const;
-  const_iterator begin() const;
+  //----- Operations
+  void splice(iterator position, ArrayList<tCONTAINS>& list);
 
-  iterator end();
-  const_iterator end() const;
-  const_iterator cend() const;
+  void remove(const value_type& value);
+
+  template <typename tPREDICATE>
+  void remove_if(tPREDICATE predicate);
+
+  void unique();
+
+  void merge(ArrayList<tCONTAINS>& list);
+
+  void sort();
+
+  template <typename tCOMPARATOR>
+  void sort(tCOMPARATOR comparator);
+
+  void reverse();
 
 private:
 

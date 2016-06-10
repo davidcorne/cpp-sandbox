@@ -227,30 +227,168 @@ typename List<tCONTAINS>::const_iterator List<tCONTAINS>::cend() const
   return NodeIteratorConst(&m_sentinel);
 }
 
+//=============================================================================
+template <typename tCONTAINS>
+template <typename tINPUT_ITERATOR>
+void List<tCONTAINS>::assign(tINPUT_ITERATOR first, tINPUT_ITERATOR last)
+{
+  (void)first;
+  (void)last;
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+void List<tCONTAINS>::assign(size_type size, value_type value)
+{
+  (void)size;
+  (void)value;
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+void List<tCONTAINS>::swap(List<tCONTAINS>& list)
+{
+  (void)list;
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+void List<tCONTAINS>::resize(size_type size, value_type value)
+{
+  (void)size;
+  (void)value;
+}
+  
+//=============================================================================
+template <typename tCONTAINS>
+void List<tCONTAINS>::splice(iterator position, List<tCONTAINS>& list)
+{
+  (void)position;
+  (void)list;
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+void List<tCONTAINS>::remove(const value_type& value)
+{
+  (void)value;
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+template <typename tPREDICATE>
+void List<tCONTAINS>::remove_if(tPREDICATE predicate)
+{
+  (void)predicate;
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+typename List<tCONTAINS>::reverse_iterator List<tCONTAINS>::rbegin()
+{
+  return reverse_iterator(m_sentinel.next);
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+typename List<tCONTAINS>::reverse_iterator List<tCONTAINS>::rend()
+{
+  return reverse_iterator(&m_sentinel);
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+typename List<tCONTAINS>::const_reverse_iterator List<tCONTAINS>::rbegin() const
+{
+  return const_reverse_iterator(m_sentinel.next);
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+typename List<tCONTAINS>::const_reverse_iterator List<tCONTAINS>::rend() const
+{
+  return reverse_iterator(&m_sentinel);
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+typename List<tCONTAINS>::const_reverse_iterator List<tCONTAINS>::crbegin() const
+{
+  return const_reverse_iterator(m_sentinel.next);
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+typename List<tCONTAINS>::const_reverse_iterator List<tCONTAINS>::crend() const
+{
+  return const_reverse_iterator(&m_sentinel);
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+void List<tCONTAINS>::unique()
+{
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+void List<tCONTAINS>::merge(List<tCONTAINS>& list)
+{
+  (void)list;
+  
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+void List<tCONTAINS>::sort()
+{
+
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+template <typename tCOMPARATOR>
+void List<tCONTAINS>::sort(tCOMPARATOR comparator)
+{
+  (void)comparator;
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+void List<tCONTAINS>::reverse()
+{
+
+}
+
+//=============================================================================
 template <typename tCONTAINS>
 typename List<tCONTAINS>::iterator begin(List<tCONTAINS>& list)
 {
   return list.begin();
 }
 
+//=============================================================================
 template <typename tCONTAINS>
 typename List<tCONTAINS>::const_iterator begin(const List<tCONTAINS>& list)
 {
   return list.begin();
 }
 
+//=============================================================================
 template <typename tCONTAINS>
 typename List<tCONTAINS>::iterator end(List<tCONTAINS>& list)
 {
   return list.end();
 }
 
+//=============================================================================
 template <typename tCONTAINS>
 typename List<tCONTAINS>::const_iterator end(const List<tCONTAINS>& list)
 {
   return list.end();
 }
 
+//=============================================================================
 template <typename tCONTAINS>
 bool operator==(const List<tCONTAINS>& lhs, const List<tCONTAINS>& rhs)
 {
@@ -270,6 +408,7 @@ bool operator==(const List<tCONTAINS>& lhs, const List<tCONTAINS>& rhs)
   return ret_val;
 }
 
+//=============================================================================
 template <typename tCONTAINS>
 bool operator!=(const List<tCONTAINS>& lhs, const List<tCONTAINS>& rhs)
 {
