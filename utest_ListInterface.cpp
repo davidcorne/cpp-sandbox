@@ -1,5 +1,5 @@
 //=============================================================================
-// Test for ArrayList
+// Tests for std::list type interfaces.
 
 #define UNUSED_VARIABLE 1
 #define UNREACHABLE_CODE 1
@@ -8,6 +8,9 @@
 // Test double including
 #include "ArrayList.h"
 #include "ArrayList.h"
+
+#include "List.h"
+#include "List.h"
 
 #include <list>
 
@@ -38,6 +41,10 @@ private:
 
   void test_internal_insert();
 
+  void test_push_back();
+
+  void test_push_front();
+
   ListUtest(const ListUtest&) = delete;
   ListUtest operator=(const ListUtest&) = delete;
   
@@ -59,6 +66,8 @@ void ListUtest<tLIST>::run_tests()
   test_ctor();
   test_capacity();
   test_accessors();
+  test_push_back();
+  test_push_front();
   test_modifiers();
   test_internal_removals();
   test_internal_insert();
@@ -194,6 +203,39 @@ void ListUtest<tLIST>::test_internal_insert()
 }
 
 //=============================================================================
+template <typename tLIST>
+void ListUtest<tLIST>::test_push_back()
+{
+  tLIST list = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+  tLIST result;
+  for (auto i : list) {
+    result.push_back(i);
+  }
+  m_test.test_equal(
+    list,
+    result,
+    "push_back() should be the same as initializer_list."
+  );
+}
+
+//=============================================================================
+template <typename tLIST>
+void ListUtest<tLIST>::test_push_front()
+{
+  tLIST list = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+  std::vector<typename tLIST::value_type> fill = {9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
+  tLIST result;
+  for (auto i : fill) {
+    result.push_front(i);
+  }
+  m_test.test_equal(
+    list,
+    result,
+    "push_front() should be the same as initializer_list."
+  );
+}
+
+//=============================================================================
 TEST(std_list, int)
 {
   ListUtest<std::list<int>>(*this).run_tests();
@@ -233,6 +275,30 @@ TEST(ArrayList, float)
   // Make sure it compiles, but don't run it.
   return;
   ListUtest<ArrayList<float>>(*this).run_tests();
+}
+
+//=============================================================================
+TEST(List, int)
+{
+  // Make sure it compiles, but don't run it.
+  return;
+  ListUtest<List<int>>(*this).run_tests();
+}
+
+//=============================================================================
+TEST(List, double)
+{
+  // Make sure it compiles, but don't run it.
+  return;
+  ListUtest<List<double>>(*this).run_tests();
+}
+
+//=============================================================================
+TEST(List, float)
+{
+  // Make sure it compiles, but don't run it.
+  return;
+  ListUtest<List<float>>(*this).run_tests();
 }
 
 //=============================================================================
