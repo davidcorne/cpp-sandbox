@@ -84,6 +84,14 @@ void print_dependencies(std::string path)
   for (const std::string& dependency : dependencies) {
     std::cout << dependency << " ";
   }
+  std::cout
+    << "\n"
+    << "$(DEPENDENCY_DIRECTORY)/"
+    << header
+    << ".P: ";
+  for (const std::string& dependency : dependencies) {
+    std::cout << dependency << " ";
+  }
   std::cout << "\n";
 }
 
