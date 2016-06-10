@@ -27,9 +27,13 @@ public:
   
 private:
 
+  using value_type = typename tLIST::value_type;
+
   void test_members();
 
   void test_ctor();
+
+  void test_copying();
 
   void test_iterate_empty();
   
@@ -39,13 +43,35 @@ private:
 
   void test_modifiers();
 
+  void test_assign();
+
+  void test_swap();
+
+  void test_resize();
+  
+  void test_push_back();
+
+  void test_push_front();
+
   void test_internal_removals();
 
   void test_internal_insert();
 
-  void test_push_back();
+  void test_reverse_iteration();
 
-  void test_push_front();
+  void test_splice();
+  
+  void test_remove();
+  
+  void test_remove_if();
+  
+  void test_unique();
+  
+  void test_merge();
+  
+  void test_sort();
+  
+  void test_reverse();
 
   ListUtest(const ListUtest&) = delete;
   ListUtest operator=(const ListUtest&) = delete;
@@ -66,14 +92,26 @@ void ListUtest<tLIST>::run_tests()
 {
   test_members();
   test_ctor();
+  test_copying();
   test_iterate_empty();
+  test_reverse_iteration();
   test_capacity();
   test_accessors();
   test_push_back();
   test_push_front();
   test_modifiers();
+  test_assign();
+  test_swap();
+  test_resize();
   test_internal_removals();
   test_internal_insert();
+  test_splice();
+  test_remove();
+  test_remove_if();
+  test_unique();
+  test_merge();
+  test_sort();
+  test_reverse();
 }
 
 //=============================================================================
@@ -111,12 +149,42 @@ void ListUtest<tLIST>::test_ctor()
 
 //=============================================================================
 template <typename tLIST>
+void ListUtest<tLIST>::test_copying()
+{
+  tLIST a{0, 1, 2, 3};
+  tLIST b(a);
+  m_test.test_equal(
+    a,
+    b,
+    "Copy constructor should work."
+  );
+}
+
+//=============================================================================
+template <typename tLIST>
 void ListUtest<tLIST>::test_iterate_empty()
 {
   tLIST list;
   for (auto i : list) {
 
   }
+}
+
+//=============================================================================
+template <typename tLIST>
+void ListUtest<tLIST>::test_reverse_iteration()
+{
+  tLIST list = {9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
+  std::vector<value_type> results;
+  for (auto it = list.rbegin(); it != list.rend(); ++it) {
+    results.push_back(*it);
+  }
+  std::vector<value_type> expected = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+  m_test.test_equal(
+    expected,
+    results,
+    "Should iterate in reverse order."
+  );
 }
 
 //=============================================================================
@@ -181,6 +249,54 @@ void ListUtest<tLIST>::test_modifiers()
 
 //=============================================================================
 template <typename tLIST>
+void ListUtest<tLIST>::test_assign()
+{
+  tLIST list;
+  std::vector<value_type> vector = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+  list.assign(begin(vector), end(vector));
+  m_test.test_equal(vector.size(), list.size(), "Assign should keep size.");
+  bool equal = std::equal(begin(vector), end(vector), begin(list));
+  m_test.test_true(equal, "Assign should assign the contents.");
+}
+
+//=============================================================================
+template <typename tLIST>
+void ListUtest<tLIST>::test_swap()
+{
+  tLIST a = {0, 1, 2, 3, 4};
+  tLIST b;
+
+  tLIST original_a(a);
+  tLIST original_b(b);
+
+  a.swap(b);
+  m_test.test_equal(a, original_b, "a should have swapped with b.");
+  m_test.test_equal(b, original_a, "b should have swapped with a.");
+}
+
+//=============================================================================
+template <typename tLIST>
+void ListUtest<tLIST>::test_resize()
+{
+  // Larger.
+  tLIST list;
+  list.resize(5u);
+  m_test.test_equal(list.size(), 5u, "list should resize to 5 elements.");
+
+  // Reduce.
+  list.resize(0u);
+  m_test.test_true(list.empty(), "resize(0) should clear the list.");
+
+  // Larger, but with an element.
+  list.resize(2u, 3);
+  m_test.test_equal(list.size(), 2u, "list should resize to 2 elements.");
+  m_test.test_equal(list.front(), 3, "list should fill with 3s");
+  m_test.test_equal(list.back(), 3, "list should fill with 3s");
+  
+}
+
+//=============================================================================
+template <typename tLIST>
 void ListUtest<tLIST>::test_internal_removals()
 {
   tLIST list = {0, 1, 2, 3, 4, 5};
@@ -227,7 +343,7 @@ void ListUtest<tLIST>::test_push_back()
   m_test.test_equal(
     list,
     result,
-    "push_back() should be the same as initializer_list."
+     "push_back() should be the same as initializer_list."
   );
 }
 
@@ -236,7 +352,7 @@ template <typename tLIST>
 void ListUtest<tLIST>::test_push_front()
 {
   tLIST list = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-  std::vector<typename tLIST::value_type> fill = {9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
+  std::vector<value_type> fill = {9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
   tLIST result;
   for (auto i : fill) {
     result.push_front(i);
@@ -246,6 +362,136 @@ void ListUtest<tLIST>::test_push_front()
     result,
     "push_front() should be the same as initializer_list."
   );
+}
+
+//=============================================================================
+template <typename tLIST>
+void ListUtest<tLIST>::test_splice()
+{
+  tLIST to = {0, 4, 5, 6};
+  tLIST from = {1, 2, 3};
+  auto position = begin(to);
+  ++position;
+  assert(*position == 4 && "position should be pointing at 4");
+
+  // Add the elements from from into to before position.
+  to.splice(position, from);
+
+  tLIST result = {0, 1, 2, 3, 4, 5, 6};
+  m_test.test_equal(to, result, "The splice didn't work.");
+}
+
+//=============================================================================
+template <typename tLIST>
+void ListUtest<tLIST>::test_remove()
+{
+  tLIST expected;
+  tLIST list = {0, 0, 0, 0, 1, 2, 3, 4};
+  
+  list.remove(5);
+  expected = {0, 0, 0, 0, 1, 2, 3, 4};
+  m_test.test_equal(list, expected, "Should have removed nothing.");
+
+  list.remove(0);
+  expected = {1, 2, 3, 4};
+  m_test.test_equal(list, expected, "Should have removed 0.");
+
+  list.remove(2);
+  expected = {1, 3, 4};
+  m_test.test_equal(list, expected, "Should have removed 2.");
+
+  list.remove(4);
+  expected = {1, 3};
+  m_test.test_equal(list, expected, "Should have removed 2.");
+
+  list.remove(1);
+  expected = {3};
+  m_test.test_equal(list, expected, "Should have removed 2.");
+
+  list.remove(3);
+  expected = {};
+  m_test.test_equal(list, expected, "Should have removed 2.");
+}
+
+//=============================================================================
+template <typename tLIST>
+void ListUtest<tLIST>::test_remove_if()
+{
+  tLIST expected;
+  tLIST list = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+  // Remove numbers divisible by 3
+  list.remove_if([](value_type i)->bool{return static_cast<int>(i) % 3 == 0;});
+  expected = {1, 2, 4, 5, 7, 8};
+  m_test.test_equal(
+    list,
+    expected,
+    "Should have removed anything divisible by 3"
+  );
+
+  // Remove nothing
+  list.remove_if([](value_type i)->bool{return i > 9;});
+  expected = {1, 2, 4, 5, 7, 8};
+  m_test.test_equal(list, expected, "Shouldn't have removed anything.");
+}
+
+//=============================================================================
+template <typename tLIST>
+void ListUtest<tLIST>::test_unique()
+{
+  tLIST list = {0, 0, 1, 2, 1, 1, 3};
+  list.unique();
+  tLIST expected = {0, 1, 2, 1, 3};
+  m_test.test_equal(list, expected, "Should remove the repeated elements.");
+}
+
+//=============================================================================
+template <typename tLIST>
+void ListUtest<tLIST>::test_merge()
+{
+  tLIST a = {0, 2, 4, 6, 8};
+  tLIST b = {1, 3, 5, 7, 9};
+  tLIST expected = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+  a.merge(b);
+  m_test.test_equal(a, expected, "Should have merged b into a.");
+  m_test.test_true(b.empty(), "The merge should have emptied b.");
+  
+}
+
+//=============================================================================
+template <typename tLIST>
+void ListUtest<tLIST>::test_sort()
+{
+  tLIST expected;
+  tLIST list = {9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
+  
+  list.sort();
+  expected = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+  m_test.test_equal(list, expected, "list should have been sorted.");
+
+  // Now reverse it.
+  list.sort([](value_type a, value_type b){return b < a;});
+  expected = {9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
+  m_test.test_equal(list, expected, "Should have reversed the list.");
+}
+
+//=============================================================================
+template <typename tLIST>
+void ListUtest<tLIST>::test_reverse()
+{
+  tLIST list = {1, 3, 5, 7, 2, 4, 6};
+  list.reverse();
+  
+  tLIST expected = {6, 4, 2, 7, 5, 3, 1};
+  m_test.test_equal(list, expected, "Should have reversed it.");
+
+  expected = {1, 3, 5, 7, 2, 4, 6};
+  list.reverse();
+  m_test.test_equal(list, expected, "Should have reversed it.");
+
+  list.reverse();
+  list.reverse();
+  m_test.test_equal(list, expected, "Double reverse, should keep the same.");
 }
 
 //=============================================================================
@@ -266,47 +512,47 @@ TEST(std_list, float)
   ListUtest<std::list<float>>(*this).run_tests();
 }
 
-//=============================================================================
-TEST(ArrayList, int)
-{
-  // Make sure it compiles, but don't run it.
-  return;
-  ListUtest<ArrayList<int>>(*this).run_tests();
-}
+// <nnn> //=============================================================================
+// <nnn> TEST(ArrayList, int)
+// <nnn> {
+// <nnn>   // Make sure it compiles, but don't run it.
+// <nnn>   return;
+// <nnn>   ListUtest<ArrayList<int>>(*this).run_tests();
+// <nnn> }
 
-//=============================================================================
-TEST(ArrayList, double)
-{
-  // Make sure it compiles, but don't run it.
-  return;
-  ListUtest<ArrayList<double>>(*this).run_tests();
-}
+// <nnn> //=============================================================================
+// <nnn> TEST(ArrayList, double)
+// <nnn> {
+// <nnn>   // Make sure it compiles, but don't run it.
+// <nnn>   return;
+// <nnn>   ListUtest<ArrayList<double>>(*this).run_tests();
+// <nnn> }
 
-//=============================================================================
-TEST(ArrayList, float)
-{
-  // Make sure it compiles, but don't run it.
-  return;
-  ListUtest<ArrayList<float>>(*this).run_tests();
-}
+// <nnn> //=============================================================================
+// <nnn> TEST(ArrayList, float)
+// <nnn> {
+// <nnn>   // Make sure it compiles, but don't run it.
+// <nnn>   return;
+// <nnn>   ListUtest<ArrayList<float>>(*this).run_tests();
+// <nnn> }
 
-//=============================================================================
-TEST(List, int)
-{
-  ListUtest<List<int>>(*this).run_tests();
-}
+// <nnn> //=============================================================================
+// <nnn> TEST(List, int)
+// <nnn> {
+// <nnn>   ListUtest<List<int>>(*this).run_tests();
+// <nnn> }
 
-//=============================================================================
-TEST(List, double)
-{
-  ListUtest<List<double>>(*this).run_tests();
-}
+// <nnn> //=============================================================================
+// <nnn> TEST(List, double)
+// <nnn> {
+// <nnn>   ListUtest<List<double>>(*this).run_tests();
+// <nnn> }
 
-//=============================================================================
-TEST(List, float)
-{
-  ListUtest<List<float>>(*this).run_tests();
-}
+// <nnn> //=============================================================================
+// <nnn> TEST(List, float)
+// <nnn> {
+// <nnn>   ListUtest<List<float>>(*this).run_tests();
+// <nnn> }
 
 //=============================================================================
 int main(int argc, char** argv) 
