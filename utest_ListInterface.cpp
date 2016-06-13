@@ -480,7 +480,7 @@ template <typename tLIST>
 void ListUtest<tLIST>::test_sort()
 {
   tLIST expected;
-  tLIST list = {9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
+  tLIST list = {9, 8, 7, 6, 5, 3, 4, 2, 1, 0};
   
   list.sort();
   expected = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
