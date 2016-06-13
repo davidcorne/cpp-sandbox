@@ -395,6 +395,7 @@ void ListUtest<tLIST>::test_splice()
 
   tLIST result = {0, 1, 2, 3, 4, 5, 6};
   m_test.test_equal(to, result, "The splice didn't work.");
+  m_test.test_true(from.empty(), "Splice should empty the from list.");
 }
 
 //=============================================================================
