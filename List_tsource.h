@@ -366,7 +366,7 @@ void List<tCONTAINS>::resize(size_type l_size, value_type value)
       push_back(value);
     }
   } else {
-    for (size_type i = current_size; i < l_size; ++i) {
+    for (size_type i = l_size; i < current_size; ++i) {
       pop_back();
     }
   }
@@ -376,8 +376,21 @@ void List<tCONTAINS>::resize(size_type l_size, value_type value)
 template <typename tCONTAINS>
 void List<tCONTAINS>::splice(iterator position, List<tCONTAINS>& list)
 {
-  (void)position;
-  (void)list;
+  if (!list.empty()) {
+    Node* current = position.node();
+    Node* first = current->previous;
+  
+    Node* sequence_start = list.m_sentinel.next;
+    first->next = sequence_start;
+    sequence_start->previous = first;
+
+    Node* sequence_end = list.m_sentinel.previous;
+    current->previous = sequence_end;
+    sequence_end->next = current;
+
+    list.m_sentinel.next = nullptr;
+    list.m_sentinel.previous = nullptr;
+  }
 }
 
 //=============================================================================
