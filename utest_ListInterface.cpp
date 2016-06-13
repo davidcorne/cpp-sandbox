@@ -555,24 +555,18 @@ TEST(ArrayList, float)
 //=============================================================================
 TEST(List, int)
 {
-  // Make sure it compiles, but don't run it.
-  return;
   ListUtest<List<int>>(*this).run_tests();
 }
 
 //=============================================================================
 TEST(List, double)
 {
-  // Make sure it compiles, but don't run it.
-  return;
   ListUtest<List<double>>(*this).run_tests();
 }
 
 //=============================================================================
 TEST(List, float)
 {
-  // Make sure it compiles, but don't run it.
-  return;
   ListUtest<List<float>>(*this).run_tests();
 }
 

@@ -14,15 +14,38 @@ template <typename tCONTAINS>
 List<tCONTAINS>::List(std::initializer_list<tCONTAINS> init)
   : List()
 {
-  Node* current = &m_sentinel;
-  for (const tCONTAINS& contains : init) {
-    Node* new_node = new Node{contains, current, nullptr};
-    current->next = new_node;
-    current = new_node;
-  }
-  m_sentinel.previous = current;
-  current->next = &m_sentinel;
+  assign(init.begin(), init.end());
 }
+
+//=============================================================================
+template <typename tCONTAINS>
+List<tCONTAINS>::List(const List<tCONTAINS>& list)
+  : List()
+{
+  assign(list.begin(), list.end());
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+List<tCONTAINS>& List<tCONTAINS>::operator=(const List<tCONTAINS>& list)
+{
+  assign(list.begin(), list.end());
+  return *this;
+}
+
+// <nnn> //=============================================================================
+// <nnn> template <typename tCONTAINS>
+// <nnn> List<tCONTAINS>::List(const List<tCONTAINS>&& list)
+// <nnn> {
+  
+// <nnn> }
+
+// <nnn> //=============================================================================
+// <nnn> template <typename tCONTAINS>
+// <nnn> List<tCONTAINS>& List<tCONTAINS>::operator=(const List<tCONTAINS>&& list)
+// <nnn> {
+  
+// <nnn> }
 
 //=============================================================================
 template <typename tCONTAINS>
@@ -130,6 +153,15 @@ typename List<tCONTAINS>::iterator List<tCONTAINS>::erase(
 )
 {
   Node* node = const_cast<Node*>(position.node());
+  return erase(node);
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+typename List<tCONTAINS>::iterator List<tCONTAINS>::erase(
+  Node* node
+)
+{
   Node* previous = node->previous;
   Node* next = node->next;
   assert(previous && next && "There should be all valid nodes.");
@@ -230,33 +262,68 @@ typename List<tCONTAINS>::const_iterator List<tCONTAINS>::cend() const
 //=============================================================================
 template <typename tCONTAINS>
 template <typename tINPUT_ITERATOR>
-void List<tCONTAINS>::assign(tINPUT_ITERATOR first, tINPUT_ITERATOR last)
+typename std::enable_if<IsIterator<tINPUT_ITERATOR>::value, void>::type
+  List<tCONTAINS>::assign(tINPUT_ITERATOR first, tINPUT_ITERATOR last)
 {
-  (void)first;
-  (void)last;
+  clear();
+  Node* current = &m_sentinel;
+  for (auto it = first; it != last; ++it) {
+    value_type value = *it;
+    Node* new_node = new Node{value, current, nullptr};
+    current->next = new_node;
+    current = new_node;
+  }
+  m_sentinel.previous = current;
+  current->next = &m_sentinel;
 }
 
 //=============================================================================
 template <typename tCONTAINS>
-void List<tCONTAINS>::assign(size_type size, value_type value)
+void List<tCONTAINS>::assign(size_type size, const value_type& value)
 {
-  (void)size;
-  (void)value;
+  clear();
+  Node* current = &m_sentinel;
+  for (size_type i = 0; i < size; ++i) {
+    Node* new_node = new Node{value, current, nullptr};
+    current->next = new_node;
+    current = new_node;
+  }
+  m_sentinel.previous = current;
+  current->next = &m_sentinel;
 }
 
 //=============================================================================
 template <typename tCONTAINS>
 void List<tCONTAINS>::swap(List<tCONTAINS>& list)
 {
-  (void)list;
+  Node* my_previous = m_sentinel.previous;
+  Node* my_next = m_sentinel.next;
+  Node* list_previous = list.m_sentinel.previous;
+  Node* list_next = list.m_sentinel.next;
+  std::swap(m_sentinel, list.m_sentinel);
+  if (my_previous || my_next) {
+    assert(my_previous && my_next && "If you have one, you should have both.");
+    my_previous->next = &list.m_sentinel;
+    my_next->previous = &list.m_sentinel;
+  }
+  if (list_previous || list_next) {
+    assert(list_previous && list_next && "If you have one, you should have both.");
+    list_previous->next = &m_sentinel;
+    list_next->previous = &m_sentinel;
+  }
 }
 
 //=============================================================================
 template <typename tCONTAINS>
-void List<tCONTAINS>::resize(size_type size, value_type value)
+void List<tCONTAINS>::resize(size_type l_size, value_type value)
 {
-  (void)size;
-  (void)value;
+  // <nnn> inefficient
+  size_type current_size = size();
+  if (current_size < l_size) {
+    for (size_type i = current_size; i < l_size; ++i) {
+      push_back(value);
+    }
+  }
 }
   
 //=============================================================================
@@ -271,7 +338,11 @@ void List<tCONTAINS>::splice(iterator position, List<tCONTAINS>& list)
 template <typename tCONTAINS>
 void List<tCONTAINS>::remove(const value_type& value)
 {
-  (void)value;
+  for (auto it = begin(); it != end(); ++it) {
+    if (*it == value) {
+      erase(it.node());
+    }
+  }
 }
 
 //=============================================================================
@@ -279,7 +350,12 @@ template <typename tCONTAINS>
 template <typename tPREDICATE>
 void List<tCONTAINS>::remove_if(tPREDICATE predicate)
 {
-  (void)predicate;
+  for (auto it = begin(); it != end(); ++it) {
+    if (predicate(*it)) {
+      erase(it.node());
+    }
+  }
+
 }
 
 //=============================================================================

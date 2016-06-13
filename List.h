@@ -5,6 +5,8 @@
 #ifndef List_H
 #define List_H
 
+#include "IsIterator.h"
+
 #include <iterator>
 #include <initializer_list>
 #include <type_traits>
@@ -107,6 +109,14 @@ public:
   
   List(std::initializer_list<tCONTAINS>);
 
+  List(const List<tCONTAINS>& list);
+
+  List& operator=(const List<tCONTAINS>& list);
+
+  // <nnn> List(const List<tCONTAINS>&& list);
+
+  // <nnn> List& operator=(const List<tCONTAINS>&& list);
+
   ~List();
   
   //----- Iterators
@@ -149,10 +159,11 @@ public:
   iterator erase(const_iterator position);
   // position must be valid and dereferenceable i.e. can't be end()
 
-  template <typename tINPUT_ITERATOR>
-  void assign(tINPUT_ITERATOR first, tINPUT_ITERATOR last);
+  void assign(size_type size, const value_type& value);
 
-  void assign(size_type size, value_type value);
+  template <typename tINPUT_ITERATOR>
+  typename std::enable_if<IsIterator<tINPUT_ITERATOR>::value, void>::type
+    assign(tINPUT_ITERATOR first, tINPUT_ITERATOR last);
 
   void swap(List<tCONTAINS>& list);
 
@@ -184,7 +195,11 @@ public:
   void sort(tCOMPARATOR comparator);
 
   void reverse();
+  
+private:
 
+  iterator erase(Node* node);
+  
 };
 
 //----- Non-member functions
