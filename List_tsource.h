@@ -221,42 +221,84 @@ void List<tCONTAINS>::pop_front()
 template <typename tCONTAINS>
 typename List<tCONTAINS>::iterator List<tCONTAINS>::begin()
 {
-  return !empty() ? NodeIterator(m_sentinel.next) : end();
+  return !empty() ? iterator(m_sentinel.next) : end();
 }
 
 //=============================================================================
 template <typename tCONTAINS>
 typename List<tCONTAINS>::const_iterator List<tCONTAINS>::begin() const
 {
-  return !empty() ? NodeIterator(m_sentinel.next) : end();
+  return !empty() ? const_iterator(m_sentinel.next) : end();
 }
 
 //=============================================================================
 template <typename tCONTAINS>
 typename List<tCONTAINS>::iterator List<tCONTAINS>::end()
 {
-  return NodeIterator(&m_sentinel);
+  return iterator(&m_sentinel);
 }
 
 //=============================================================================
 template <typename tCONTAINS>
 typename List<tCONTAINS>::const_iterator List<tCONTAINS>::end() const
 {
-  return NodeIteratorConst(&m_sentinel);
+  return const_iterator(&m_sentinel);
 }
 
 //=============================================================================
 template <typename tCONTAINS>
 typename List<tCONTAINS>::const_iterator List<tCONTAINS>::cbegin() const
 {
-  return !empty() ? NodeIterator(m_sentinel.next) : cend();
+  return !empty() ? const_iterator(m_sentinel.next) : cend();
 }
 
 //=============================================================================
 template <typename tCONTAINS>
 typename List<tCONTAINS>::const_iterator List<tCONTAINS>::cend() const
 {
-  return NodeIteratorConst(&m_sentinel);
+  return const_iterator(&m_sentinel);
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+typename List<tCONTAINS>::reverse_iterator List<tCONTAINS>::rbegin()
+{
+  return !empty() ? reverse_iterator(m_sentinel.previous) : rend();
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+typename List<tCONTAINS>::reverse_iterator List<tCONTAINS>::rend()
+{
+  return reverse_iterator(&m_sentinel);
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+typename List<tCONTAINS>::const_reverse_iterator List<tCONTAINS>::rbegin() const
+{
+  return !empty() ? const_reverse_iterator(m_sentinel.previous) : rend();
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+typename List<tCONTAINS>::const_reverse_iterator List<tCONTAINS>::rend() const
+{
+  return reverse_iterator(&m_sentinel);
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+typename List<tCONTAINS>::const_reverse_iterator List<tCONTAINS>::crbegin() const
+{
+  return !empty() ? const_reverse_iterator(m_sentinel.previous) : crend();
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+typename List<tCONTAINS>::const_reverse_iterator List<tCONTAINS>::crend() const
+{
+  return const_reverse_iterator(&m_sentinel);
 }
 
 //=============================================================================
@@ -323,6 +365,10 @@ void List<tCONTAINS>::resize(size_type l_size, value_type value)
     for (size_type i = current_size; i < l_size; ++i) {
       push_back(value);
     }
+  } else {
+    for (size_type i = current_size; i < l_size; ++i) {
+      pop_back();
+    }
   }
 }
   
@@ -356,48 +402,6 @@ void List<tCONTAINS>::remove_if(tPREDICATE predicate)
     }
   }
 
-}
-
-//=============================================================================
-template <typename tCONTAINS>
-typename List<tCONTAINS>::reverse_iterator List<tCONTAINS>::rbegin()
-{
-  return reverse_iterator(m_sentinel.next);
-}
-
-//=============================================================================
-template <typename tCONTAINS>
-typename List<tCONTAINS>::reverse_iterator List<tCONTAINS>::rend()
-{
-  return reverse_iterator(&m_sentinel);
-}
-
-//=============================================================================
-template <typename tCONTAINS>
-typename List<tCONTAINS>::const_reverse_iterator List<tCONTAINS>::rbegin() const
-{
-  return const_reverse_iterator(m_sentinel.next);
-}
-
-//=============================================================================
-template <typename tCONTAINS>
-typename List<tCONTAINS>::const_reverse_iterator List<tCONTAINS>::rend() const
-{
-  return reverse_iterator(&m_sentinel);
-}
-
-//=============================================================================
-template <typename tCONTAINS>
-typename List<tCONTAINS>::const_reverse_iterator List<tCONTAINS>::crbegin() const
-{
-  return const_reverse_iterator(m_sentinel.next);
-}
-
-//=============================================================================
-template <typename tCONTAINS>
-typename List<tCONTAINS>::const_reverse_iterator List<tCONTAINS>::crend() const
-{
-  return const_reverse_iterator(&m_sentinel);
 }
 
 //=============================================================================

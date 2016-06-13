@@ -57,11 +57,17 @@ private:
   protected:
 
     tNODE_TYPE m_current;
+
+  private:
+
+    virtual void increment() = 0;
+    virtual void decrement() = 0;
   };
   
   //===========================================================================
+  template <typename tDERIVED_ITERATOR>
   class NodeIteratorConst :
-    public NodeIteratorBase<NodeIteratorConst, const Node*> {
+    public NodeIteratorBase<tDERIVED_ITERATOR, const Node*> {
   public:
     
     NodeIteratorConst(const Node*);
@@ -73,20 +79,83 @@ private:
   };
   
   //===========================================================================
-  class NodeIterator : public NodeIteratorBase<NodeIterator, Node*> {
+  class ForwardNodeIteratorConst :
+    public NodeIteratorConst<ForwardNodeIteratorConst> {
+  public:
+
+    ForwardNodeIteratorConst(const Node*);
+    
+  private:
+    
+    using NodeIteratorConst<ForwardNodeIteratorConst>::m_current;
+
+    virtual void increment() override;
+    virtual void decrement() override;
+  };
+  
+  //===========================================================================
+  class BackwardNodeIteratorConst :
+    public NodeIteratorConst<BackwardNodeIteratorConst> {
+  public:
+
+    BackwardNodeIteratorConst(const Node*);
+    
+  private:
+    
+    using NodeIteratorConst<BackwardNodeIteratorConst>::m_current;
+
+    virtual void increment() override;
+    virtual void decrement() override;
+  };
+  
+  //===========================================================================
+  template <typename tDERIVED_ITERATOR>
+  class NodeIterator : public NodeIteratorBase<tDERIVED_ITERATOR, Node*> {
   public:
     
     NodeIterator(Node*);
-    
-    operator NodeIteratorConst() const;
     
     tCONTAINS& operator*();
     
     tCONTAINS* operator->();
     
-    using NodeIteratorBase<NodeIterator, Node*>::m_current;
+  protected:
+    
+    using NodeIteratorBase<tDERIVED_ITERATOR, Node*>::m_current;
   };
 
+  //===========================================================================
+  class ForwardNodeIterator : public NodeIterator<ForwardNodeIterator> {
+  public:
+
+    ForwardNodeIterator(Node*);
+    
+    operator ForwardNodeIteratorConst() const;
+    
+  private:
+    
+    using NodeIterator<ForwardNodeIterator>::m_current;
+    
+    virtual void increment() override;
+    virtual void decrement() override;
+  };
+  
+  //===========================================================================
+  class BackwardNodeIterator : public NodeIterator<BackwardNodeIterator> {
+  public:
+
+    BackwardNodeIterator(Node*);
+    
+    operator BackwardNodeIteratorConst() const;
+
+  private:
+    
+    using NodeIterator<BackwardNodeIterator>::m_current;
+    
+    virtual void increment() override;
+    virtual void decrement() override;
+  };
+  
   Node m_sentinel;
 
 public:
@@ -99,10 +168,10 @@ public:
   using const_reference = typename allocator_type::const_reference;
   using pointer = typename allocator_type::pointer;
   using const_pointer = typename allocator_type::const_pointer;
-  using iterator = NodeIterator;
-  using const_iterator = NodeIteratorConst;
-  using reverse_iterator = NodeIterator; // <nnn> 
-  using const_reverse_iterator = NodeIteratorConst; // <nnn>
+  using iterator = ForwardNodeIterator;
+  using const_iterator = ForwardNodeIteratorConst;
+  using reverse_iterator = BackwardNodeIterator;
+  using const_reverse_iterator = BackwardNodeIteratorConst;
   
   //----- Constructors
   List();

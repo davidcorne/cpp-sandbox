@@ -31,7 +31,7 @@ template <typename tCONTAINS>
 template <typename tDERIVED_ITERATOR, typename tNODE_TYPE>
 tDERIVED_ITERATOR& List<tCONTAINS>::NodeIteratorBase<tDERIVED_ITERATOR, tNODE_TYPE>::operator++()
 {
-  m_current = m_current->next;
+  increment();
   return *reinterpret_cast<tDERIVED_ITERATOR*>(this);
 }
 
@@ -40,9 +40,8 @@ template <typename tCONTAINS>
 template <typename tDERIVED_ITERATOR, typename tNODE_TYPE>
 tDERIVED_ITERATOR& List<tCONTAINS>::NodeIteratorBase<tDERIVED_ITERATOR, tNODE_TYPE>::operator--()
 {
-  m_current = m_current->previous;
-  // <nnn> 
-  return *(tDERIVED_ITERATOR*)(this);
+  decrement();
+  return *reinterpret_cast<tDERIVED_ITERATOR*>(this);
 }
 
 //=============================================================================
@@ -51,7 +50,7 @@ template <typename tDERIVED_ITERATOR, typename tNODE_TYPE>
 tDERIVED_ITERATOR List<tCONTAINS>::NodeIteratorBase<tDERIVED_ITERATOR, tNODE_TYPE>::operator++(int)
 {
   tDERIVED_ITERATOR it = *this;
-  m_current = m_current->next;
+  increment();
   return it;
 }
 
@@ -61,7 +60,7 @@ template <typename tDERIVED_ITERATOR, typename tNODE_TYPE>
 tDERIVED_ITERATOR List<tCONTAINS>::NodeIteratorBase<tDERIVED_ITERATOR, tNODE_TYPE>::operator--(int)
 {
   tDERIVED_ITERATOR it = *this;
-  m_current = m_current->previous;
+  decrement();
   return it;
 }
    
@@ -95,49 +94,154 @@ tNODE_TYPE List<tCONTAINS>::NodeIteratorBase<tDERIVED_ITERATOR, tNODE_TYPE>::nod
 
 //=============================================================================
 template <typename tCONTAINS>
-List<tCONTAINS>::NodeIterator::NodeIterator(Node* node)
-  : NodeIteratorBase<NodeIterator, Node*>(node)
+template <typename tDERIVED_ITERATOR>
+List<tCONTAINS>::NodeIterator<tDERIVED_ITERATOR>::NodeIterator(Node* node)
+  : NodeIteratorBase<tDERIVED_ITERATOR, Node*>(node)
 {
 }
 
 //=============================================================================
 template <typename tCONTAINS>
-List<tCONTAINS>::NodeIterator::operator typename List<tCONTAINS>::NodeIteratorConst() const
-{
-  return NodeIteratorConst(NodeIteratorBase<NodeIterator, Node*>::m_current);
-}
-
-//=============================================================================
-template <typename tCONTAINS>
-tCONTAINS& List<tCONTAINS>::NodeIterator::operator*()
+template <typename tDERIVED_ITERATOR>
+tCONTAINS& List<tCONTAINS>::NodeIterator<tDERIVED_ITERATOR>::operator*()
 {
   return  m_current->value;
 }
 
 //=============================================================================
 template <typename tCONTAINS>
-tCONTAINS* List<tCONTAINS>::NodeIterator::operator->()
+template <typename tDERIVED_ITERATOR>
+tCONTAINS* List<tCONTAINS>::NodeIterator<tDERIVED_ITERATOR>::operator->()
 {
   return  &m_current->value;
 }
 
 //=============================================================================
 template <typename tCONTAINS>
-List<tCONTAINS>::NodeIteratorConst::NodeIteratorConst(const Node* node)
-  : NodeIteratorBase<NodeIteratorConst, const Node*>(node)
+template <typename tDERIVED_ITERATOR>
+List<tCONTAINS>::NodeIteratorConst<tDERIVED_ITERATOR>::NodeIteratorConst(const Node* node)
+  : NodeIteratorBase<tDERIVED_ITERATOR, const Node*>(node)
 {
 }
 
 //=============================================================================
 template <typename tCONTAINS>
-const tCONTAINS& List<tCONTAINS>::NodeIteratorConst::operator*()
+template <typename tDERIVED_ITERATOR>
+const tCONTAINS& List<tCONTAINS>::NodeIteratorConst<tDERIVED_ITERATOR>::operator*()
 {
-  return  NodeIteratorBase<NodeIteratorConst, const Node*>::m_current->value;
+  return  NodeIteratorBase<tDERIVED_ITERATOR, const Node*>::m_current->value;
 }
 
 //=============================================================================
 template <typename tCONTAINS>
-const tCONTAINS* List<tCONTAINS>::NodeIteratorConst::operator->()
+template <typename tDERIVED_ITERATOR>
+const tCONTAINS* List<tCONTAINS>::NodeIteratorConst<tDERIVED_ITERATOR>::operator->()
 {
-  return  &NodeIteratorBase<NodeIteratorConst, const Node*>::m_current->value;
+  return  &NodeIteratorBase<tDERIVED_ITERATOR, const Node*>::m_current->value;
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+List<tCONTAINS>::ForwardNodeIterator::ForwardNodeIterator(Node* node)
+: NodeIterator<ForwardNodeIterator>(node)
+{
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+void List<tCONTAINS>::ForwardNodeIterator::increment()
+{
+  m_current = m_current->next;
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+void List<tCONTAINS>::ForwardNodeIterator::decrement()
+{
+  m_current = m_current->previous;
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+List<tCONTAINS>::ForwardNodeIterator::operator typename List<tCONTAINS>::ForwardNodeIteratorConst() const
+{
+  return ForwardNodeIteratorConst(
+    NodeIteratorBase<ForwardNodeIterator, Node*>::m_current
+  );
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+List<tCONTAINS>::BackwardNodeIterator::BackwardNodeIterator(Node* node)
+: NodeIterator<BackwardNodeIterator>(node)
+{
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+void List<tCONTAINS>::BackwardNodeIterator::increment()
+{
+  m_current = m_current->previous;
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+void List<tCONTAINS>::BackwardNodeIterator::decrement()
+{
+  m_current = m_current->next;
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+List<tCONTAINS>::BackwardNodeIterator::operator typename List<tCONTAINS>::BackwardNodeIteratorConst() const
+{
+  return BackwardNodeIteratorConst(
+    NodeIteratorBase<BackwardNodeIterator, Node*>::m_current
+  );
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+List<tCONTAINS>::ForwardNodeIteratorConst::ForwardNodeIteratorConst(
+  const Node* node
+)
+: NodeIteratorConst<ForwardNodeIteratorConst>(node)
+{
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+void List<tCONTAINS>::ForwardNodeIteratorConst::increment()
+{
+  m_current = m_current->next;
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+void List<tCONTAINS>::ForwardNodeIteratorConst::decrement()
+{
+  m_current = m_current->previous;
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+List<tCONTAINS>::BackwardNodeIteratorConst::BackwardNodeIteratorConst(
+  const Node* node
+)
+: NodeIteratorConst<BackwardNodeIteratorConst>(node)
+{
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+void List<tCONTAINS>::BackwardNodeIteratorConst::increment()
+{
+  m_current = m_current->previous;
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+void List<tCONTAINS>::BackwardNodeIteratorConst::decrement()
+{
+  m_current = m_current->next;
 }
