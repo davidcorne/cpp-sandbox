@@ -484,6 +484,10 @@ void ListUtest<tLIST>::test_sort()
   
   list.sort();
   expected = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+  for (value_type v : list) {
+    std::cout << v << ", ";
+  }
+  std::cout << "\n";
   m_test.test_equal(list, expected, "list should have been sorted.");
 
   // Now reverse it.

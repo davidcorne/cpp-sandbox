@@ -258,6 +258,9 @@ public:
 
   void merge(List<tCONTAINS>& list);
 
+  template <typename tCOMPARATOR>
+  void merge(List<tCONTAINS>& list, tCOMPARATOR comparator);
+
   void sort();
 
   template <typename tCOMPARATOR>
@@ -267,6 +270,7 @@ public:
   
 private:
 
+  
   iterator erase(Node* node);
   
 };

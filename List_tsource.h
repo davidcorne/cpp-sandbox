@@ -397,11 +397,7 @@ void List<tCONTAINS>::splice(iterator position, List<tCONTAINS>& list)
 template <typename tCONTAINS>
 void List<tCONTAINS>::remove(const value_type& value)
 {
-  for (auto it = begin(); it != end(); ++it) {
-    if (*it == value) {
-      erase(it.node());
-    }
-  }
+  remove_if([&value](const value_type& other){return value == other;});
 }
 
 //=============================================================================
@@ -409,12 +405,14 @@ template <typename tCONTAINS>
 template <typename tPREDICATE>
 void List<tCONTAINS>::remove_if(tPREDICATE predicate)
 {
-  for (auto it = begin(); it != end(); ++it) {
+  auto it = begin();
+  while (it != end()) {
     if (predicate(*it)) {
-      erase(it.node());
+      it = erase(it.node());
+    } else {
+      ++it;
     }
   }
-
 }
 
 //=============================================================================
@@ -427,15 +425,40 @@ void List<tCONTAINS>::unique()
 template <typename tCONTAINS>
 void List<tCONTAINS>::merge(List<tCONTAINS>& list)
 {
-  (void)list;
-  
+  merge(list, std::less<tCONTAINS>());  
+}
+
+//=============================================================================
+template <typename tCONTAINS>
+template <typename tCOMPARATOR>
+void List<tCONTAINS>::merge(List<tCONTAINS>& list, tCOMPARATOR comparator)
+{
+  List<tCONTAINS> merged;
+  while (!empty() && !list.empty()) {
+    if (comparator(front(), list.front())) {
+      merged.push_back(front());
+      pop_front();
+    } else {
+      merged.push_back(list.front());
+      list.pop_front();
+    }
+  }
+  // Now at least one of the lists is empty, finish should have elements
+  // remaining.
+  List<tCONTAINS>* finish = !empty() ? this : &list;
+  while (!finish->empty()) {
+    merged.push_back(finish->front());
+    finish->pop_front();
+  }
+  // Now move merged into this
+  assign(merged.begin(), merged.end());
 }
 
 //=============================================================================
 template <typename tCONTAINS>
 void List<tCONTAINS>::sort()
 {
-
+  sort(std::less<tCONTAINS>());
 }
 
 //=============================================================================
@@ -444,6 +467,9 @@ template <typename tCOMPARATOR>
 void List<tCONTAINS>::sort(tCOMPARATOR comparator)
 {
   (void)comparator;
+  if (!empty()) {
+
+  }
 }
 
 //=============================================================================
