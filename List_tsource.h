@@ -419,6 +419,18 @@ void List<tCONTAINS>::remove_if(tPREDICATE predicate)
 template <typename tCONTAINS>
 void List<tCONTAINS>::unique()
 {
+  // Start with the 2nd element
+  auto it = begin();
+  value_type last = *it;
+  ++it;
+  while (it != end()) {
+    if (last == *it) {
+      it = erase(it);
+    } else {
+      last = *it;
+      ++it;
+    }
+  }
 }
 
 //=============================================================================
