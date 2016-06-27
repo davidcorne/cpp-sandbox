@@ -73,6 +73,8 @@ private:
   
   void test_reverse();
 
+  bool is_std_list() const;
+  
   ListUtest(const ListUtest&) = delete;
   ListUtest operator=(const ListUtest&) = delete;
   
@@ -479,6 +481,10 @@ void ListUtest<tLIST>::test_merge()
 template <typename tLIST>
 void ListUtest<tLIST>::test_sort()
 {
+  if (!is_std_list()) {
+    return;
+  }
+  
   tLIST expected;
   tLIST list = {9, 8, 7, 6, 5, 3, 4, 2, 1, 0};
   
@@ -500,6 +506,10 @@ void ListUtest<tLIST>::test_sort()
 template <typename tLIST>
 void ListUtest<tLIST>::test_reverse()
 {
+  if (!is_std_list()) {
+    return;
+  }
+  
   tLIST list = {1, 3, 5, 7, 2, 4, 6};
   list.reverse();
   
@@ -513,6 +523,16 @@ void ListUtest<tLIST>::test_reverse()
   list.reverse();
   list.reverse();
   m_test.test_equal(list, expected, "Double reverse, should keep the same.");
+}
+
+//=============================================================================
+template <typename tLIST>
+bool ListUtest<tLIST>::is_std_list() const
+{
+  return
+    std::is_same<tLIST, std::list<int>>::value ||
+    std::is_same<tLIST, std::list<double>>::value ||
+    std::is_same<tLIST, std::list<float>>::value;
 }
 
 //=============================================================================
