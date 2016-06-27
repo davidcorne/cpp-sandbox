@@ -506,10 +506,6 @@ void ListUtest<tLIST>::test_sort()
 template <typename tLIST>
 void ListUtest<tLIST>::test_reverse()
 {
-  if (!is_std_list()) {
-    return;
-  }
-  
   tLIST list = {1, 3, 5, 7, 2, 4, 6};
   list.reverse();
   

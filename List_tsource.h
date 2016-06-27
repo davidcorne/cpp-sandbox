@@ -488,7 +488,16 @@ void List<tCONTAINS>::sort(tCOMPARATOR comparator)
 template <typename tCONTAINS>
 void List<tCONTAINS>::reverse()
 {
-
+  if (!empty()) {
+    Node* current = m_sentinel.next;
+    while (current != &m_sentinel) {
+      // swap over the stuff
+      std::swap(current->next, current->previous);
+      current = current->previous;
+    }
+    // Swap the m_sentinel node
+    std::swap(m_sentinel.next, m_sentinel.previous);
+  }
 }
 
 //=============================================================================
