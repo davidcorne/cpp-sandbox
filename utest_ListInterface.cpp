@@ -73,8 +73,6 @@ private:
   
   void test_reverse();
 
-  bool is_std_list() const;
-  
   ListUtest(const ListUtest&) = delete;
   ListUtest operator=(const ListUtest&) = delete;
   
@@ -481,25 +479,43 @@ void ListUtest<tLIST>::test_merge()
 template <typename tLIST>
 void ListUtest<tLIST>::test_sort()
 {
-  if (!is_std_list()) {
-    return;
+  {
+    tLIST expected = {0, 1};
+    tLIST list = {1, 0};
+    list.sort();
+    m_test.test_equal(
+      list,
+      expected,
+      "Should be able to sort a 2 element list."
+    );
   }
-  
-  tLIST expected;
-  tLIST list = {9, 8, 7, 6, 5, 3, 4, 2, 1, 0};
-  
-  list.sort();
-  expected = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-  for (value_type v : list) {
-    std::cout << v << ", ";
+  {
+    tLIST expected = {0, 1, 2};
+    tLIST list = {2, 0, 1};
+    list.sort();
+    m_test.test_equal(
+      list,
+      expected,
+      "Should be able to sort a 3 element list."
+    );
   }
-  std::cout << "\n";
-  m_test.test_equal(list, expected, "list should have been sorted.");
+  {
+    tLIST expected;
+    tLIST list = {9, 8, 7, 6, 5, 3, 4, 2, 1, 0};
+  
+    list.sort();
+    expected = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    for (value_type v : list) {
+      std::cout << v << ", ";
+    }
+    std::cout << "\n";
+    m_test.test_equal(list, expected, "list should have been sorted.");
 
-  // Now reverse it.
-  list.sort([](value_type a, value_type b){return b < a;});
-  expected = {9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
-  m_test.test_equal(list, expected, "Should have reversed the list.");
+    // Now reverse it.
+    list.sort([](value_type a, value_type b){return b < a;});
+    expected = {9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
+    m_test.test_equal(list, expected, "Should have reversed the list.");
+  }
 }
 
 //=============================================================================
@@ -519,16 +535,6 @@ void ListUtest<tLIST>::test_reverse()
   list.reverse();
   list.reverse();
   m_test.test_equal(list, expected, "Double reverse, should keep the same.");
-}
-
-//=============================================================================
-template <typename tLIST>
-bool ListUtest<tLIST>::is_std_list() const
-{
-  return
-    std::is_same<tLIST, std::list<int>>::value ||
-    std::is_same<tLIST, std::list<double>>::value ||
-    std::is_same<tLIST, std::list<float>>::value;
 }
 
 //=============================================================================

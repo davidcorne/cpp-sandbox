@@ -182,9 +182,9 @@ public:
 
   List& operator=(const List<tCONTAINS>& list);
 
-  // <nnn> List(const List<tCONTAINS>&& list);
+  List(List<tCONTAINS>&& list);
 
-  // <nnn> List& operator=(const List<tCONTAINS>&& list);
+  List& operator=(List<tCONTAINS>&& list);
 
   ~List();
   

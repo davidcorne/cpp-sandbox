@@ -33,19 +33,27 @@ List<tCONTAINS>& List<tCONTAINS>::operator=(const List<tCONTAINS>& list)
   return *this;
 }
 
-// <nnn> //=============================================================================
-// <nnn> template <typename tCONTAINS>
-// <nnn> List<tCONTAINS>::List(const List<tCONTAINS>&& list)
-// <nnn> {
-  
-// <nnn> }
+//=============================================================================
+template <typename tCONTAINS>
+List<tCONTAINS>::List(List<tCONTAINS>&& list)
+  : List()
+{
+  *this = std::move(list);
+}
 
-// <nnn> //=============================================================================
-// <nnn> template <typename tCONTAINS>
-// <nnn> List<tCONTAINS>& List<tCONTAINS>::operator=(const List<tCONTAINS>&& list)
-// <nnn> {
-  
-// <nnn> }
+//=============================================================================
+template <typename tCONTAINS>
+List<tCONTAINS>& List<tCONTAINS>::operator=(List<tCONTAINS>&& list)
+{
+  m_sentinel = list.m_sentinel;
+  if (!list.empty()) {
+    m_sentinel.next->previous = &m_sentinel;
+    m_sentinel.previous->next = &m_sentinel;
+    list.m_sentinel.next = nullptr;
+    list.m_sentinel.previous = nullptr;
+  }
+  return *this;
+}
 
 //=============================================================================
 template <typename tCONTAINS>
@@ -478,9 +486,38 @@ template <typename tCONTAINS>
 template <typename tCOMPARATOR>
 void List<tCONTAINS>::sort(tCOMPARATOR comparator)
 {
-  (void)comparator;
-  if (!empty()) {
+  size_type i = size();
+  // If size is 1 or 0, it's already sorted
+  if (i == 2) {
+    Node* one = m_sentinel.next;
+    Node* two = m_sentinel.previous;
+    if (!comparator(one->value, two->value)) {
+      std::swap(one->value, two->value);
+    }
+  } else if (i > 2) {
+    
+    Node* pre_split = m_sentinel.next->next;
+    Node* post_split = pre_split->next;
+    Node* old_last = m_sentinel.previous;
+    
+    List<tCONTAINS> merge_1;
+    pre_split->next = &merge_1.m_sentinel;
+    m_sentinel.next->previous = &merge_1.m_sentinel;
+    merge_1.m_sentinel.previous = pre_split;
+    merge_1.m_sentinel.next = m_sentinel.next;
 
+    List<tCONTAINS> merge_2;
+    post_split->previous = &merge_2.m_sentinel;
+    old_last->next = &merge_2.m_sentinel;
+    merge_2.m_sentinel.previous = old_last;
+    merge_2.m_sentinel.next = post_split;
+
+    merge_1.sort(comparator);
+    merge_2.sort(comparator);
+    
+    merge_1.merge(merge_2, comparator);
+    // Convert merge_1 to an rvalue
+    *this = std::move(merge_1);
   }
 }
 
