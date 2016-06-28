@@ -278,6 +278,7 @@ template <typename tCONTAINS>
 template <typename tINPUT_ITERATOR>
 void ArrayList<tCONTAINS>::assign(tINPUT_ITERATOR first, tINPUT_ITERATOR last)
 {
+  // Unimplemented.
   (void)first;
   (void)last;
 }
@@ -286,6 +287,7 @@ void ArrayList<tCONTAINS>::assign(tINPUT_ITERATOR first, tINPUT_ITERATOR last)
 template <typename tCONTAINS>
 void ArrayList<tCONTAINS>::assign(size_type size, value_type value)
 {
+  // Unimplemented.
   (void)size;
   (void)value;
 }
@@ -294,6 +296,7 @@ void ArrayList<tCONTAINS>::assign(size_type size, value_type value)
 template <typename tCONTAINS>
 void ArrayList<tCONTAINS>::swap(ArrayList<tCONTAINS>& list)
 {
+  // Unimplemented.
   (void)list;
 }
 
@@ -301,6 +304,7 @@ void ArrayList<tCONTAINS>::swap(ArrayList<tCONTAINS>& list)
 template <typename tCONTAINS>
 void ArrayList<tCONTAINS>::resize(size_type size, value_type value)
 {
+  // Unimplemented.
   (void)size;
   (void)value;
 }
@@ -309,6 +313,7 @@ void ArrayList<tCONTAINS>::resize(size_type size, value_type value)
 template <typename tCONTAINS>
 void ArrayList<tCONTAINS>::splice(iterator position, ArrayList<tCONTAINS>& list)
 {
+  // Unimplemented.
   (void)position;
   (void)list;
 }
@@ -317,6 +322,7 @@ void ArrayList<tCONTAINS>::splice(iterator position, ArrayList<tCONTAINS>& list)
 template <typename tCONTAINS>
 void ArrayList<tCONTAINS>::remove(const value_type& value)
 {
+  // Unimplemented.
   (void)value;
 }
 
@@ -325,6 +331,7 @@ template <typename tCONTAINS>
 template <typename tPREDICATE>
 void ArrayList<tCONTAINS>::remove_if(tPREDICATE predicate)
 {
+  // Unimplemented.
   (void)predicate;
 }
 
@@ -383,12 +390,14 @@ typename ArrayList<tCONTAINS>::const_reverse_iterator ArrayList<tCONTAINS>::cren
 template <typename tCONTAINS>
 void ArrayList<tCONTAINS>::unique()
 {
+  // Unimplemented.
 }
 
 //=============================================================================
 template <typename tCONTAINS>
 void ArrayList<tCONTAINS>::merge(ArrayList<tCONTAINS>& list)
 {
+  // Unimplemented.
   (void)list;
   
 }
@@ -397,7 +406,7 @@ void ArrayList<tCONTAINS>::merge(ArrayList<tCONTAINS>& list)
 template <typename tCONTAINS>
 void ArrayList<tCONTAINS>::sort()
 {
-
+  sort(std::less<tCONTAINS>());
 }
 
 //=============================================================================
@@ -405,6 +414,7 @@ template <typename tCONTAINS>
 template <typename tCOMPARATOR>
 void ArrayList<tCONTAINS>::sort(tCOMPARATOR comparator)
 {
+  // Unimplemented.
   (void)comparator;
 }
 
@@ -412,6 +422,7 @@ void ArrayList<tCONTAINS>::sort(tCOMPARATOR comparator)
 template <typename tCONTAINS>
 void ArrayList<tCONTAINS>::reverse()
 {
+  // Unimplemented.
 
 }
 
