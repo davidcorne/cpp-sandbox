@@ -3,6 +3,7 @@
 
 #define UNUSED_VARIABLE 1
 #define UNREACHABLE_CODE 1
+#define UNREFERENCED_FORMAL_PARAMETER 1
 #include "IgnoreDiagnostics.h"
 
 // Test double including
@@ -102,6 +103,9 @@ void ListUtest<tLIST>::run_tests()
   test_push_back();
   test_push_front();
   test_modifiers();
+
+  if (is_array_list()) return;
+  
   test_assign();
   test_swap();
   test_resize();
@@ -383,14 +387,14 @@ void ListUtest<tLIST>::test_push_back()
 template <typename tLIST>
 void ListUtest<tLIST>::test_push_front()
 {
-  tLIST list = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+  tLIST expected = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
   std::vector<value_type> fill = {9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
   tLIST result;
   for (auto i : fill) {
     result.push_front(i);
   }
   m_test.test_equal(
-    list,
+    expected,
     result,
     "push_front() should be the same as initializer_list."
   );
@@ -505,8 +509,6 @@ void ListUtest<tLIST>::test_merge()
 template <typename tLIST>
 void ListUtest<tLIST>::test_sort()
 {
-  if (is_array_list()) return;
-
   {
     tLIST expected = {0, 1};
     tLIST list = {1, 0};
