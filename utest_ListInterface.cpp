@@ -78,6 +78,8 @@ private:
   
   ListUtest(const ListUtest&) = delete;
   ListUtest operator=(const ListUtest&) = delete;
+
+  void print(const tLIST& list) const;
   
   UnitCpp::TestCase& m_test;
 };
@@ -107,10 +109,10 @@ void ListUtest<tLIST>::run_tests()
   test_swap();
   test_resize();
   test_internal_removals();
+  test_internal_insert();
 
   if (is_array_list()) return;
   
-  test_internal_insert();
   test_splice();
   test_remove();
   test_remove_if();
@@ -341,6 +343,10 @@ void ListUtest<tLIST>::test_internal_removals()
 template <typename tLIST>
 void ListUtest<tLIST>::test_internal_insert()
 {
+  // At the moment I can't think how to get insert() to not invalidate
+  // iterators.
+  if (is_array_list()) return;
+                                
   tLIST list = {0, 1, 2};
   for (auto it = begin(list); it != end(list); ++it) {
     list.insert(it, (*it) * 2);
@@ -551,6 +557,16 @@ bool ListUtest<tLIST>::is_array_list() const
     std::is_same<tLIST, ArrayList<int>>::value ||
     std::is_same<tLIST, ArrayList<double>>::value ||
     std::is_same<tLIST, ArrayList<float>>::value;
+}
+
+//=============================================================================
+template <typename tLIST>
+void ListUtest<tLIST>::print(const tLIST& list) const
+{
+  for (const auto& item : list) {
+    std::cout << item << " ";
+  }
+  std::cout << "\n";
 }
 
 //=============================================================================

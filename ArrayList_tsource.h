@@ -124,29 +124,49 @@ typename ArrayList<tCONTAINS>::iterator ArrayList<tCONTAINS>::insert(
 )
 {
   Node* node = const_cast<Node*>(position.node());
+  assert(node && "Shouldn't get an iterator pointing at null.");
+  Node* next = nullptr;
   if (!node->next || !node->previous) {
     assert(!node->next && !node->previous && "Both or neither should be null.");
     push_back(value);
-    return end();
-  }
-  if (m_storage.size() + 1 < m_storage.capacity()) {
+    next = &m_sentinel;
+  } else if (m_storage.size() + 1 < m_storage.capacity()) {
     // Don't have to resize.
-    
-    
+    m_storage.push_back(Node{value, nullptr, node});
+    // new_node is inserted *before* node
+    node->previous->next = &m_storage.back();
+    node->previous = &m_storage.back();
+    next = node->next;
   } else {
-    assert(true);
-    // <nnn> // Need to resize the vector.
-    // <nnn> std::vector<Node> vector;
-    // <nnn> vector.reserve(m_storage.size() * 2);
-    
-    // <nnn> for (const tCONTAINS& item : *this) {
-    // <nnn>   vector.push_back(Node{item, nullptr, nullptr});
-    // <nnn> }
-    // <nnn> vector.push_back(Node{value, nullptr, nullptr});
-    // <nnn> m_storage = std::move(vector);
-    // <nnn> relink();
+    // We need to resize, so add everything to a new vector, making sure to
+    // get the new value before the old node.
+    std::vector<Node> vector;
+    vector.reserve(m_storage.capacity());
+
+    // Add every value to a new vector, then save the next node so we can
+    // return that position.
+    Node* current = m_sentinel.next;
+    size_type inserted = 0;
+    while (current != &m_sentinel) {
+      if (current == node) {
+        // insert the value before node
+        vector.push_back(Node{value, nullptr, nullptr});
+        inserted = vector.size() - 1;
+      }
+      vector.push_back(Node{current->value, nullptr, nullptr});
+      current = current->next;
+    }
+    m_storage = std::move(vector);
+    relink();
+
+    if (inserted + 2 < m_storage.size()) {
+      next = &m_storage[inserted + 2];
+    } else {
+      // It's off the end
+      next = &m_sentinel;
+    }
   }
-  return iterator(node->next);
+  return iterator(next);
 }
 
 //=============================================================================
