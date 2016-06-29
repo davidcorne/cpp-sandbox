@@ -111,9 +111,6 @@ void ListUtest<tLIST>::run_tests()
   test_internal_removals();
   test_internal_insert();
   test_splice();
-
-  if (is_array_list()) return;
-  
   test_remove();
   test_remove_if();
   test_unique();

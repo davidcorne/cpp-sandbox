@@ -49,8 +49,12 @@ ArrayList<tCONTAINS>& ArrayList<tCONTAINS>::operator=(
 {
   m_sentinel = list.m_sentinel;
   m_storage = std::move(list.m_storage);
-  m_storage.front().previous = &m_sentinel;
-  m_storage.back().next = &m_sentinel;
+  if (!m_storage.empty()) {
+    m_storage.front().previous = &m_sentinel;
+    m_storage.back().next = &m_sentinel;
+  } else {
+    assert(!m_sentinel.next && !m_sentinel.previous && "Links should be null");
+  }
   return *this;
 }
 
@@ -562,39 +566,12 @@ template <typename tCONTAINS>
 template <typename tCOMPARATOR>
 void ArrayList<tCONTAINS>::sort(tCOMPARATOR comparator)
 {
-  // <nnn> size_type i = size();
-  // <nnn> // If size is 1 or 0, it's already sorted
-  // <nnn> if (i == 2) {
-  // <nnn>   Node* one = m_sentinel.next;
-  // <nnn>   Node* two = m_sentinel.previous;
-  // <nnn>   if (!comparator(one->value, two->value)) {
-  // <nnn>     std::swap(one->value, two->value);
-  // <nnn>   }
-  // <nnn> } else if (i > 2) {
-    
-  // <nnn>   Node* pre_split = m_sentinel.next->next;
-  // <nnn>   Node* post_split = pre_split->next;
-  // <nnn>   Node* old_last = m_sentinel.previous;
-    
-  // <nnn>   ArrayList<tCONTAINS> merge_1;
-  // <nnn>   pre_split->next = &merge_1.m_sentinel;
-  // <nnn>   m_sentinel.next->previous = &merge_1.m_sentinel;
-  // <nnn>   merge_1.m_sentinel.previous = pre_split;
-  // <nnn>   merge_1.m_sentinel.next = m_sentinel.next;
-
-  // <nnn>   ArrayList<tCONTAINS> merge_2;
-  // <nnn>   post_split->previous = &merge_2.m_sentinel;
-  // <nnn>   old_last->next = &merge_2.m_sentinel;
-  // <nnn>   merge_2.m_sentinel.previous = old_last;
-  // <nnn>   merge_2.m_sentinel.next = post_split;
-
-  // <nnn>   merge_1.sort(comparator);
-  // <nnn>   merge_2.sort(comparator);
-    
-  // <nnn>   merge_1.merge(merge_2, comparator);
-  // <nnn>   // Convert merge_1 to an rvalue
-  // <nnn>   *this = std::move(merge_1);
-  // <nnn> }
+  std::sort(
+    m_storage.begin(),
+    m_storage.end(),
+    [&comparator](const Node& a, const Node& b){return comparator(a.value, b.value);}
+  );
+  relink();
 }
 
 //=============================================================================
