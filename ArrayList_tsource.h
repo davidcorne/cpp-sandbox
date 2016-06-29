@@ -165,8 +165,35 @@ typename ArrayList<tCONTAINS>::iterator ArrayList<tCONTAINS>::erase(
   Node* node
 )
 {
-  // Unimplemented
-  return begin();
+  Node* next = nullptr;
+  // Remove the node from the vector.
+  std::vector<Node> vector;
+  vector.reserve(m_storage.capacity());
+
+  // Add every value to a new vector, then save the next node so we can return
+  // that position.
+  Node* current = m_sentinel.next;
+  bool last_node_is_next = false;
+  while (current != &m_sentinel) {
+    if (current != node) {
+      vector.push_back(Node{current->value, nullptr, nullptr});
+      if (last_node_is_next) {
+        next = &vector.back();
+        last_node_is_next = false;
+      }
+    } else {
+      last_node_is_next = true;
+    }
+    current = current->next;
+  }
+  m_storage = std::move(vector);
+  relink();
+
+  // If the end node is the next node, make next the sentinel.
+  if (last_node_is_next) {
+    next = &m_sentinel;
+  }
+  return iterator(next);
 }
 
 //=============================================================================
@@ -342,6 +369,8 @@ template <typename tCONTAINS>
 void ArrayList<tCONTAINS>::swap(ArrayList<tCONTAINS>& list)
 {
   // Unimplemented
+  std::swap(m_storage, list.m_storage);
+  std::swap(m_sentinel, list.m_sentinel);
 }
 
 //=============================================================================
@@ -369,19 +398,19 @@ void ArrayList<tCONTAINS>::relink()
 template <typename tCONTAINS>
 void ArrayList<tCONTAINS>::resize(size_type l_size, value_type value)
 {
-  // <nnn> // <nnn> inefficient
-  // <nnn> size_type current_size = size();
-  // <nnn> if (current_size < l_size) {
-  // <nnn>   for (size_type i = current_size; i < l_size; ++i) {
-  // <nnn>     push_back(value);
-  // <nnn>   }
-  // <nnn> } else {
-  // <nnn>   for (size_type i = l_size; i < current_size; ++i) {
-  // <nnn>     pop_back();
-  // <nnn>   }
-  // <nnn> }
+  // <nnn> inefficient
+  size_type current_size = size();
+  if (current_size < l_size) {
+    for (size_type i = current_size; i < l_size; ++i) {
+      push_back(value);
+    }
+  } else {
+    for (size_type i = l_size; i < current_size; ++i) {
+      pop_back();
+    }
+  }
 }
-  
+
 //=============================================================================
 template <typename tCONTAINS>
 void ArrayList<tCONTAINS>::splice(iterator position, ArrayList<tCONTAINS>& list)

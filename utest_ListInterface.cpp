@@ -103,13 +103,13 @@ void ListUtest<tLIST>::run_tests()
   test_push_back();
   test_push_front();
   test_modifiers();
-
-  if (is_array_list()) return;
-  
   test_assign();
   test_swap();
   test_resize();
   test_internal_removals();
+
+  if (is_array_list()) return;
+  
   test_internal_insert();
   test_splice();
   test_remove();
@@ -180,8 +180,6 @@ void ListUtest<tLIST>::test_iterate_empty()
 template <typename tLIST>
 void ListUtest<tLIST>::test_reverse_iteration()
 {
-  if (is_array_list()) return;
-
   tLIST list = {9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
   std::vector<value_type> results;
   for (auto it = list.rbegin(); it != list.rend(); ++it) {
@@ -246,8 +244,6 @@ void ListUtest<tLIST>::test_modifiers()
   m_test.test_equal(list.front(), 4, "push_front: list should be {4, 5, 6}");
   m_test.test_equal(list.back(), 6, "push_front: list should be {4, 5, 6}");
 
-  if (is_array_list()) return;
-
   list.pop_front();
   m_test.test_equal(list.front(), 5, "pop_front: list should be {5, 6}");
   m_test.test_equal(list.back(), 6, "pop_front: list should be {5, 6}");
@@ -261,8 +257,6 @@ void ListUtest<tLIST>::test_modifiers()
 template <typename tLIST>
 void ListUtest<tLIST>::test_assign()
 {
-  if (is_array_list()) return;
-
   tLIST expected;
   tLIST list;
   
@@ -291,8 +285,6 @@ void ListUtest<tLIST>::test_assign()
 template <typename tLIST>
 void ListUtest<tLIST>::test_swap()
 {
-  if (is_array_list()) return;
-
   tLIST a = {0, 1, 2, 3, 4};
   tLIST b;
 
@@ -308,8 +300,6 @@ void ListUtest<tLIST>::test_swap()
 template <typename tLIST>
 void ListUtest<tLIST>::test_resize()
 {
-  if (is_array_list()) return;
-
   // Larger.
   tLIST list;
   list.resize(5u);
@@ -331,8 +321,6 @@ void ListUtest<tLIST>::test_resize()
 template <typename tLIST>
 void ListUtest<tLIST>::test_internal_removals()
 {
-  if (is_array_list()) return;
-
   tLIST list = {0, 1, 2, 3, 4, 5};
   // Remove each even element
   auto it = begin(list);
@@ -353,8 +341,6 @@ void ListUtest<tLIST>::test_internal_removals()
 template <typename tLIST>
 void ListUtest<tLIST>::test_internal_insert()
 {
-  if (is_array_list()) return;
-
   tLIST list = {0, 1, 2};
   for (auto it = begin(list); it != end(list); ++it) {
     list.insert(it, (*it) * 2);
@@ -404,8 +390,6 @@ void ListUtest<tLIST>::test_push_front()
 template <typename tLIST>
 void ListUtest<tLIST>::test_splice()
 {
-  if (is_array_list()) return;
-
   tLIST to = {0, 4, 5, 6};
   tLIST from = {1, 2, 3};
   auto position = begin(to);
@@ -424,8 +408,6 @@ void ListUtest<tLIST>::test_splice()
 template <typename tLIST>
 void ListUtest<tLIST>::test_remove()
 {
-  if (is_array_list()) return;
-
   tLIST expected;
   tLIST list = {0, 0, 0, 0, 1, 2, 3, 4};
   
@@ -458,8 +440,6 @@ void ListUtest<tLIST>::test_remove()
 template <typename tLIST>
 void ListUtest<tLIST>::test_remove_if()
 {
-  if (is_array_list()) return;
-
   tLIST expected;
   tLIST list = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
@@ -482,8 +462,6 @@ void ListUtest<tLIST>::test_remove_if()
 template <typename tLIST>
 void ListUtest<tLIST>::test_unique()
 {
-  if (is_array_list()) return;
-
   tLIST list = {0, 0, 1, 2, 1, 1, 3};
   list.unique();
   tLIST expected = {0, 1, 2, 1, 3};
@@ -494,8 +472,6 @@ void ListUtest<tLIST>::test_unique()
 template <typename tLIST>
 void ListUtest<tLIST>::test_merge()
 {
-  if (is_array_list()) return;
-
   tLIST a = {0, 2, 4, 6, 8};
   tLIST b = {1, 3, 5, 7, 9};
   tLIST expected = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -552,8 +528,6 @@ void ListUtest<tLIST>::test_sort()
 template <typename tLIST>
 void ListUtest<tLIST>::test_reverse()
 {
-  if (is_array_list()) return;
-
   tLIST list = {1, 3, 5, 7, 2, 4, 6};
   list.reverse();
   

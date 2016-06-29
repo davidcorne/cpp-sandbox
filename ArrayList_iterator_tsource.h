@@ -108,6 +108,7 @@ template <typename tCONTAINS>
 template <typename tDERIVED_ITERATOR>
 tCONTAINS& ArrayList<tCONTAINS>::NodeIterator<tDERIVED_ITERATOR>::operator*()
 {
+  assert(m_current && "m_current shouldn't be null.");
   return  m_current->value;
 }
 
@@ -116,6 +117,7 @@ template <typename tCONTAINS>
 template <typename tDERIVED_ITERATOR>
 tCONTAINS* ArrayList<tCONTAINS>::NodeIterator<tDERIVED_ITERATOR>::operator->()
 {
+  assert(m_current && "m_current shouldn't be null.");
   return  &m_current->value;
 }
 
@@ -132,7 +134,7 @@ template <typename tCONTAINS>
 template <typename tDERIVED_ITERATOR>
 const tCONTAINS& ArrayList<tCONTAINS>::NodeIteratorConst<tDERIVED_ITERATOR>::operator*()
 {
-  return  NodeIteratorBase<tDERIVED_ITERATOR, const Node*>::m_current->value;
+  return NodeIteratorBase<tDERIVED_ITERATOR, const Node*>::m_current->value;
 }
 
 //=============================================================================
@@ -140,7 +142,7 @@ template <typename tCONTAINS>
 template <typename tDERIVED_ITERATOR>
 const tCONTAINS* ArrayList<tCONTAINS>::NodeIteratorConst<tDERIVED_ITERATOR>::operator->()
 {
-  return  &NodeIteratorBase<tDERIVED_ITERATOR, const Node*>::m_current->value;
+  return &NodeIteratorBase<tDERIVED_ITERATOR, const Node*>::m_current->value;
 }
 
 //=============================================================================
@@ -155,6 +157,7 @@ template <typename tCONTAINS>
 void ArrayList<tCONTAINS>::ForwardNodeIterator::increment()
 {
   m_current = m_current->next;
+  assert(m_current && "m_current shouldn't be null.");
 }
 
 //=============================================================================
@@ -162,6 +165,7 @@ template <typename tCONTAINS>
 void ArrayList<tCONTAINS>::ForwardNodeIterator::decrement()
 {
   m_current = m_current->previous;
+  assert(m_current && "m_current shouldn't be null.");
 }
 
 //=============================================================================
@@ -185,6 +189,7 @@ template <typename tCONTAINS>
 void ArrayList<tCONTAINS>::BackwardNodeIterator::increment()
 {
   m_current = m_current->previous;
+  assert(m_current && "m_current shouldn't be null.");
 }
 
 //=============================================================================
@@ -192,6 +197,7 @@ template <typename tCONTAINS>
 void ArrayList<tCONTAINS>::BackwardNodeIterator::decrement()
 {
   m_current = m_current->next;
+  assert(m_current && "m_current shouldn't be null.");
 }
 
 //=============================================================================
@@ -217,6 +223,7 @@ template <typename tCONTAINS>
 void ArrayList<tCONTAINS>::ForwardNodeIteratorConst::increment()
 {
   m_current = m_current->next;
+  assert(m_current && "m_current shouldn't be null.");
 }
 
 //=============================================================================
@@ -224,6 +231,7 @@ template <typename tCONTAINS>
 void ArrayList<tCONTAINS>::ForwardNodeIteratorConst::decrement()
 {
   m_current = m_current->previous;
+  assert(m_current && "m_current shouldn't be null.");
 }
 
 //=============================================================================
@@ -240,6 +248,7 @@ template <typename tCONTAINS>
 void ArrayList<tCONTAINS>::BackwardNodeIteratorConst::increment()
 {
   m_current = m_current->previous;
+  assert(m_current && "m_current shouldn't be null.");
 }
 
 //=============================================================================
@@ -247,4 +256,5 @@ template <typename tCONTAINS>
 void ArrayList<tCONTAINS>::BackwardNodeIteratorConst::decrement()
 {
   m_current = m_current->next;
+  assert(m_current && "m_current shouldn't be null.");
 }
