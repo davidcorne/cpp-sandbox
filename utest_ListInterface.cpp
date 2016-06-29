@@ -110,10 +110,10 @@ void ListUtest<tLIST>::run_tests()
   test_resize();
   test_internal_removals();
   test_internal_insert();
+  test_splice();
 
   if (is_array_list()) return;
   
-  test_splice();
   test_remove();
   test_remove_if();
   test_unique();
@@ -408,6 +408,14 @@ void ListUtest<tLIST>::test_splice()
   tLIST result = {0, 1, 2, 3, 4, 5, 6};
   m_test.test_equal(to, result, "The splice didn't work.");
   m_test.test_true(from.empty(), "Splice should empty the from list.");
+
+  {
+    tLIST empty;
+    tLIST list = {0};
+    result = {0};
+    empty.splice(begin(empty), list);
+    m_test.test_equal(empty, result, "Should be able to an empty list.");
+  }
 }
 
 //=============================================================================

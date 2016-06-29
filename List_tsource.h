@@ -385,19 +385,23 @@ template <typename tCONTAINS>
 void List<tCONTAINS>::splice(iterator position, List<tCONTAINS>& list)
 {
   if (!list.empty()) {
-    Node* current = position.node();
-    Node* first = current->previous;
+    if (empty()) {
+      *this = std::move(list);
+    } else {
+      Node* current = position.node();
+      Node* first = current->previous;
   
-    Node* sequence_start = list.m_sentinel.next;
-    first->next = sequence_start;
-    sequence_start->previous = first;
+      Node* sequence_start = list.m_sentinel.next;
+      first->next = sequence_start;
+      sequence_start->previous = first;
 
-    Node* sequence_end = list.m_sentinel.previous;
-    current->previous = sequence_end;
-    sequence_end->next = current;
+      Node* sequence_end = list.m_sentinel.previous;
+      current->previous = sequence_end;
+      sequence_end->next = current;
 
-    list.m_sentinel.next = nullptr;
-    list.m_sentinel.previous = nullptr;
+      list.m_sentinel.next = nullptr;
+      list.m_sentinel.previous = nullptr;
+    }
   }
 }
 
