@@ -49,6 +49,8 @@ ArrayList<tCONTAINS>& ArrayList<tCONTAINS>::operator=(
 {
   m_sentinel = list.m_sentinel;
   m_storage = std::move(list.m_storage);
+  m_storage.front().previous = &m_sentinel;
+  m_storage.back().next = &m_sentinel;
   return *this;
 }
 
@@ -433,22 +435,45 @@ void ArrayList<tCONTAINS>::resize(size_type l_size, value_type value)
 
 //=============================================================================
 template <typename tCONTAINS>
-void ArrayList<tCONTAINS>::splice(iterator position, ArrayList<tCONTAINS>& list)
+void ArrayList<tCONTAINS>::splice(
+  iterator position,
+  ArrayList<tCONTAINS>& list
+)
 {
-  if (!list.empty()) {
-    // <nnn> Node* current = position.node();
-    // <nnn> Node* first = current->previous;
-  
-    // <nnn> Node* sequence_start = list.m_sentinel.next;
-    // <nnn> first->next = sequence_start;
-    // <nnn> sequence_start->previous = first;
+  if (list.empty()) return;
 
-    // <nnn> Node* sequence_end = list.m_sentinel.previous;
-    // <nnn> current->previous = sequence_end;
-    // <nnn> sequence_end->next = current;
+  if (size() + list.size() < m_storage.capacity()) {
+    // No need to resize
+    assert(false && "Not implemented.");
+  } else {
+    if (empty()) {
+      // We're empty, just move the other list into us.
+      *this = std::move(list);
+    } else {
+      Node* node = position.node();
+      
+      // We need to resize, so add everything to a new vector, making sure to
+      // get the new value before the old node.
+      std::vector<Node> vector;
+      vector.reserve(m_storage.capacity());
 
-    // <nnn> list.m_sentinel.next = nullptr;
-    // <nnn> list.m_sentinel.previous = nullptr;
+      // Add every value to a new vector, then save the next node so we can
+      // return that position.
+      Node* current = m_sentinel.next;
+      while (current != &m_sentinel) {
+        if (current == node) {
+          // insert the list before node
+          for (const tCONTAINS& value : list) {
+            vector.push_back(Node{value, nullptr, nullptr});
+          }
+        }
+        vector.push_back(Node{current->value, nullptr, nullptr});
+        current = current->next;
+      }
+      m_storage = std::move(vector);
+      relink();
+      list.clear();
+    }
   }
 }
 

@@ -414,7 +414,7 @@ void ListUtest<tLIST>::test_splice()
     tLIST list = {0};
     result = {0};
     empty.splice(begin(empty), list);
-    m_test.test_equal(empty, result, "Should be able to an empty list.");
+    m_test.test_equal(empty, result, "Should be able to splice an empty list.");
   }
 }
 
