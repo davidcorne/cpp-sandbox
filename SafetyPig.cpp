@@ -23,7 +23,7 @@
  *            
  */
 // Note, the safety pig is in C style comments as there are lines ending in "\"
-// which is an error in comse compilers.
+// which is an error in some compilers.
 #include <iostream>
 
 //=============================================================================
