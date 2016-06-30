@@ -3,15 +3,17 @@
 
 #include "Capabilities.h"
 #ifdef CAPABILITY_THREAD
-#include <thread>
-#include <chrono>
+
+#include "Sleep.h"
+#include "Sleep.h"
+
 #include <iostream>
 
 //=============================================================================
 int main()
 {
   std::cout << "Starting program, will sleep for 1 second." << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(1));
+  DGC::sleep(1);
   std::cout << "End." << std::endl;
   return 0;
 }
