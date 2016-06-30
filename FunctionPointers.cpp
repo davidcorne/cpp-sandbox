@@ -70,20 +70,20 @@ int main()
   strings.push_back("b");
 
   // print the original list
-  print_list<std::string>(strings, "original strings");
+  print_list(strings, "original strings");
   
   // sort by minimum length
   std::list<std::string> length_sorted_strings = strings;
   length_sorted_strings.sort(
     [](std::string x, std::string y){return x.length() < y.length();}
   );
-  print_list<std::string>(length_sorted_strings, "strings sorted by length");
+  print_list(length_sorted_strings, "strings sorted by length");
 
   auto ascii_order_function = ascii_order;
   
   std::list<std::string> ascii_sorted_strings = strings;
   ascii_sorted_strings.sort(ascii_order_function);
-  print_list<std::string>(ascii_sorted_strings, "strings sorted by ascii value");
+  print_list(ascii_sorted_strings, "strings sorted by ascii value");
 
   return 0;
 }
