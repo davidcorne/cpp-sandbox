@@ -6,6 +6,8 @@
 #ifdef CAPABILITY_VARIADIC_TEMPLATES
 #include <UnitCpp.h>
 
+#include "MemoryLeakDetector.h"
+
 //=============================================================================
 template <typename T>
 class ComStyleSmartPointer {
@@ -109,6 +111,16 @@ TEST(ComStyleSmartPointer, uncopyable)
   TEST_EQUAL(ref_count, 1);
   ref_count = uncopyable->release();
   TEST_EQUAL(ref_count, 0);
+}
+
+//=============================================================================
+TEST(ComStyleSmartPointer, leak)
+{
+  // Don't call any TEST_X functions as they allocate memory.
+  MemoryLeakDetector detector;
+  ComStyleSmartPointer<double>* d = new ComStyleSmartPointer<double>(3.14);
+  int ref_count = d->release();
+  assert(ref_count == 0 && "Should reach a ref_countof 0.");
 }
 
 //=============================================================================

@@ -7,6 +7,8 @@
 
 #include "MemoryCount.h"
 
+#include <cassert>
+
 typedef void (*MemoryLeakHandler)();
 
 //=============================================================================
