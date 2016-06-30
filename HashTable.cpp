@@ -2,32 +2,31 @@
 // Mainly based on a version of
 // http://www.algolist.net/Data_structures/Hash_table/Simple_example
 
-typedef int Key;
-typedef int Value;
-
 #include <iostream>
 #include <UnitCpp.h>
 
 #include "Iterator.h"
 
 //=============================================================================
+template <typename tKEY, typename tVALUE>
 class HashEntry {
 public:
   
-  HashEntry(Key key, Value value);
+  HashEntry(tKEY key, tVALUE value);
   ~HashEntry();
   
-  Key key() const;
+  tKEY key() const;
   
-  Value value() const;
+  tVALUE value() const;
     
 private:
   
-  Key m_key;
-  Value m_value;
+  tKEY m_key;
+  tVALUE m_value;
 };
 
 //=============================================================================
+template <typename tKEY, typename tVALUE>
 class HashMap {
 public:
 
@@ -35,55 +34,57 @@ public:
 
   ~HashMap();
 
-  Value get(Key key) const;
+  tVALUE get(tKEY key) const;
 
-  void put(Key key, Value value);
+  void put(tKEY key, tVALUE value);
 
   int size() const;
 
-  Iterator<HashEntry> iterator();
+  Iterator<HashEntry<tKEY, tVALUE>> iterator();
   
 private:
 
-  int offset(Key key) const;
+  int offset(tKEY key) const;
   // Get the offset to put the key in.
 
   void resize(int new_size);
   // Re-size the array to the new_size
   // Precondition: new_size > m_current_size;
-  
+
+  template <typename tOTHER_KEY, typename tOTHER_VALUE>
   friend class HashMapIterator;
   
-  HashMap(const HashMap&);
-  HashMap& operator=(const HashMap&);
+  HashMap(const HashMap<tKEY, tVALUE>&);
+  HashMap<tKEY, tVALUE>& operator=(const HashMap<tKEY, tVALUE>&);
 
   int m_table_size;
   int m_current_size;
-  HashEntry** m_table;
+  HashEntry<tKEY, tVALUE>** m_table;
 };
 
 //=============================================================================
-class HashMapIterator : public AbsIterator<HashEntry> {
+template <typename tKEY, typename tVALUE>
+class HashMapIterator : public AbsIterator<HashEntry<tKEY, tVALUE>> {
 public:
 
-  HashMapIterator(const HashMap& map);
+  HashMapIterator(const HashMap<tKEY, tVALUE>& map);
 
-  HashMapIterator(const HashMapIterator& iter);
-  HashMapIterator& operator=(const HashMapIterator& iter);
+  HashMapIterator(const HashMapIterator<tKEY, tVALUE>& iter);
+  HashMapIterator& operator=(const HashMapIterator<tKEY, tVALUE>& iter);
 
-  virtual std::unique_ptr<AbsIterator<HashEntry> > clone() const override;
+  virtual std::unique_ptr<AbsIterator<HashEntry<tKEY, tVALUE> > > clone() const override;
   
   virtual bool operator++() override;
 
-  virtual HashEntry& operator()() override;
+  virtual HashEntry<tKEY, tVALUE>& operator()() override;
 
-  virtual const HashEntry& operator()() const override;
+  virtual const HashEntry<tKEY, tVALUE>& operator()() const override;
 
   virtual ~HashMapIterator();
   
 private:
 
-  const HashMap* m_map;
+  const HashMap<tKEY, tVALUE>* m_map;
   int m_index;
 };
 
@@ -91,13 +92,13 @@ private:
 //=============================================================================
 TEST(HashMap, constructor)
 {
-  HashMap map;
+  HashMap<int, int> map;
 }
 
 //=============================================================================
 TEST(HashMap, size)
 {
-  HashMap map;
+  HashMap<int, int> map;
   TEST_EQUAL(map.size(), 0);
   map.put(3, 1);
   TEST_EQUAL(map.size(), 1);
@@ -106,7 +107,7 @@ TEST(HashMap, size)
 //=============================================================================
 TEST(HashMap, put)
 {
-  HashMap map;
+  HashMap<int, int> map;
   map.put(1, 3);
   TEST_EQUAL(map.get(1), 3);
 }
@@ -114,7 +115,7 @@ TEST(HashMap, put)
 //=============================================================================
 TEST(HashMap, dynamic)
 {
-  HashMap map;
+  HashMap<int, int> map;
   for (int i = 0; i < 150; ++i) {
     map.put(i, 150 - i);
   }
@@ -129,7 +130,7 @@ TEST(HashMap, dynamic)
 //=============================================================================
 TEST(HashMap, collisions)
 {
-  HashMap map;
+  HashMap<int, int> map;
   int start = 5;
   for (int i = start; i < start + (128 * 128); i += 128) {
     map.put(i, 0);
@@ -139,17 +140,17 @@ TEST(HashMap, collisions)
 //=============================================================================
 TEST(HashMapIterator, constructor)
 {
-  HashMap map;
-  HashMapIterator iterator(map);
+  HashMap<int, int> map;
+  HashMapIterator<int, int> iterator(map);
 }
 
 //=============================================================================
 TEST(HashMapIterator, iterating)
 {
-  HashMap map;
+  HashMap<int, int> map;
   map.put(5, -10);
   map.put(1, 0);
-  HashMapIterator iterator(map);
+  HashMapIterator<int, int> iterator(map);
   bool ok = false;
   ok = ++iterator;
   TEST_TRUE(ok);
@@ -163,19 +164,21 @@ TEST(HashMapIterator, iterating)
 //----- Implementations
 //----- HashMap
 //=============================================================================
-HashMap::HashMap()
+template <typename tKEY, typename tVALUE>
+HashMap<tKEY, tVALUE>::HashMap()
   : m_table_size(128),
     m_current_size(0),
     m_table(nullptr)
 {
-  m_table = new HashEntry*[m_table_size];
+  m_table = new HashEntry<tKEY, tVALUE>*[m_table_size];
   for (int i = 0; i < m_table_size; ++i) {
     m_table[i] = nullptr;
   }
 }
 
 //=============================================================================
-HashMap::~HashMap()
+template <typename tKEY, typename tVALUE>
+HashMap<tKEY, tVALUE>::~HashMap()
 {
   for (int i = 0; i < m_table_size; ++i) {
     if (m_table[i]) {
@@ -187,7 +190,8 @@ HashMap::~HashMap()
 }
 
 //=============================================================================
-int HashMap::offset(Key key) const
+template <typename tKEY, typename tVALUE>
+int HashMap<tKEY, tVALUE>::offset(tKEY key) const
 {
   int hash = (key % m_table_size);
   int original_hash = hash;
@@ -201,9 +205,10 @@ int HashMap::offset(Key key) const
 }
 
 //=============================================================================
-Value HashMap::get(Key key) const
+template <typename tKEY, typename tVALUE>
+tVALUE HashMap<tKEY, tVALUE>::get(tKEY key) const
 {
-  Value value = -1;
+  tVALUE value = -1;
   int hash = offset(key);
   if (m_table[hash]) {
     value = m_table[hash]->value();
@@ -212,7 +217,8 @@ Value HashMap::get(Key key) const
 }
 
 //=============================================================================
-void HashMap::put(Key key, Value value)
+template <typename tKEY, typename tVALUE>
+void HashMap<tKEY, tVALUE>::put(tKEY key, tVALUE value)
 {
   if (m_current_size > (m_table_size / 2)) {
     resize(m_table_size * 2);
@@ -223,20 +229,22 @@ void HashMap::put(Key key, Value value)
   } else {
     ++m_current_size;
   }
-  m_table[hash] = new HashEntry(key, value);
+  m_table[hash] = new HashEntry<tKEY, tVALUE>(key, value);
 }
 
 //=============================================================================
-int HashMap::size() const
+template <typename tKEY, typename tVALUE>
+int HashMap<tKEY, tVALUE>::size() const
 {
   return m_current_size;
 }
 
 //=============================================================================
-void HashMap::resize(int new_size)
+template <typename tKEY, typename tVALUE>
+void HashMap<tKEY, tVALUE>::resize(int new_size)
 {
   assert((new_size > m_table_size) && "Incorrect size passed to resize().");
-  HashEntry** larger_array = new HashEntry*[new_size];
+  HashEntry<tKEY, tVALUE>** larger_array = new HashEntry<tKEY, tVALUE>*[new_size];
   for (int i = 0; i < m_table_size; ++i) {
     larger_array[i] = m_table[i];
   }
@@ -250,46 +258,53 @@ void HashMap::resize(int new_size)
 
 //----- HashEntry
 //=============================================================================
-HashEntry::HashEntry(Key key, Value value)
+template <typename tKEY, typename tVALUE>
+HashEntry<tKEY, tVALUE>::HashEntry(tKEY key, tVALUE value)
   : m_key(key),
     m_value(value)
 {
 }
 
 //=============================================================================
-HashEntry::~HashEntry()
+template <typename tKEY, typename tVALUE>
+HashEntry<tKEY, tVALUE>::~HashEntry()
 {
 }
 
 //=============================================================================
-Key HashEntry::key() const
+template <typename tKEY, typename tVALUE>
+tKEY HashEntry<tKEY, tVALUE>::key() const
 {
   return m_key;
 }
 
 //=============================================================================
-Value HashEntry::value() const
+template <typename tKEY, typename tVALUE>
+tVALUE HashEntry<tKEY, tVALUE>::value() const
 {
   return m_value;
 }
 
 //----- HashMapIterator
 //=============================================================================
-HashMapIterator::HashMapIterator(const HashMap& map)
+template <typename tKEY, typename tVALUE>
+HashMapIterator<tKEY, tVALUE>::HashMapIterator(const HashMap<tKEY, tVALUE>& map)
   : m_map(&map),
     m_index(-1)
 {
 }
 
 //=============================================================================
-HashMapIterator::HashMapIterator(const HashMapIterator& other)
+template <typename tKEY, typename tVALUE>
+HashMapIterator<tKEY, tVALUE>::HashMapIterator(const HashMapIterator<tKEY, tVALUE>& other)
   :  m_map(other.m_map),
      m_index(other.m_index)
 {
 }
 
 //=============================================================================
-HashMapIterator& HashMapIterator::operator=(const HashMapIterator& other)
+template <typename tKEY, typename tVALUE>
+HashMapIterator<tKEY, tVALUE>& HashMapIterator<tKEY, tVALUE>::operator=(const HashMapIterator<tKEY, tVALUE>& other)
 {
   m_map = other.m_map;
   m_index = other.m_index;
@@ -297,21 +312,24 @@ HashMapIterator& HashMapIterator::operator=(const HashMapIterator& other)
 }
 
 //=============================================================================
-HashMapIterator::~HashMapIterator()
+template <typename tKEY, typename tVALUE>
+HashMapIterator<tKEY, tVALUE>::~HashMapIterator()
 {
 }
 
 //=============================================================================
-std::unique_ptr<AbsIterator<HashEntry> > HashMapIterator::clone() const
+template <typename tKEY, typename tVALUE>
+std::unique_ptr<AbsIterator<HashEntry<tKEY, tVALUE>> > HashMapIterator<tKEY, tVALUE>::clone() const
 {
-  std::unique_ptr<AbsIterator<HashEntry> > other(
-    new HashMapIterator(*this)
+  std::unique_ptr<AbsIterator<HashEntry<tKEY, tVALUE>> > other(
+    new HashMapIterator<tKEY, tVALUE>(*this)
   );
   return other;
 }
 
 //=============================================================================
-bool HashMapIterator::operator++()
+template <typename tKEY, typename tVALUE>
+bool HashMapIterator<tKEY, tVALUE>::operator++()
 {
   while (m_index < m_map->m_table_size) {
     ++m_index;
@@ -323,17 +341,19 @@ bool HashMapIterator::operator++()
 }
 
 //=============================================================================
-HashEntry& HashMapIterator::operator()()
+template <typename tKEY, typename tVALUE>
+HashEntry<tKEY, tVALUE>& HashMapIterator<tKEY, tVALUE>::operator()()
 {
-  HashEntry* entry = m_map->m_table[m_index];
+  HashEntry<tKEY, tVALUE>* entry = m_map->m_table[m_index];
   assert(entry && "Null entry.");
   return *entry;
 }
 
 //=============================================================================
-const HashEntry& HashMapIterator::operator()() const
+template <typename tKEY, typename tVALUE>
+const HashEntry<tKEY, tVALUE>& HashMapIterator<tKEY, tVALUE>::operator()() const
 {
-  HashEntry* entry = m_map->m_table[m_index];
+  HashEntry<tKEY, tVALUE>* entry = m_map->m_table[m_index];
   assert(entry && "Null entry.");
   return *entry;
 }
