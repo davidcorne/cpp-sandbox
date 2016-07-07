@@ -35,7 +35,7 @@ TEST(StringBuilder, build)
 //=============================================================================
 TEST(StringBuilder, faster)
 {
-  // Lets make 1,000,000 pseudo-random strings. Pseudo-random as it's the same
+  // Lets make 10,000 pseudo-random strings. Pseudo-random as it's the same
   // seed, so this is deterministic.
   std::size_t number_of_strings = 10000;
   std::size_t max_string_length = 500;
