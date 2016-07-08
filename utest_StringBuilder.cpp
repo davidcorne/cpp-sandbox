@@ -9,6 +9,9 @@
 #include "RandomStringGenerator.h"
 
 #include <UnitCpp.h>
+#include <set>
+
+using namespace std::string_literals;
 
 //=============================================================================
 TEST(StringBuilder, build)
@@ -30,6 +33,29 @@ TEST(StringBuilder, build)
   builder.clear();
   ((builder << "Ok, ") << "last ") << "one.";
   TEST_EQUAL(builder.build(), "Ok, last one.");
+}
+
+//=============================================================================
+TEST(StringBuilder, construction)
+{
+  {
+    auto il = {"Concat"s, "ernate"s, " these."s};
+    StringBuilder builder(il);
+    TEST_EQUAL(builder.build(), "Concaternate these.");
+  }
+  {
+    std::set<std::string> s =
+      {" these ", " could ", " be ", " in ", " any ", " order "};
+    StringBuilder builder(begin(s), end(s));
+    std::string result = builder.build();
+    TEST_EQUAL(result.length(), std::size_t{34});
+    TEST_NOT_EQUAL(result.find(" these "), std::string::npos);
+    TEST_NOT_EQUAL(result.find(" could "), std::string::npos);
+    TEST_NOT_EQUAL(result.find(" be "), std::string::npos);
+    TEST_NOT_EQUAL(result.find(" in "), std::string::npos);
+    TEST_NOT_EQUAL(result.find(" any "), std::string::npos);
+    TEST_NOT_EQUAL(result.find(" order "), std::string::npos);
+  }
 }
 
 //=============================================================================

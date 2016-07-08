@@ -12,12 +12,8 @@
 class StringBuilder {
 public:
 
-  StringBuilder() = default;
-
-  // Note: has a tFIRST so that this doesn't define a default constructor with
-  // 0 arguments.
-  template <typename tFIRST, typename... tARGS>
-  StringBuilder(tFIRST first, tARGS...);
+  template <typename... tARGS>
+  StringBuilder(tARGS&&...);
   
   StringBuilder& append(std::string s);
 
@@ -39,9 +35,9 @@ private:
 #include <cassert>
 
 //=============================================================================
-template <typename tFIRST, typename... tARGS>
-StringBuilder::StringBuilder(tFIRST first, tARGS... arguments)
-  : m_strings(first, arguments...)
+template <typename... tARGS>
+StringBuilder::StringBuilder(tARGS&&... arguments)
+  : m_strings(std::forward<tARGS>(arguments)...)
 {
 
 }
