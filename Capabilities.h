@@ -25,6 +25,7 @@
 #define CAPABILITY_INITIALISER_LISTS 1
 #define CAPABILITY_RANGE_BASE_FOR 1
 #define CAPABILITY_REGEX 1
+#define CAPABILITY_STD_STRING_LITERALS 1
 #define CAPABILITY_THREAD 1
 #define CAPABILITY_THREAD_LOCAL_VARIABLES 1
 #define CAPABILITY_TYPE_TRAITS 1
@@ -90,9 +91,13 @@
 #undef CAPABILITY_GENERIC_LAMBDAS
 // <nnn> #endif // __has_feature(cxx_generic_lambdas)
 
+// There doesn't appear to be a __has_feature for std::string literals :(
+#undef CAPABILITY_STD_STRING_LITERALS
+
 #endif // COMPILER_TYPE == COMPILER_TYPE_CLANG
 
 #if COMPILER_TYPE == COMPILER_TYPE_VS
+// MSVC++ 14.0 VERSION == 1900 (Visual Studio 2015)
 // MSVC++ 12.0 VERSION == 1800 (Visual Studio 2013)
 // MSVC++ 11.0 VERSION == 1700 (Visual Studio 2012)
 // MSVC++ 10.0 VERSION == 1600 (Visual Studio 2010)
@@ -126,6 +131,17 @@
 #undef CAPABILITY_THREAD
 #undef CAPABILITY_TYPE_TRAITS
 #endif // VERSION < 1700
+
+#if VERSION < 1700
+#undef CAPABILITY_ATOMICS
+#undef CAPABILITY_RANGE_BASE_FOR
+#undef CAPABILITY_THREAD
+#undef CAPABILITY_TYPE_TRAITS
+#endif // VERSION < 1700
+
+#if VERSION < 1900
+#undef CAPABILITY_STD_STRING_LITERALS
+#endif
 
 #endif // COMPILER_TYPE == COMPILER_TYPE_VS
 #endif

@@ -5,13 +5,12 @@
 #include "StringBuilder.h"
 #include "StringBuilder.h"
 
+#include "Capabilities.h"
 #include "Stopwatch.h"
 #include "RandomStringGenerator.h"
 
 #include <UnitCpp.h>
 #include <set>
-
-using namespace std::string_literals;
 
 //=============================================================================
 TEST(StringBuilder, build)
@@ -38,11 +37,14 @@ TEST(StringBuilder, build)
 //=============================================================================
 TEST(StringBuilder, construction)
 {
+#ifdef CAPABILITY_STD_STRING_LITERALS
+  using namespace std::string_literals;
   {
     auto il = {"Concat"s, "ernate"s, " these."s};
     StringBuilder builder(il);
     TEST_EQUAL(builder.build(), "Concaternate these.");
   }
+#endif
   {
     std::set<std::string> s =
       {" these ", " could ", " be ", " in ", " any ", " order "};
