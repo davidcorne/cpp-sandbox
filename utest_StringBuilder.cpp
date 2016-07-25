@@ -35,7 +35,7 @@ TEST(StringBuilder, build)
 
   builder.clear();
   builder << "Maybe " << "one without " << "brackets.";
-  TEST_EQUAL(builder.build(), "Maybe, one without brackets.");
+  TEST_EQUAL(builder.build(), "Maybe one without brackets.");
 }
 
 //=============================================================================
