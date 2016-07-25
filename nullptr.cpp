@@ -16,7 +16,7 @@ public:
 
   int area() const {
     // if it's already set return it, otherwise work it out
-    if (m_area.get() == nullptr) {
+    if (!m_area.get()) {
       std::cout << "Calculating" << std::endl;
       std::shared_ptr<int> ptr(new int);
       m_area = ptr;

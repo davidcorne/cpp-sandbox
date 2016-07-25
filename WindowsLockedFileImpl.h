@@ -63,7 +63,7 @@ WindowsLockedFileImpl::WindowsLockedFileImpl(Path path, ErrorPtr& error)
     if (error_code == ERROR_SHARING_VIOLATION) {
       error = ErrorPtr(new LockFileError(path));
     } else {
-      PVOID lpMsgBuf;
+      LPVOID lpMsgBuf;
       FormatMessage(
         FORMAT_MESSAGE_ALLOCATE_BUFFER |           
         FORMAT_MESSAGE_FROM_SYSTEM |               
