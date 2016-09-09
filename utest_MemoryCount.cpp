@@ -20,6 +20,7 @@ TEST(MemoryCount, count)
   TEST_EQUAL(memory_start, memory_end);
 }
 
+
 //=============================================================================
 TEST(MemoryCount, array)
 {
@@ -29,7 +30,12 @@ TEST(MemoryCount, array)
   size_t memory_allocated = MEMORY_USED - memory_start;
   delete[] array;
   size_t memory_end = MEMORY_USED;
+#ifdef DEBUG
+// If it's not DEBUG, the memory could be optimised in any way, don't run this
+// test if it's not debug.
   TEST_EQUAL(memory_allocated, 15 * sizeof(int));
+#endif
+  (void)memory_allocated;
   TEST_EQUAL(memory_start, memory_end);
 }
 

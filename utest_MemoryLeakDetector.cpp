@@ -31,7 +31,10 @@ TEST(MemoryLeakDetector, memory_leak)
       int* i = new int(0);
     }
   }
+#ifdef DEBUG
+// Only test in DEBUG, this is not tracked in non-DEBUG build.  
   TEST_TRUE(LEAKED, "Memory has leaked.");
+#endif
 }
 
 //=============================================================================
@@ -45,7 +48,10 @@ TEST(MemoryLeakDetector, leaked_array)
       int* array = new int[size];
     }
   }
+#ifdef DEBUG
+// Only test in DEBUG, this is not tracked in non-DEBUG build.  
   TEST_TRUE(LEAKED, "Memory has leaked.");
+#endif
 }
 
 //=============================================================================

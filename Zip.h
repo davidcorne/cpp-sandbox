@@ -66,7 +66,7 @@ template <typename tVALUE, typename tCONTAINER>
 class Zip {
 public:
 
-  Zip(const tCONTAINER* a, const tCONTAINER* b)
+  Zip(const tCONTAINER& a, const tCONTAINER& b)
     : m_a(a),
       m_b(b)
     {
@@ -75,21 +75,21 @@ public:
   ZipIterator<tVALUE, typename tCONTAINER::const_iterator> begin() {
     using std::begin;
     return ZipIterator<tVALUE, typename tCONTAINER::const_iterator>(
-      begin(*m_a),
-      begin(*m_b)
+      begin(m_a),
+      begin(m_b)
     );
   }
   ZipIterator<tVALUE, typename tCONTAINER::const_iterator> end() {
     using std::end;
     return ZipIterator<tVALUE, typename tCONTAINER::const_iterator>(
-      end(*m_a),
-      end(*m_b)
+      end(m_a),
+      end(m_b)
     );
   }
   
 private:
-  const tCONTAINER* m_a;
-  const tCONTAINER* m_b;
+  tCONTAINER m_a;
+  tCONTAINER m_b;
 };
 
 //=============================================================================
@@ -98,7 +98,7 @@ Zip<typename tCONTAINER::value_type, tCONTAINER> zip(
   const tCONTAINER& a,
   const tCONTAINER& b
 ) {
-  return Zip<typename tCONTAINER::value_type, tCONTAINER>(&a, &b);
+  return Zip<typename tCONTAINER::value_type, tCONTAINER>(a, b);
 }
 
 #endif

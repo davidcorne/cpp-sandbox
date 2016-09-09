@@ -25,9 +25,9 @@ ifeq ($(COMPILER_TYPE), gcc)
   COMPILER := g++
   LINKER := g++
   VERSION := $(shell g++ --version | grep "g++" | sed -e 's:.*\([0-9]\+\.[0-9]\+\.[0-9]\+\).*:\1:')
-  DEBUG_ARGS := -g 
-  OPTIMISE_ARGS := -O3
-  COMPILER_ARGS := -std=c++1y -Wall -Werror -I $(UNITCPP)
+  DEBUG_ARGS := -g -DDEBUG 
+  OPTIMISE_ARGS := -O1
+  COMMON_ARGS := -std=c++1y -Wall -Werror -I $(UNITCPP)
   LINKER_ARGS := -pthread
   OUT_EXE_FILE := -o 
   OUT_OBJECT_FILE := -o 
@@ -41,9 +41,9 @@ ifeq ($(COMPILER_TYPE), clang)
   VERSION := $(shell clang++ --version | grep "clang" | sed -e 's:[^0-9]*::' -e 's: \+.*::')
 
   INCLUDES := -I$(UNITCPP)
-  DEBUG_ARGS := -g
-  OPTIMISE_ARGS := -O3
-  COMPILER_ARGS := -std=c++1y -Wall -Werror $(INCLUDES) -fexceptions -Wno-error=microsoft-pure-definition
+  DEBUG_ARGS := -g -DDEBUG
+  OPTIMISE_ARGS := 
+  COMMON_ARGS := -std=c++1y -Wall -Werror $(INCLUDES) -fexceptions -Wno-error=microsoft-pure-definition
   LINKER_ARGS :=
 
   OUT_EXE_FILE := -o 
@@ -59,9 +59,9 @@ ifeq ($(COMPILER_TYPE), vs)
   # a bit of a hack because I know I'm in cygwin if I'm using cl in a makefile.
   INCLUDES := /I$(UNITCPP)
   COMMON_ARGS := /nologo
-  DEBUG_ARGS = /Zi
+  DEBUG_ARGS = /Zi  /DDEBUG
   OPTIMISE_ARGS := /O2
-  COMPILER_ARGS := $(COMMON_ARGS) $(INCLUDES) /W4 /wd4481 /WX /EHsc
+  COMMON_ARGS := $(COMMON_ARGS) $(INCLUDES) /W4 /wd4481 /WX /EHsc
   LINKER_ARGS := $(COMMON_ARGS) /MTd
 
   VERSION_SUPPORTS_FS := $(shell expr `echo $(VERSION)` \>= 1800)
@@ -78,7 +78,15 @@ ifndef COMPILER
   $(error "COMPILER_TYPE \"$(COMPILER_TYPE)\" unknown.")
 endif
 
-COMPILER_DESCRIPTION := $(COMPILER_TYPE).$(VERSION)
+ifeq ($(OPTIMISED_BUILD), 1)
+  BINARY_VARIANT := o
+  COMPILER_ARGS := $(OPTIMISE_ARGS) $(COMMON_ARGS)
+else
+  BINARY_VARIANT := d
+  COMPILER_ARGS := $(DEBUG_ARGS) $(COMMON_ARGS)
+endif
+
+COMPILER_DESCRIPTION := $(BINARY_VARIANT).$(COMPILER_TYPE).$(VERSION)
 EXE_DIRECTORY := exe.$(COMPILER_DESCRIPTION)
 OBJ_DIRECTORY := obj.$(COMPILER_DESCRIPTION)
 RESULT_DIRECTORY := results.$(COMPILER_DESCRIPTION)
@@ -146,7 +154,7 @@ all: $(EXE_FILES) $(DEPENDS_SPECIFIC)
 #------------------------------------------------------------------------------
 $(EXE_DIRECTORY)/%.exe: $(OBJ_DIRECTORY)/%.obj
 	@mkdir -p $(EXE_DIRECTORY)
-	$(LINKER) $(DEBUG_ARGS) $(LINKER_ARGS) $< $(OUT_EXE_FILE)$@
+	$(LINKER) $(COMPILER_ARGS) $(LINKER_ARGS) $< $(OUT_EXE_FILE)$@
 	@echo ""
 
 #==============================================================================
@@ -155,7 +163,7 @@ $(EXE_DIRECTORY)/%.exe: $(OBJ_DIRECTORY)/%.obj
 #==============================================================================
 $(OBJ_DIRECTORY)/%.obj: $(DEPENDENCY_DIRECTORY)/%.P
 	@mkdir -p $(OBJ_DIRECTORY)
-	$(COMPILER) $(DEBUG_ARGS) $(COMPILER_ARGS) $(NO_LINK) $(subst $(DEPENDENCY_DIRECTORY)/,, $(subst .P,.$(EXT),$<)) $(OUT_OBJECT_FILE)$@
+	$(COMPILER) $(COMPILER_ARGS) $(NO_LINK) $(subst $(DEPENDENCY_DIRECTORY)/,, $(subst .P,.$(EXT),$<)) $(OUT_OBJECT_FILE)$@
 
 #==============================================================================
 $(DEPENDENCY_DIRECTORY)/%.P: %.$(EXT) $(DEPENDS)
@@ -164,12 +172,12 @@ $(DEPENDENCY_DIRECTORY)/%.P: %.$(EXT) $(DEPENDS)
 
 #==============================================================================
 $(DEPENDS): $(DEPENDS_SOURCE)
-	$(COMPILER) $(OPTIMISE_ARGS) $(COMPILER_ARGS) $< $(OUT_EXE_FILE)$@
+	$(COMPILER) $(COMPILER_ARGS) $< $(OUT_EXE_FILE)$@
 
 #==============================================================================
 $(DEPENDS_SPECIFIC): $(DEPENDS_SOURCE)
 	@mkdir -p $(DEPENDS_DIR)
-	$(COMPILER) $(OPTIMISE_ARGS) $(COMPILER_ARGS) $< $(OUT_EXE_FILE)$@
+	$(COMPILER) $(COMPILER_ARGS) $< $(OUT_EXE_FILE)$@
 
 #==============================================================================
 .DELETE_ON_ERROR: $(RESULT_DIRECTORY)/%.test_result

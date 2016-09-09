@@ -19,6 +19,7 @@ TEST(utest_Zip, usage)
   
   std::vector<int> expected = {0, 2, 4, 6, 8, 10};
   for (std::size_t i = 0; i < expected.size(); ++i) {
+    std::cout << "i: " << i << " result[i] : " << result[i] << " expected[i]: " << expected[i] << std::endl;
     TEST_EQUAL(result[i], expected[i]);
   }
 

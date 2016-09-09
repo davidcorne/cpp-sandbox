@@ -11,8 +11,10 @@ test_compiler()
   if type $program >/dev/null 2>&1
   then
     echo "Has $compiler"
-    make -j 4 COMPILER_TYPE=$compiler_type
-    make test COMPILER_TYPE=$compiler_type
+    make -j 4 OPTIMISED_BUILD=0 COMPILER_TYPE=$compiler_type
+    make test OPTIMISED_BUILD=0 COMPILER_TYPE=$compiler_type
+    make -j 4 OPTIMISED_BUILD=1 COMPILER_TYPE=$compiler_type
+    make test OPTIMISED_BUILD=1 COMPILER_TYPE=$compiler_type
     tested_compilers="$tested_compilers $(make COMPILER_TYPE=$compiler_type compiler_description)"
   fi
 }

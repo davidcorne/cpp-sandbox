@@ -88,15 +88,15 @@ TEST(StringBuilder, faster)
 
   stopwatch.start();
   built = builder.build();
-  TEST_EQUAL(naive, built);
   auto built_duration = stopwatch.stop();
+  TEST_EQUAL(naive, built);
   std::cout
-    << "Using std::string::operator+=(): "
+    << "std::string::operator+=(): "
     <<  naive_duration.count()
     << "\n"
-    << "Using StringBuilder: "
+    << "StringBuilder:             "
     << built_duration.count()
-    << "\n";
+    << "\n\n";
   
 // This doens't pass, as the StringBuilder is slower on some platforms.
 //X  TEST_LESS_THAN(
