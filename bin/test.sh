@@ -13,9 +13,10 @@ test_compiler()
     echo "Has $compiler"
     make -j 4 OPTIMISED_BUILD=0 COMPILER_TYPE=$compiler_type
     make test OPTIMISED_BUILD=0 COMPILER_TYPE=$compiler_type
+    tested_compilers="$tested_compilers \\n\\t$(make OPTIMISED_BUILD=0 COMPILER_TYPE=$compiler_type compiler_description)"
     make -j 4 OPTIMISED_BUILD=1 COMPILER_TYPE=$compiler_type
     make test OPTIMISED_BUILD=1 COMPILER_TYPE=$compiler_type
-    tested_compilers="$tested_compilers $(make COMPILER_TYPE=$compiler_type compiler_description)"
+    tested_compilers="$tested_compilers \\n\\t$(make OPTIMISED_BUILD=1 COMPILER_TYPE=$compiler_type compiler_description)"
   fi
 }
 
@@ -34,4 +35,4 @@ if type cl 2>/dev/null > /dev/null
 then
   test_compiler cl vs
 fi
-echo "Tested with:$tested_compilers"
+echo -e "Tested with:$tested_compilers"
