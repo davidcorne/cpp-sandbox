@@ -26,7 +26,7 @@ ifeq ($(COMPILER_TYPE), gcc)
   LINKER := g++
   VERSION := $(shell g++ --version | grep "g++" | sed -e 's:.*\([0-9]\+\.[0-9]\+\.[0-9]\+\).*:\1:')
   DEBUG_ARGS := -g -DDEBUG 
-  OPTIMISE_ARGS := -O1
+  OPTIMISE_ARGS := -O3
   COMMON_ARGS := -std=c++1y -Wall -Werror -I $(UNITCPP)
   LINKER_ARGS := -pthread
   OUT_EXE_FILE := -o 
@@ -172,7 +172,7 @@ $(DEPENDENCY_DIRECTORY)/%.P: %.$(EXT) $(DEPENDS)
 
 #==============================================================================
 $(DEPENDS): $(DEPENDS_SOURCE)
-	$(COMPILER) $(COMPILER_ARGS) $< $(OUT_EXE_FILE)$@
+	$(COMPILER) $(OPTIMISE_ARGS) $(COMMON_ARGS) $< $(OUT_EXE_FILE)$@
 
 #==============================================================================
 $(DEPENDS_SPECIFIC): $(DEPENDS_SOURCE)
