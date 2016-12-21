@@ -7,43 +7,60 @@
 // the letter C and allocated the instances as pointers to the base class.
 
 #include <iostream>
+#include <memory>
 
+//=============================================================================
 class CPolygon {
-  protected:
-    int width, height;
-  public:
-    void set_values (int a, int b)
-      { width=a; height=b; }
-    virtual int area (void) =0;
-    void printarea (void)
-    { std::cout << area() << std::endl; }
-  virtual ~CPolygon() = 0;
-  };
+public:
 
+  void set_values(int a, int b) {
+     width=a;
+     height=b;
+  }
+  
+  virtual int area() const = 0;
+  
+  virtual ~CPolygon() = 0;
+  
+protected:
+  int width;
+  int height;
+};
+
+//=============================================================================
+void printarea(const CPolygon& poly)
+{
+  std::cout << poly.area() << std::endl;
+}
+
+//=============================================================================
 CPolygon::~CPolygon()
 {
 }
 
+//=============================================================================
 class CRectangle: public CPolygon {
-  public:
-    int area (void)
-      { return (width * height); }
-  };
+public:
+  int area() const override {
+    return (width * height);
+  }
+};
 
+//=============================================================================
 class CTriangle: public CPolygon {
-  public:
-    int area (void)
-      { return (width * height / 2); }
-  };
+public:
+  int area() const override {
+    return (width * height / 2);
+  }
+};
 
+//=============================================================================
 int main () {
-  CPolygon * ppoly1 = new CRectangle;
-  CPolygon * ppoly2 = new CTriangle;
-  ppoly1->set_values (4,5);
-  ppoly2->set_values (4,5);
-  ppoly1->printarea();
-  ppoly2->printarea();
-  delete ppoly1;
-  delete ppoly2;
+  std::unique_ptr<CPolygon> ppoly1 = std::make_unique<CRectangle>();
+  std::unique_ptr<CPolygon> ppoly2 = std::make_unique<CTriangle>();
+  ppoly1->set_values(4,5);
+  ppoly2->set_values(4,5);
+  printarea(*ppoly1);
+  printarea(*ppoly2);
   return 0;
 }
