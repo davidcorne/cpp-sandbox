@@ -104,6 +104,24 @@ TEST(LoggingAllocator, settings)
 }
 
 //=============================================================================
+TEST(LoggingAllocator, vector)
+{
+  // tet that it is useful as an allocator in a standard container e.g. vector
+  std::vector<int, LoggingAllocator<int>> vector;
+  vector.push_back(0);
+  vector.push_back(1);
+  vector.push_back(2);
+  vector.push_back(3);
+  vector.push_back(4);
+  vector.push_back(5);
+  vector.push_back(6);
+  vector.push_back(7);
+  vector.push_back(8);
+  vector.push_back(9);
+  vector.push_back(10);
+  
+}
+//=============================================================================
 int main(int argc, char** argv) 
 {
   return UnitCpp::TestRegister::test_register().run_tests_interactive(argc, argv);

@@ -96,15 +96,18 @@ T* LoggingAllocator<T, LogAllocation, LogDeallocation>::allocate(std::size_t n)
   if (LogAllocation) {
     (*m_os) << "Allocated " << n << " bytes.\n";
   }
-  void* t = malloc(n);
-  return static_cast<T*>(t);
+  void* t = ::operator new(n * sizeof (T));
+  return reinterpret_cast<T*>(t);
 }
 
 //=============================================================================
 template <typename T, bool LogAllocation, bool LogDeallocation>
-void LoggingAllocator<T, LogAllocation, LogDeallocation>::deallocate(T* p, std::size_t n)
+void LoggingAllocator<T, LogAllocation, LogDeallocation>::deallocate(
+  T* pointer,
+  std::size_t n
+)
 {
-  free(p);
+  ::operator delete(pointer);
   if (LogDeallocation) {
     (*m_os) << "Deallocated " << n << " bytes.\n";
   }
