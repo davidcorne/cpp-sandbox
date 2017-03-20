@@ -4,7 +4,7 @@
 #include <cassert>
 
 //=============================================================================
-template <typename T>
+template <typename T, int CAPACITY=5>
 class Ring {
 public:
 
@@ -46,7 +46,7 @@ public:
   ~Ring(){}
       
 private:
-  static const int MAX_ARRAY = 5;
+  static const int MAX_ARRAY = CAPACITY;
   int m_head;
   int m_tail;
   T m_array[MAX_ARRAY];

@@ -35,6 +35,8 @@ TEST(RingBuffer, add)
 TEST(RingBuffer, max_size)
 {
   TEST_EQUAL(RequestRing().max_size(), 5, "Wrong max size");
+  TEST_EQUAL(Ring<int>().max_size(), 5, "Wrong default max size");
+  TEST_EQUAL((Ring<int, 16>().max_size()), 16, "Wrong set max size");
 }
 
 //=============================================================================
