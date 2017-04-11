@@ -16,6 +16,8 @@ public:
 
   Optional(const tTYPE& instance);
 
+  ~Optional();
+  
   explicit operator bool() const;
 
   tTYPE& value();
@@ -35,6 +37,7 @@ Optional<tTYPE>::Optional()
 
 }
 
+//=============================================================================
 template <typename tTYPE>
 Optional<tTYPE>::Optional(const tTYPE& type)
   : m_defined(true)
@@ -42,6 +45,16 @@ Optional<tTYPE>::Optional(const tTYPE& type)
   new(&m_storage) tTYPE(type);
 }
 
+//=============================================================================
+template <typename tTYPE>
+Optional<tTYPE>::~Optional()
+{
+  if (m_defined) {
+    value().~tTYPE();
+  }
+}
+
+//=============================================================================
 template <typename tTYPE>
 Optional<tTYPE>::operator bool() const
 {
