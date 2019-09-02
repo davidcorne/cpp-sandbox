@@ -40,7 +40,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 RUN hg clone https://davidcorne@bitbucket.org/davidcorne/unitcpp /usr/local/unitcpp/UnitCpp
-ENV UNITCPP /usr/local/unitcpp
+ENV UNITCPP /usr/local/unitcpp/UnitCpp
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=
