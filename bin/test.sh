@@ -2,6 +2,7 @@
 # Written by: DGC
 
 set -e
+PROCESSORS=$(nproc)
 
 #==============================================================================
 test_compiler()
@@ -11,10 +12,10 @@ test_compiler()
   if type $program >/dev/null 2>&1
   then
     echo "Has $compiler"
-    make -j 4 OPTIMISED_BUILD=0 COMPILER_TYPE=$compiler_type
+    make -j $PROCESSORS OPTIMISED_BUILD=0 COMPILER_TYPE=$compiler_type
     make test OPTIMISED_BUILD=0 COMPILER_TYPE=$compiler_type
     tested_compilers="$tested_compilers \\n\\t$(make OPTIMISED_BUILD=0 COMPILER_TYPE=$compiler_type compiler_description)"
-    make -j 4 OPTIMISED_BUILD=1 COMPILER_TYPE=$compiler_type
+    make -j $PROCESSORS OPTIMISED_BUILD=1 COMPILER_TYPE=$compiler_type
     make test OPTIMISED_BUILD=1 COMPILER_TYPE=$compiler_type
     tested_compilers="$tested_compilers \\n\\t$(make OPTIMISED_BUILD=1 COMPILER_TYPE=$compiler_type compiler_description)"
   fi
