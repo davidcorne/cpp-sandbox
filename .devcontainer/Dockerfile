@@ -24,7 +24,7 @@ RUN apt-get update \
     && apt-get -y install mercurial \
     #
     # Install C++ tools
-    && apt-get -y install build-essential \
+    && apt-get -y install build-essential clang \
     #
     # Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user.
     && groupadd --gid $USER_GID $USERNAME \
