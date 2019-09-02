@@ -5,6 +5,7 @@
 #include "Capabilities.h"
 #ifdef CAPABILITY_ATOMICS
 #include <atomic>
+#include <functional>
 #include <thread>
 #include <vector>
 
