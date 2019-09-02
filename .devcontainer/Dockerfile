@@ -20,6 +20,9 @@ RUN apt-get update \
     # Verify git, process tools, lsb-release (useful for CLI installs) installed
     && apt-get -y install git procps lsb-release \
     #
+    # Install mercurial, so we can fetch UnitCpp
+    && apt-get -y install mercurial \
+    #
     # Install C++ tools
     && apt-get -y install build-essential \
     #
@@ -36,7 +39,7 @@ RUN apt-get update \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
-RUN git clone https://github.com/davidcorne/unitcpp /usr/local/unitcpp
+RUN hg clone https://davidcorne@bitbucket.org/davidcorne/unitcpp /usr/local/unitcpp/UnitCpp
 ENV UNITCPP /usr/local/unitcpp
 
 # Switch back to dialog for any ad-hoc use of apt-get
