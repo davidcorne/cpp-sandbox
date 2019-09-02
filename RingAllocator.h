@@ -43,7 +43,7 @@ public:
   template<typename U> 
   RingAllocator(const RingAllocator<U, Capacity>& other);
 
-  ~RingAllocator();
+  ~RingAllocator() noexcept(false); // The noexcept(false) is BAD! destructors shouldn't throw, but this one does for testing.
   
   T* allocate(std::size_t n);
 
@@ -106,7 +106,7 @@ RingAllocator<T, Capacity>::RingAllocator(const RingAllocator<T, Capacity>&)
 
 //=============================================================================
 template <typename T, std::size_t Capacity>
-RingAllocator<T, Capacity>::~RingAllocator()
+RingAllocator<T, Capacity>::~RingAllocator() noexcept(false)
 {
   --s_instances;
   if (!s_instances && s_usage.any()) throw MemoryLeak{};

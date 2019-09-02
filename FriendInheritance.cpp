@@ -32,8 +32,8 @@ public:
 //=============================================================================
 int main()
 {
-  PrivateStuff private_stuff;
-  TestInstance instance;
+  PrivateStuff private_stuff{};
+  TestInstance instance{};
   instance.print_int(private_stuff);
   return 0;
 }

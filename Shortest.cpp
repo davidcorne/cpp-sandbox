@@ -5,7 +5,8 @@
 
 #include "Compiler.h"
 
-#if COMPILER_TYPE == COMPILER_TYPE_GCC
+// This is no longer supported in any compiler. (For good reason)
+#if 0
 
 int main;
 
