@@ -44,7 +44,7 @@ ifeq ($(COMPILER_TYPE), clang)
   DEBUG_ARGS := -g -DDEBUG
   OPTIMISE_ARGS := 
   COMMON_ARGS := -std=c++1y -Wall -Werror $(INCLUDES) -fexceptions -Wno-error=microsoft-pure-definition
-  LINKER_ARGS :=
+  LINKER_ARGS := -pthread
 
   OUT_EXE_FILE := -o 
   OUT_OBJECT_FILE := -o 
