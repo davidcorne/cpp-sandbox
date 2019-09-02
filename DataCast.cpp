@@ -18,6 +18,8 @@ public:
 
   std::string name() const;
   
+  double passcode() const;
+
 private:
 
   std::string m_name;
@@ -121,6 +123,12 @@ BankData::~BankData()
 std::string BankData::name() const
 {
   return m_name;
+}
+
+//=============================================================================
+double BankData::passcode() const
+{
+  return m_passcode;
 }
 
 //----- hak
