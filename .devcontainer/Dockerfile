@@ -20,9 +20,6 @@ RUN apt-get update \
     # Verify git, process tools, lsb-release (useful for CLI installs) installed
     && apt-get -y install git procps lsb-release \
     #
-    # Install mercurial, so we can fetch UnitCpp
-    && apt-get -y install mercurial \
-    #
     # Install C++ tools
     && apt-get -y install build-essential clang \
     #
