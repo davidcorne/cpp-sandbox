@@ -36,8 +36,15 @@ RUN apt-get update \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
-RUN git clone https://github.com/davidcorne/unitcpp /usr/local/unitcpp
-ENV UNITCPP /usr/local/unitcpp
+RUN git clone --branch 2.1.1 https://github.com/davidcorne/unitcpp /usr/local/src/unitcpp
+
+RUN cd /usr/local/src/unitcpp && make install
+
+ENV UNITCPP=/usr/local/include/unitcpp_2.1.1/
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=
+
+COPY . /project
+
+WORKDIR /project
