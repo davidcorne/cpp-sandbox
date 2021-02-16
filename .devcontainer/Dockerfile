@@ -20,11 +20,8 @@ RUN apt-get update \
     # Verify git, process tools, lsb-release (useful for CLI installs) installed
     && apt-get -y install git procps lsb-release \
     #
-    # Install mercurial, so we can fetch UnitCpp
-    && apt-get -y install mercurial \
-    #
     # Install C++ tools
-    && apt-get -y install build-essential clang \
+    && apt-get -y install make g++ clang \
     #
     # Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user.
     && groupadd --gid $USER_GID $USERNAME \
@@ -39,8 +36,16 @@ RUN apt-get update \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
-RUN hg clone https://davidcorne@bitbucket.org/davidcorne/unitcpp /usr/local/unitcpp
-ENV UNITCPP /usr/local/unitcpp/UnitCpp
+# Now get the unit testing framework at the correct version, and install it
+RUN git clone --branch 2.1.1 https://github.com/davidcorne/unitcpp /usr/local/src/unitcpp
+RUN cd /usr/local/src/unitcpp && make install
+ENV UNITCPP=/usr/local/include/unitcpp_2.1.1/
 
 # Switch back to dialog for any ad-hoc use of apt-get
 ENV DEBIAN_FRONTEND=
+
+COPY . /project
+
+WORKDIR /project
+
+CMD [ "./bin/test.sh" ]
